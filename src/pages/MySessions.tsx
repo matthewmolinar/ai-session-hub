@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
-import { ChevronRight, ChevronDown, Folder, FileText, GitFork } from "lucide-react";
+import { ChevronRight, ChevronDown, Folder, FileText, GitFork, Search, Upload, Sparkles } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { ModelBadge } from "@/components/ModelBadge";
 
@@ -277,6 +277,8 @@ export default function MySessions() {
     );
   }
 
+  const isDemo = true; // TODO: replace with real session count check
+
   return (
     <div className="max-w-3xl mx-auto px-4 py-6">
       <div className="mb-4">
@@ -285,10 +287,53 @@ export default function MySessions() {
           {totalFiles} files across {totalSessions} sessions
         </p>
       </div>
+
+      {/* Value showcase banner */}
+      {isDemo && (
+        <div className="mb-4 relative overflow-hidden rounded-lg border border-primary/20 bg-gradient-to-br from-primary/5 via-background to-accent/5 p-5">
+          <div className="absolute top-2 right-2">
+            <span className="text-2xs font-mono bg-primary/10 text-primary rounded-full px-2 py-0.5">preview</span>
+          </div>
+          <div className="flex items-start gap-4">
+            <div className="h-9 w-9 rounded-lg bg-primary/10 flex items-center justify-center shrink-0 mt-0.5">
+              <Sparkles className="h-4.5 w-4.5 text-primary" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <h2 className="text-sm font-semibold text-foreground mb-1">
+                See every AI session that shaped your code
+              </h2>
+              <p className="text-xs text-muted-foreground leading-relaxed mb-3">
+                Browse your codebase like a file tree — but instead of code, see the AI conversations that created and modified each file. Search across sessions instantly. Share context with your team.
+              </p>
+              <div className="flex items-center gap-3 text-xs text-muted-foreground mb-3">
+                <span className="flex items-center gap-1.5">
+                  <Search className="h-3 w-3" />
+                  Search sessions
+                </span>
+                <span className="text-border">·</span>
+                <span className="flex items-center gap-1.5">
+                  <GitFork className="h-3 w-3" />
+                  Track file history
+                </span>
+                <span className="text-border">·</span>
+                <span className="flex items-center gap-1.5">
+                  <Upload className="h-3 w-3" />
+                  Share with team
+                </span>
+              </div>
+              <p className="text-2xs text-muted-foreground/70 italic">
+                ↓ Below is a preview with sample data — yours will look like this once you import sessions.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="border border-border rounded-lg bg-card overflow-hidden">
         <div className="px-3 py-2 border-b border-border bg-secondary/30 flex items-center gap-2 text-xs text-muted-foreground">
           <Folder className="h-3.5 w-3.5" />
           <span className="font-medium text-foreground">Project root</span>
+          {isDemo && <span className="ml-auto text-2xs text-muted-foreground/50 font-mono">sample data</span>}
         </div>
         <div className="py-1">
           {FILE_TREE.map((node) => (
