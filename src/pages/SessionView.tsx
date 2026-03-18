@@ -12,6 +12,13 @@ export default function SessionView() {
     ?.flatMap((t) => t.diff?.map((d) => d.filename) ?? [])
     .filter((v, i, a) => a.indexOf(v) === i) ?? [];
 
+  const toolCalls = session.transcript
+    ?.filter((t) => t.role === "tool" && t.toolCall)
+    .map((t) => t.toolCall!.name)
+    .filter((v, i, a) => a.indexOf(v) === i) ?? [];
+
+  const skills = session.tags;
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-[200px_1fr_200px] gap-0 h-[calc(100vh-44px)]">
       {/* Left sidebar: Turn Navigator */}
