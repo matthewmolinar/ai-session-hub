@@ -61,12 +61,6 @@ export function AppHeader() {
         </Link>
 
         <nav className="flex items-center gap-4 text-xs">
-          <Link
-            to="/"
-            className={`transition-colors ${location.pathname === "/" ? "text-foreground font-medium" : "text-muted-foreground hover:text-foreground"}`}
-          >
-            Feed
-          </Link>
           {user && (
             <Link
               to="/my-sessions"
@@ -75,6 +69,12 @@ export function AppHeader() {
               My Sessions
             </Link>
           )}
+          <Link
+            to="/"
+            className={`transition-colors ${location.pathname === "/" ? "text-foreground font-medium" : "text-muted-foreground hover:text-foreground"}`}
+          >
+            Feed
+          </Link>
         </nav>
 
         <div className="ml-auto flex items-center gap-2">
