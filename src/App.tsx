@@ -9,6 +9,7 @@ import Index from "./pages/Index";
 import SessionView from "./pages/SessionView";
 import Profile from "./pages/Profile";
 import MySessions from "./pages/MySessions";
+import Skills from "./pages/Skills";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -31,6 +32,7 @@ function AppContent() {
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/my-sessions" element={<MySessions />} />
+          <Route path="/skills" element={<Skills />} />
           <Route path="/session/:id" element={<SessionView />} />
           <Route path="/profile/:username" element={<Profile />} />
           <Route path="*" element={<NotFound />} />
