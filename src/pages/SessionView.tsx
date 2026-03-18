@@ -128,10 +128,6 @@ export default function SessionView() {
               <FileCode className="h-3 w-3" />
               {session.filesChanged} files
             </span>
-            <span className="flex items-center gap-1">
-              <GitFork className="h-3 w-3" />
-              {session.forks} forks
-            </span>
             {totalComments > 0 && (
               <span className="flex items-center gap-1 text-primary">
                 <MessageSquare className="h-3 w-3" />
