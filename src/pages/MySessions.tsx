@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
-import { ChevronRight, ChevronDown, Folder, FileText, GitFork } from "lucide-react";
+import { ChevronRight, ChevronDown, Folder, FileText, GitFork, Search, Upload, Sparkles } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { ModelBadge } from "@/components/ModelBadge";
 
