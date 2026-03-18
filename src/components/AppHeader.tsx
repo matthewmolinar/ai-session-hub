@@ -11,7 +11,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 export function AppHeader() {
-  const { signOut } = useAuth();
+  const { signOut, user } = useAuth();
+  const username = user?.user_metadata?.username || user?.email?.split("@")[0] || "user";
   const location = useLocation();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
