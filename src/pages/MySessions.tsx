@@ -447,38 +447,35 @@ export default function MySessions() {
                 transition={{ duration: 0.2 }}
                 className="overflow-hidden"
               >
-                <div className="mb-4 relative overflow-hidden rounded-lg border border-primary/20 bg-gradient-to-br from-primary/5 via-background to-accent/5 p-5">
-                  <div className="absolute top-2 right-2">
+                <div className="mb-5 relative overflow-hidden rounded-xl border border-primary/20 bg-gradient-to-br from-primary/8 via-background to-accent/8 px-6 py-8 text-center">
+                  <div className="absolute top-3 right-3">
                     <span className="text-2xs font-mono bg-primary/10 text-primary rounded-full px-2 py-0.5">preview</span>
                   </div>
-                  <div className="flex items-start gap-4">
-                    <div className="h-9 w-9 rounded-lg bg-primary/10 flex items-center justify-center shrink-0 mt-0.5">
-                      <Sparkles className="h-4.5 w-4.5 text-primary" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <h2 className="text-sm font-semibold text-foreground mb-1">
-                        See every AI session that shaped your code
-                      </h2>
-                      <p className="text-xs text-muted-foreground leading-relaxed mb-3">
-                        Browse your codebase like a file tree — click any file to see the AI conversations that created and modified it.
-                      </p>
-                      <div className="flex items-center gap-3 text-xs text-muted-foreground">
-                        <span className="flex items-center gap-1.5">
-                          <Search className="h-3 w-3" />
-                          Search
-                        </span>
-                        <span className="text-border">·</span>
-                        <span className="flex items-center gap-1.5">
-                          <GitFork className="h-3 w-3" />
-                          Track
-                        </span>
-                        <span className="text-border">·</span>
-                        <span className="flex items-center gap-1.5">
-                          <Upload className="h-3 w-3" />
-                          Share
-                        </span>
-                      </div>
-                    </div>
+                  <div className="inline-flex h-12 w-12 rounded-xl bg-primary/10 items-center justify-center mb-4">
+                    <Sparkles className="h-6 w-6 text-primary" />
+                  </div>
+                  <h2 className="text-xl font-bold text-foreground tracking-tight mb-2">
+                    See your AI coding sessions.<br />
+                    Search them. Share with your team.
+                  </h2>
+                  <p className="text-sm text-muted-foreground leading-relaxed max-w-md mx-auto mb-4">
+                    Every file in your codebase, linked to the AI conversations that built it. Click any file below to explore.
+                  </p>
+                  <div className="flex items-center justify-center gap-4 text-xs text-muted-foreground">
+                    <span className="flex items-center gap-1.5">
+                      <Search className="h-3.5 w-3.5 text-primary" />
+                      Search sessions
+                    </span>
+                    <span className="text-border">·</span>
+                    <span className="flex items-center gap-1.5">
+                      <GitFork className="h-3.5 w-3.5 text-primary" />
+                      Track changes
+                    </span>
+                    <span className="text-border">·</span>
+                    <span className="flex items-center gap-1.5">
+                      <Upload className="h-3.5 w-3.5 text-primary" />
+                      Share with team
+                    </span>
                   </div>
                 </div>
               </motion.div>
