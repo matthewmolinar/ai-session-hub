@@ -1,20 +1,20 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 import { AppHeader } from "@/components/AppHeader";
+import { AuthGate } from "@/components/AuthGate";
 import Index from "./pages/Index";
 import SessionView from "./pages/SessionView";
 import Profile from "./pages/Profile";
-import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
-function ProtectedRoutes() {
-  const { user, loading } = useAuth();
+function AppContent() {
+  const { loading } = useAuth();
 
   if (loading) {
     return (
@@ -24,12 +24,8 @@ function ProtectedRoutes() {
     );
   }
 
-  if (!user) {
-    return <Auth />;
-  }
-
   return (
-    <div className="min-h-screen flex flex-col bg-background">
+    <div className="min-h-screen flex flex-col bg-background relative">
       <AppHeader />
       <div className="flex-1">
         <Routes>
@@ -39,6 +35,7 @@ function ProtectedRoutes() {
           <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
+      <AuthGate />
     </div>
   );
 }
@@ -50,7 +47,7 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <AuthProvider>
-          <ProtectedRoutes />
+          <AppContent />
         </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>
