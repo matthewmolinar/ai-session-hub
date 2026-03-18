@@ -77,7 +77,7 @@ export default function SessionView() {
       </main>
 
       {/* Right sidebar: Environment State */}
-      <aside className="hidden lg:block border-l border-border p-3 overflow-y-auto">
+      <aside className="hidden lg:block border-l border-border p-3 overflow-y-auto sticky top-0 h-[calc(100vh-44px)]">
         <h4 className="text-label mb-2">Files Modified</h4>
         <div className="flex flex-col gap-1">
           {filesInSession.map((f) => (
