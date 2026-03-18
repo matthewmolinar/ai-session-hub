@@ -1,22 +1,41 @@
-import { useParams } from "react-router-dom";
-import { GitFork, MessageSquare, FileCode, ExternalLink } from "lucide-react";
+import { useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { MessageSquare, FileCode, Pencil } from "lucide-react";
 import { SessionCard } from "@/components/SessionCard";
+import { EditProfileModal } from "@/components/EditProfileModal";
+import { useProfile } from "@/hooks/useProfile";
 import { SESSIONS } from "@/lib/mock-data";
+import { Button } from "@/components/ui/button";
 
 export default function Profile() {
   const { username } = useParams();
-  const userSessions = SESSIONS.filter((s) => s.author.username === username);
-  const allSessions = userSessions.length > 0 ? userSessions : SESSIONS.slice(0, 3);
+  const navigate = useNavigate();
+  const { profile, loading, isOwn, updateProfile } = useProfile(username);
+  const [editOpen, setEditOpen] = useState(false);
 
-  const totalTurns = allSessions.reduce((a, s) => a + s.turns, 0);
-  const totalForks = allSessions.reduce((a, s) => a + s.forks, 0);
-  const totalFiles = allSessions.reduce((a, s) => a + s.filesChanged, 0);
+  // Mock sessions — still using mock data for now
+  const allSessions = SESSIONS.filter((s) => s.author.username === username);
+  const sessions = allSessions.length > 0 ? allSessions : SESSIONS.slice(0, 3);
 
-  // Most used models
+  const totalTurns = sessions.reduce((a, s) => a + s.turns, 0);
+  const totalFiles = sessions.reduce((a, s) => a + s.filesChanged, 0);
+
   const modelCounts: Record<string, number> = {};
-  allSessions.forEach((s) => {
+  sessions.forEach((s) => {
     modelCounts[s.model] = (modelCounts[s.model] || 0) + 1;
   });
+
+  if (loading) {
+    return (
+      <div className="max-w-2xl mx-auto px-4 py-12 flex justify-center">
+        <div className="h-5 w-5 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
+
+  const displayName = profile?.display_name || username || "User";
+  const displayUsername = profile?.username || username;
+  const bio = profile?.bio || "No bio yet";
 
   return (
     <div className="max-w-2xl mx-auto px-4 py-6">
@@ -24,11 +43,24 @@ export default function Profile() {
       <div className="border-b border-border pb-4 mb-6">
         <div className="flex items-start gap-4">
           <div className="h-12 w-12 rounded-lg bg-secondary flex items-center justify-center text-lg font-semibold text-foreground">
-            {(username || "U")[0].toUpperCase()}
+            {displayName[0].toUpperCase()}
           </div>
           <div className="flex-1">
-            <h1 className="text-lg font-semibold text-foreground">@{username}</h1>
-            <p className="text-xs text-muted-foreground mt-0.5">Prompt engineer · Open-source contributor</p>
+            <div className="flex items-center gap-2">
+              <h1 className="text-lg font-semibold text-foreground">@{displayUsername}</h1>
+              {isOwn && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setEditOpen(true)}
+                  className="h-7 px-2 text-xs text-muted-foreground"
+                >
+                  <Pencil className="h-3 w-3 mr-1" />
+                  Edit
+                </Button>
+              )}
+            </div>
+            <p className="text-xs text-muted-foreground mt-0.5">{bio}</p>
             <div className="flex items-center gap-4 mt-2 text-xs text-muted-foreground">
               <span className="flex items-center gap-1">
                 <MessageSquare className="h-3 w-3" />
@@ -38,15 +70,11 @@ export default function Profile() {
                 <FileCode className="h-3 w-3" />
                 {totalFiles} files changed
               </span>
-              <span className="flex items-center gap-1">
-                <GitFork className="h-3 w-3" />
-                {totalForks} forks received
-              </span>
             </div>
           </div>
         </div>
 
-        {/* Style / preferred models */}
+        {/* Preferred models */}
         <div className="mt-4 flex items-center gap-2">
           <span className="text-2xs text-muted-foreground uppercase tracking-wider font-medium">Preferred models:</span>
           {Object.entries(modelCounts).map(([model, count]) => (
@@ -58,13 +86,29 @@ export default function Profile() {
         </div>
       </div>
 
-      {/* Session history */}
+      {/* Sessions */}
       <h2 className="text-label mb-3">Sessions</h2>
       <div className="flex flex-col gap-3">
-        {allSessions.map((session) => (
+        {sessions.map((session) => (
           <SessionCard key={session.id} session={session} />
         ))}
       </div>
+
+      {/* Edit modal */}
+      {profile && (
+        <EditProfileModal
+          open={editOpen}
+          onOpenChange={setEditOpen}
+          profile={profile}
+          onSave={async (updates) => {
+            const result = await updateProfile(updates);
+            if (!result.error && updates.username !== profile.username) {
+              navigate(`/profile/${updates.username}`, { replace: true });
+            }
+            return { error: result.error || undefined };
+          }}
+        />
+      )}
     </div>
   );
 }
