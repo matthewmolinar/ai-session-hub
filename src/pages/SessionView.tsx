@@ -95,20 +95,39 @@ export default function SessionView() {
           ))}
         </div>
 
-        <h4 className="text-label mt-6 mb-2">Branch</h4>
+        {toolCalls.length > 0 && (
+          <>
+            <h4 className="text-label mt-5 mb-2">Tool Calls</h4>
+            <div className="flex flex-col gap-1">
+              {toolCalls.map((name) => (
+                <div key={name} className="flex items-center gap-1.5 text-xs font-mono text-muted-foreground">
+                  <Terminal className="h-3 w-3 shrink-0 text-primary" />
+                  <span className="truncate">{name}</span>
+                </div>
+              ))}
+            </div>
+          </>
+        )}
+
+        {skills.length > 0 && (
+          <>
+            <h4 className="text-label mt-5 mb-2">Skills</h4>
+            <div className="flex flex-wrap gap-1">
+              {skills.map((skill) => (
+                <span key={skill} className="inline-flex items-center gap-1 rounded-md bg-secondary px-1.5 py-0.5 text-2xs font-mono text-muted-foreground">
+                  <Zap className="h-2.5 w-2.5 text-primary" />
+                  {skill}
+                </span>
+              ))}
+            </div>
+          </>
+        )}
+
+        <h4 className="text-label mt-5 mb-2">Branch</h4>
         <div className="text-xs font-mono text-muted-foreground">
           <span className="text-foreground">main</span>
           <span className="mx-1">→</span>
           <span className="text-primary">this session</span>
-        </div>
-
-        <h4 className="text-label mt-6 mb-2">Tags</h4>
-        <div className="flex flex-wrap gap-1">
-          {session.tags.map((tag) => (
-            <span key={tag} className="inline-flex items-center rounded-md bg-secondary px-1.5 py-0.5 text-2xs font-mono text-muted-foreground">
-              {tag}
-            </span>
-          ))}
         </div>
       </aside>
     </div>
