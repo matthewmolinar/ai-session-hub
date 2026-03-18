@@ -1,8 +1,14 @@
 import { useEffect, useState, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { GitFork, Search, LogOut } from "lucide-react";
+import { GitFork, Search, LogOut, User } from "lucide-react";
 import { SESSIONS } from "@/lib/mock-data";
 import { useAuth } from "@/contexts/AuthContext";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export function AppHeader() {
   const { signOut } = useAuth();
