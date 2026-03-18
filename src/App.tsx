@@ -30,6 +30,7 @@ function AppContent() {
       <div className="flex-1">
         <Routes>
           <Route path="/" element={<Index />} />
+          <Route path="/my-sessions" element={<MySessions />} />
           <Route path="/session/:id" element={<SessionView />} />
           <Route path="/profile/:username" element={<Profile />} />
           <Route path="*" element={<NotFound />} />
