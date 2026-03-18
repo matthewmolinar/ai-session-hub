@@ -222,6 +222,7 @@ export const SESSION_DETAIL: Session = {
       content: "The issue is that the default WebSocket provider doesn't handle reconnection gracefully. I'll add exponential backoff with jitter:\n\n- Base delay: 1s\n- Max delay: 30s\n- Jitter: ±500ms\n- Max retries: 10",
       timestamp: "14:39",
       intentSummary: "Exponential backoff",
+      usage: { inputTokens: 8960, outputTokens: 4210, cost: 0.0694 },
       diff: [
         {
           filename: "src/sync/ws-provider.ts",
