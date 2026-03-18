@@ -24,8 +24,8 @@ export function SessionCard({ session, onSignInClick }: SessionCardProps) {
     >
       {blurred && (
         <>
-          <div className="absolute inset-0 z-10 backdrop-blur-[6px] bg-card/30 rounded-lg" />
-          <div className="absolute inset-0 z-20 flex items-center justify-center">
+          <div className="absolute inset-0 z-10 backdrop-blur-[6px] bg-card/30 rounded-lg" style={{ top: '3.5rem' }} />
+          <div className="absolute inset-0 z-20 flex items-center justify-center" style={{ top: '3.5rem' }}>
             <span className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground bg-card/80 backdrop-blur-sm border border-border rounded-full px-3 py-1.5 shadow-sm">
               <Lock className="h-3 w-3" />
               Sign in to view
@@ -34,9 +34,11 @@ export function SessionCard({ session, onSignInClick }: SessionCardProps) {
         </>
       )}
 
-      {/* L1: Title */}
-      <div className="flex items-start justify-between gap-3 mb-1.5">
-        <h3 className="text-base font-semibold text-foreground leading-snug line-clamp-1">
+      {/* L1: Title + author (always visible) */}
+      <div className="flex items-center gap-2 mb-1.5">
+        <span className="font-medium text-xs text-muted-foreground">@{session.author.username}</span>
+        <span className="text-border">·</span>
+        <h3 className="text-base font-semibold text-foreground leading-snug line-clamp-1 flex-1">
           {session.title}
         </h3>
         <ModelBadge model={session.model} />
