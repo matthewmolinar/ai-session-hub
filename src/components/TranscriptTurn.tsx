@@ -27,6 +27,15 @@ export function TranscriptTurn({ turn, comments, onAddComment }: TranscriptTurnP
             {turn.role}
           </span>
           <span className="text-2xs text-muted-foreground">{turn.timestamp}</span>
+          {turn.usage && turn.usage.cost > 0.001 && (
+            <span className="flex items-center gap-0.5 text-2xs font-mono text-muted-foreground ml-auto opacity-0 group-hover:opacity-100 transition-opacity">
+              <Coins className="h-2.5 w-2.5" />
+              ${turn.usage.cost.toFixed(4)}
+              <span className="text-muted-foreground/60 ml-1">
+                {((turn.usage.inputTokens + turn.usage.outputTokens) / 1000).toFixed(1)}k tok
+              </span>
+            </span>
+          )}
         </div>
 
         {/* Content */}
