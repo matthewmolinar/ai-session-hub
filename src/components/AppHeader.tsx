@@ -156,7 +156,7 @@ export function AppHeader() {
                 ref={inputRef}
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                placeholder="Search sessions, authors, tags..."
+                placeholder="Search... try skill:typescript or model:gpt-4o"
                 className="flex-1 bg-transparent text-sm text-foreground placeholder:text-muted-foreground outline-none"
               />
               <kbd className="text-2xs bg-secondary text-muted-foreground rounded px-1.5 py-0.5 border border-border">esc</kbd>
