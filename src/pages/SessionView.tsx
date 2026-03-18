@@ -1,5 +1,5 @@
 import { useParams, Link } from "react-router-dom";
-import { GitFork, ArrowLeft, FileCode, MessageSquare, Share2 } from "lucide-react";
+import { ArrowLeft, FileCode, GitFork, MessageSquare, Share2 } from "lucide-react";
 import { TranscriptTurn } from "@/components/TranscriptTurn";
 import { ModelBadge } from "@/components/ModelBadge";
 import { SESSION_DETAIL } from "@/lib/mock-data";
@@ -45,10 +45,6 @@ export default function SessionView() {
               <button className="flex items-center gap-1 px-2.5 py-1 rounded-md text-xs bg-secondary text-foreground hover:bg-border transition-colors">
                 <Share2 className="h-3 w-3" />
                 Share
-              </button>
-              <button className="flex items-center gap-1 px-2.5 py-1 rounded-md text-xs bg-primary text-primary-foreground hover:opacity-90 transition-opacity">
-                <GitFork className="h-3 w-3" />
-                Fork
               </button>
             </div>
           </div>

@@ -1,5 +1,3 @@
-import { useState } from "react";
-import { Plus } from "lucide-react";
 import { DiffBlock } from "./DiffBlock";
 import { ToolCallBlock } from "./ToolCallBlock";
 import type { Turn } from "@/lib/mock-data";
@@ -9,8 +7,6 @@ interface TranscriptTurnProps {
 }
 
 export function TranscriptTurn({ turn }: TranscriptTurnProps) {
-  const [showFork, setShowFork] = useState(false);
-
   if (turn.role === "tool" && turn.toolCall) {
     return <ToolCallBlock turn={turn} />;
   }
@@ -18,20 +14,7 @@ export function TranscriptTurn({ turn }: TranscriptTurnProps) {
   const isUser = turn.role === "user";
 
   return (
-    <div
-      className="relative group"
-      onMouseEnter={() => setShowFork(true)}
-      onMouseLeave={() => setShowFork(false)}
-    >
-      {/* Fork line */}
-      {showFork && (
-        <button
-          className="absolute -left-6 top-0 bottom-0 w-5 flex items-start pt-2 justify-center opacity-0 group-hover:opacity-100 transition-opacity"
-          title={`Fork from turn #${turn.id}`}
-        >
-          <Plus className="h-3.5 w-3.5 text-primary" />
-        </button>
-      )}
+    <div className="relative group">
 
       <div className={`py-3 ${isUser ? "border-l-2 border-primary pl-4" : "pl-4"}`}>
         {/* Role label */}
