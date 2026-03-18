@@ -162,6 +162,7 @@ export const SESSION_DETAIL: Session = {
       role: "tool",
       content: "",
       timestamp: "14:31",
+      usage: { inputTokens: 0, outputTokens: 0, cost: 0.0 },
       toolCall: {
         name: "filesystem_write",
         args: JSON.stringify({ path: "src/editor/document.ts", content: "..." }, null, 2),
