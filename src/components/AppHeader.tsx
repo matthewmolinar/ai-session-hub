@@ -5,6 +5,7 @@ import { SESSIONS } from "@/lib/mock-data";
 import { useAuth } from "@/contexts/AuthContext";
 
 export function AppHeader() {
+  const { signOut } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
