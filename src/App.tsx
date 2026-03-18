@@ -9,6 +9,7 @@ import Index from "./pages/Index";
 import SessionView from "./pages/SessionView";
 import Profile from "./pages/Profile";
 import MySessions from "./pages/MySessions";
+import Skills from "./pages/Skills";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
