@@ -8,6 +8,7 @@ import { AppHeader } from "@/components/AppHeader";
 import Index from "./pages/Index";
 import SessionView from "./pages/SessionView";
 import Profile from "./pages/Profile";
+import MySessions from "./pages/MySessions";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -29,6 +30,7 @@ function AppContent() {
       <div className="flex-1">
         <Routes>
           <Route path="/" element={<Index />} />
+          <Route path="/my-sessions" element={<MySessions />} />
           <Route path="/session/:id" element={<SessionView />} />
           <Route path="/profile/:username" element={<Profile />} />
           <Route path="*" element={<NotFound />} />

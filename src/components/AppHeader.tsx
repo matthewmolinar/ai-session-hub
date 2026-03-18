@@ -65,6 +65,14 @@ export function AppHeader() {
           >
             Feed
           </Link>
+          {user && (
+            <Link
+              to="/my-sessions"
+              className={`transition-colors ${location.pathname === "/my-sessions" ? "text-foreground font-medium" : "text-muted-foreground hover:text-foreground"}`}
+            >
+              My Sessions
+            </Link>
+          )}
         </nav>
 
         <div className="ml-auto flex items-center gap-2">
