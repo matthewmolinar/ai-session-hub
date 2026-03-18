@@ -75,6 +75,13 @@ export function AppHeader() {
             <span>Search sessions...</span>
             <kbd className="ml-2 text-2xs bg-background rounded px-1 py-0.5 border border-border">/</kbd>
           </button>
+          <button
+            onClick={signOut}
+            className="flex items-center gap-1.5 rounded-md px-2 py-1 text-xs text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+            title="Sign out"
+          >
+            <LogOut className="h-3 w-3" />
+          </button>
         </div>
       </header>
 
