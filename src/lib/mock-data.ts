@@ -132,6 +132,7 @@ export const SESSION_DETAIL: Session = {
       content: "I want to build a collaborative text editor using Yjs CRDTs. Start with a basic document model and WebSocket sync. Use TypeScript throughout.",
       timestamp: "14:30",
       intentSummary: "Initial setup",
+      usage: { inputTokens: 42, outputTokens: 0, cost: 0.0001 },
     },
     {
       id: 2,
