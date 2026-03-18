@@ -13,9 +13,9 @@ export default function SessionView() {
     .filter((v, i, a) => a.indexOf(v) === i) ?? [];
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-[200px_1fr_200px] gap-0 min-h-[calc(100vh-44px)]">
+    <div className="grid grid-cols-1 lg:grid-cols-[200px_1fr_200px] gap-0 h-[calc(100vh-44px)]">
       {/* Left sidebar: Turn Navigator */}
-      <aside className="hidden lg:block border-r border-border p-3 overflow-y-auto">
+      <aside className="hidden lg:block border-r border-border p-3 overflow-y-auto sticky top-0 h-[calc(100vh-44px)]">
         <Link to="/" className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground mb-4 transition-colors">
           <ArrowLeft className="h-3 w-3" />
           Back to feed
@@ -36,7 +36,7 @@ export default function SessionView() {
       </aside>
 
       {/* Main transcript */}
-      <main className="overflow-y-auto">
+      <main className="overflow-y-auto h-[calc(100vh-44px)]">
         {/* Session header */}
         <div className="border-b border-border px-6 py-4">
           <div className="flex items-start justify-between gap-4 mb-2">
@@ -77,7 +77,7 @@ export default function SessionView() {
       </main>
 
       {/* Right sidebar: Environment State */}
-      <aside className="hidden lg:block border-l border-border p-3 overflow-y-auto">
+      <aside className="hidden lg:block border-l border-border p-3 overflow-y-auto sticky top-0 h-[calc(100vh-44px)]">
         <h4 className="text-label mb-2">Files Modified</h4>
         <div className="flex flex-col gap-1">
           {filesInSession.map((f) => (
