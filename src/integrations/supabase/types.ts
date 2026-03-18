@@ -14,117 +14,33 @@ export type Database = {
   }
   public: {
     Tables: {
-      project_secrets: {
+      profiles: {
         Row: {
+          avatar_url: string | null
+          bio: string | null
           created_at: string
           display_name: string | null
           id: string
-          is_secret: boolean
-          key: string
-          project_id: string
           updated_at: string
+          username: string | null
         }
         Insert: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string
+          display_name?: string | null
+          id: string
+          updated_at?: string
+          username?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          bio?: string | null
           created_at?: string
           display_name?: string | null
           id?: string
-          is_secret?: boolean
-          key: string
-          project_id: string
           updated_at?: string
-        }
-        Update: {
-          created_at?: string
-          display_name?: string | null
-          id?: string
-          is_secret?: boolean
-          key?: string
-          project_id?: string
-          updated_at?: string
-        }
-        Relationships: []
-      }
-      shared_tasks: {
-        Row: {
-          assigned_agent_id: string | null
-          completed_at: string | null
-          created_at: string | null
-          created_by: string | null
-          description: string | null
-          id: string
-          instance_id: string
-          org_id: string
-          priority: number | null
-          status: string | null
-          title: string
-          updated_at: string | null
-        }
-        Insert: {
-          assigned_agent_id?: string | null
-          completed_at?: string | null
-          created_at?: string | null
-          created_by?: string | null
-          description?: string | null
-          id?: string
-          instance_id: string
-          org_id: string
-          priority?: number | null
-          status?: string | null
-          title: string
-          updated_at?: string | null
-        }
-        Update: {
-          assigned_agent_id?: string | null
-          completed_at?: string | null
-          created_at?: string | null
-          created_by?: string | null
-          description?: string | null
-          id?: string
-          instance_id?: string
-          org_id?: string
-          priority?: number | null
-          status?: string | null
-          title?: string
-          updated_at?: string | null
-        }
-        Relationships: []
-      }
-      standup_reports: {
-        Row: {
-          agent_activity: Json | null
-          created_at: string | null
-          id: string
-          instance_id: string
-          org_id: string
-          report_date: string
-          summary_md: string
-          tasks_completed: number | null
-          tasks_created: number | null
-          tasks_in_progress: number | null
-        }
-        Insert: {
-          agent_activity?: Json | null
-          created_at?: string | null
-          id?: string
-          instance_id: string
-          org_id: string
-          report_date: string
-          summary_md: string
-          tasks_completed?: number | null
-          tasks_created?: number | null
-          tasks_in_progress?: number | null
-        }
-        Update: {
-          agent_activity?: Json | null
-          created_at?: string | null
-          id?: string
-          instance_id?: string
-          org_id?: string
-          report_date?: string
-          summary_md?: string
-          tasks_completed?: number | null
-          tasks_created?: number | null
-          tasks_in_progress?: number | null
+          username?: string | null
         }
         Relationships: []
       }
@@ -183,15 +99,7 @@ export type Database = {
           org_id?: string
           task_id?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "task_comments_task_id_fkey"
-            columns: ["task_id"]
-            isOneToOne: false
-            referencedRelation: "shared_tasks"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       task_messages: {
         Row: {
