@@ -48,6 +48,19 @@ export default function SessionView() {
 
   const totalComments = Object.values(commentsByTurn).reduce((sum, arr) => sum + arr.length, 0);
 
+  // Token & cost aggregation
+  const costData = useMemo(() => {
+    const turns = session.transcript ?? [];
+    const totalInput = turns.reduce((s, t) => s + (t.usage?.inputTokens ?? 0), 0);
+    const totalOutput = turns.reduce((s, t) => s + (t.usage?.outputTokens ?? 0), 0);
+    const totalCost = turns.reduce((s, t) => s + (t.usage?.cost ?? 0), 0);
+    const mostExpensive = [...turns]
+      .filter((t) => t.usage && t.usage.cost > 0 && t.role !== "tool")
+      .sort((a, b) => (b.usage?.cost ?? 0) - (a.usage?.cost ?? 0))
+      .slice(0, 3);
+    return { totalInput, totalOutput, totalCost, mostExpensive };
+  }, [session.transcript]);
+
   const filesInSession = session.transcript
     ?.flatMap((t) => t.diff?.map((d) => d.filename) ?? [])
     .filter((v, i, a) => a.indexOf(v) === i) ?? [];
