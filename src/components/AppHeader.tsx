@@ -58,12 +58,6 @@ export function AppHeader() {
           >
             Feed
           </Link>
-          <Link
-            to="/profile/danabramov"
-            className={`transition-colors ${location.pathname.startsWith("/profile") ? "text-foreground font-medium" : "text-muted-foreground hover:text-foreground"}`}
-          >
-            Profile
-          </Link>
         </nav>
 
         <div className="ml-auto flex items-center gap-2">
