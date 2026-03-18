@@ -229,7 +229,7 @@ function FileTreeNode({
   return (
     <div>
       <button
-        onClick={() => setShowSessions(!showSessions)}
+        onClick={() => toggleFileOpen(node.path)}
         className="w-full flex items-center gap-1.5 py-1.5 px-2 text-sm hover:bg-secondary/60 rounded-md transition-colors group cursor-pointer"
         style={{ paddingLeft: `${depth * 16 + 8}px` }}
       >
