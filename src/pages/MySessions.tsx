@@ -2,6 +2,7 @@ import { useState, useMemo, useCallback } from "react";
 import { ChevronRight, ChevronDown, Folder, FileText, GitFork, Search, Upload, Sparkles, X, FileCode, MessageSquare, Share2, Coins, Terminal, Zap } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
+import { useMySessionsState } from "@/contexts/MySessionsContext";
 import { ModelBadge } from "@/components/ModelBadge";
 import { TranscriptTurn } from "@/components/TranscriptTurn";
 import { SESSION_DETAIL, SESSIONS } from "@/lib/mock-data";
