@@ -184,8 +184,9 @@ function FileTreeNode({
   onSessionClick: (sessionId: string) => void;
   activeSessionId: string | null;
 }) {
-  const [expanded, setExpanded] = useState(depth < 2);
-  const [showSessions, setShowSessions] = useState(false);
+  const { expandedPaths, toggleExpanded, openFilePaths, toggleFileOpen } = useMySessionsState();
+  const expanded = node.type === "folder" && expandedPaths.has(node.path);
+  const showSessions = node.type === "file" && openFilePaths.has(node.path);
 
   if (node.type === "folder") {
     const fileCount = countFiles(node);
