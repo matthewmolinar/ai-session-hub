@@ -2,7 +2,6 @@ import { useEffect, useState, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { GitFork, Search, LogOut, User, LogIn } from "lucide-react";
 import { AuthModal } from "@/components/AuthModal";
-import { GitFork, Search, LogOut, User } from "lucide-react";
 import { SESSIONS } from "@/lib/mock-data";
 import { useAuth } from "@/contexts/AuthContext";
 import {
