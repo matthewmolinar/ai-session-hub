@@ -13,9 +13,9 @@ export default function SessionView() {
     .filter((v, i, a) => a.indexOf(v) === i) ?? [];
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-[200px_1fr_200px] gap-0 min-h-[calc(100vh-44px)]">
+    <div className="grid grid-cols-1 lg:grid-cols-[200px_1fr_200px] gap-0 h-[calc(100vh-44px)]">
       {/* Left sidebar: Turn Navigator */}
-      <aside className="hidden lg:block border-r border-border p-3 overflow-y-auto">
+      <aside className="hidden lg:block border-r border-border p-3 overflow-y-auto sticky top-0 h-[calc(100vh-44px)]">
         <Link to="/" className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground mb-4 transition-colors">
           <ArrowLeft className="h-3 w-3" />
           Back to feed
