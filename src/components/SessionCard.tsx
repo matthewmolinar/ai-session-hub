@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { FileCode, MessageSquare } from "lucide-react";
+import { FileCode, MessageSquare, Lock } from "lucide-react";
 import { ModelBadge } from "./ModelBadge";
 import { Sparkline } from "./Sparkline";
 import { useAuth } from "@/contexts/AuthContext";
@@ -7,17 +7,31 @@ import type { Session } from "@/lib/mock-data";
 
 interface SessionCardProps {
   session: Session;
+  onSignInClick?: () => void;
 }
 
-export function SessionCard({ session }: SessionCardProps) {
+export function SessionCard({ session, onSignInClick }: SessionCardProps) {
   const timeAgo = getTimeAgo(session.createdAt);
   const { user } = useAuth();
   const blurred = !user;
 
   const content = (
-    <div className="relative rounded-lg shadow-card border border-border bg-card p-4 transition-shadow hover:shadow-md overflow-hidden">
+    <div
+      className="relative rounded-lg shadow-card border border-border bg-card p-4 transition-shadow hover:shadow-md overflow-hidden"
+      onClick={blurred && onSignInClick ? () => onSignInClick() : undefined}
+      role={blurred ? "button" : undefined}
+      style={blurred ? { cursor: "pointer" } : undefined}
+    >
       {blurred && (
-        <div className="absolute inset-0 z-10 backdrop-blur-sm bg-card/20 rounded-lg" />
+        <>
+          <div className="absolute inset-0 z-10 backdrop-blur-[6px] bg-card/30 rounded-lg" />
+          <div className="absolute inset-0 z-20 flex items-center justify-center">
+            <span className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground bg-card/80 backdrop-blur-sm border border-border rounded-full px-3 py-1.5 shadow-sm">
+              <Lock className="h-3 w-3" />
+              Sign in to view
+            </span>
+          </div>
+        </>
       )}
 
       {/* L1: Title */}
