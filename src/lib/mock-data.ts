@@ -175,6 +175,7 @@ export const SESSION_DETAIL: Session = {
       content: "Good. Now add cursor awareness so users can see each other's selections. Use the Yjs awareness protocol.",
       timestamp: "14:32",
       intentSummary: "Add cursor awareness",
+      usage: { inputTokens: 38, outputTokens: 0, cost: 0.0001 },
     },
     {
       id: 5,
