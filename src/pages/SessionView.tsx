@@ -1,6 +1,6 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useMemo } from "react";
 import { useParams, Link } from "react-router-dom";
-import { ArrowLeft, FileCode, GitFork, MessageSquare, Share2, Terminal, Zap } from "lucide-react";
+import { ArrowLeft, Coins, FileCode, GitFork, MessageSquare, Share2, Terminal, Zap } from "lucide-react";
 import { TranscriptTurn } from "@/components/TranscriptTurn";
 import { ModelBadge } from "@/components/ModelBadge";
 import { SESSION_DETAIL } from "@/lib/mock-data";
@@ -47,6 +47,19 @@ export default function SessionView() {
   }, []);
 
   const totalComments = Object.values(commentsByTurn).reduce((sum, arr) => sum + arr.length, 0);
+
+  // Token & cost aggregation
+  const costData = useMemo(() => {
+    const turns = session.transcript ?? [];
+    const totalInput = turns.reduce((s, t) => s + (t.usage?.inputTokens ?? 0), 0);
+    const totalOutput = turns.reduce((s, t) => s + (t.usage?.outputTokens ?? 0), 0);
+    const totalCost = turns.reduce((s, t) => s + (t.usage?.cost ?? 0), 0);
+    const mostExpensive = [...turns]
+      .filter((t) => t.usage && t.usage.cost > 0 && t.role !== "tool")
+      .sort((a, b) => (b.usage?.cost ?? 0) - (a.usage?.cost ?? 0))
+      .slice(0, 3);
+    return { totalInput, totalOutput, totalCost, mostExpensive };
+  }, [session.transcript]);
 
   const filesInSession = session.transcript
     ?.flatMap((t) => t.diff?.map((d) => d.filename) ?? [])
@@ -144,7 +157,43 @@ export default function SessionView() {
 
       {/* Right sidebar: Environment State */}
       <aside className="hidden lg:block border-l border-border p-3 overflow-y-auto sticky top-0 h-[calc(100vh-44px)]">
-        <h4 className="text-label mb-2">Files Modified</h4>
+        {/* Cost & Tokens */}
+        <h4 className="text-label mb-2 flex items-center gap-1.5">
+          <Coins className="h-3 w-3 text-primary" />
+          Session Cost
+        </h4>
+        <div className="rounded-md border border-border bg-secondary/50 p-2.5 mb-1">
+          <div className="text-lg font-semibold text-foreground font-mono">
+            ${costData.totalCost.toFixed(4)}
+          </div>
+          <div className="flex gap-3 mt-1.5 text-2xs text-muted-foreground">
+            <span>{costData.totalInput.toLocaleString()} in</span>
+            <span>{costData.totalOutput.toLocaleString()} out</span>
+          </div>
+        </div>
+        {costData.mostExpensive.length > 0 && (
+          <div className="mt-2 mb-4">
+            <span className="text-2xs text-muted-foreground">Most expensive turns</span>
+            <div className="flex flex-col gap-1 mt-1">
+              {costData.mostExpensive.map((t) => (
+                <a
+                  key={t.id}
+                  href={`#turn-${t.id}`}
+                  className="flex items-center justify-between gap-1 px-2 py-1 rounded-sm text-2xs hover:bg-secondary transition-colors"
+                >
+                  <span className="text-muted-foreground truncate">
+                    {t.intentSummary || t.content.slice(0, 25)}
+                  </span>
+                  <span className="font-mono text-foreground shrink-0">
+                    ${t.usage!.cost.toFixed(4)}
+                  </span>
+                </a>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <h4 className="text-label mt-4 mb-2">Files Modified</h4>
         <div className="flex flex-col gap-1">
           {filesInSession.map((f) => (
             <div key={f} className="flex items-center gap-1.5 text-xs font-mono text-muted-foreground">

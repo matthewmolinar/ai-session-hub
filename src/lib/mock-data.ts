@@ -16,12 +16,19 @@ export interface Session {
   transcript?: Turn[];
 }
 
+export interface TurnUsage {
+  inputTokens: number;
+  outputTokens: number;
+  cost: number; // USD
+}
+
 export interface Turn {
   id: number;
   role: "user" | "assistant" | "tool";
   content: string;
   timestamp: string;
   intentSummary?: string;
+  usage?: TurnUsage;
   toolCall?: {
     name: string;
     args: string;
@@ -125,6 +132,7 @@ export const SESSION_DETAIL: Session = {
       content: "I want to build a collaborative text editor using Yjs CRDTs. Start with a basic document model and WebSocket sync. Use TypeScript throughout.",
       timestamp: "14:30",
       intentSummary: "Initial setup",
+      usage: { inputTokens: 42, outputTokens: 0, cost: 0.0001 },
     },
     {
       id: 2,
@@ -132,6 +140,7 @@ export const SESSION_DETAIL: Session = {
       content: "I'll set up the project structure with a Yjs document model and WebSocket provider. Let me create the core files:\n\n1. `src/editor/document.ts` — Y.Doc wrapper with text type\n2. `src/sync/ws-provider.ts` — WebSocket connection manager\n3. `src/editor/Editor.tsx` — React component binding\n\nStarting with the document model:",
       timestamp: "14:30",
       intentSummary: "Project scaffold",
+      usage: { inputTokens: 1240, outputTokens: 3820, cost: 0.0327 },
       diff: [
         {
           filename: "src/editor/document.ts",
@@ -153,6 +162,7 @@ export const SESSION_DETAIL: Session = {
       role: "tool",
       content: "",
       timestamp: "14:31",
+      usage: { inputTokens: 0, outputTokens: 0, cost: 0.0 },
       toolCall: {
         name: "filesystem_write",
         args: JSON.stringify({ path: "src/editor/document.ts", content: "..." }, null, 2),
@@ -165,6 +175,7 @@ export const SESSION_DETAIL: Session = {
       content: "Good. Now add cursor awareness so users can see each other's selections. Use the Yjs awareness protocol.",
       timestamp: "14:32",
       intentSummary: "Add cursor awareness",
+      usage: { inputTokens: 38, outputTokens: 0, cost: 0.0001 },
     },
     {
       id: 5,
@@ -172,6 +183,7 @@ export const SESSION_DETAIL: Session = {
       content: "I'll integrate the Yjs awareness protocol for cursor sharing. Each connected client will broadcast their cursor position and selection range.\n\nThe awareness state includes:\n- `cursor` — current position\n- `selection` — anchor + head for range selections\n- `user` — name and color for rendering",
       timestamp: "14:33",
       intentSummary: "Cursor awareness impl",
+      usage: { inputTokens: 4280, outputTokens: 5640, cost: 0.0812 },
       diff: [
         {
           filename: "src/sync/awareness.ts",
@@ -202,6 +214,7 @@ export const SESSION_DETAIL: Session = {
       content: "The WebSocket connection keeps dropping after ~30 seconds. Add reconnection logic with exponential backoff.",
       timestamp: "14:38",
       intentSummary: "Fix WS reconnection",
+      usage: { inputTokens: 36, outputTokens: 0, cost: 0.0001 },
     },
     {
       id: 7,
@@ -209,6 +222,7 @@ export const SESSION_DETAIL: Session = {
       content: "The issue is that the default WebSocket provider doesn't handle reconnection gracefully. I'll add exponential backoff with jitter:\n\n- Base delay: 1s\n- Max delay: 30s\n- Jitter: ±500ms\n- Max retries: 10",
       timestamp: "14:39",
       intentSummary: "Exponential backoff",
+      usage: { inputTokens: 8960, outputTokens: 4210, cost: 0.0694 },
       diff: [
         {
           filename: "src/sync/ws-provider.ts",
