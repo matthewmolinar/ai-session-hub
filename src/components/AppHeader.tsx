@@ -1,7 +1,8 @@
 import { useEffect, useState, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { GitFork, Search } from "lucide-react";
+import { GitFork, Search, LogOut } from "lucide-react";
 import { SESSIONS } from "@/lib/mock-data";
+import { useAuth } from "@/contexts/AuthContext";
 
 export function AppHeader() {
   const location = useLocation();
