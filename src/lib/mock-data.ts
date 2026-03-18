@@ -214,6 +214,7 @@ export const SESSION_DETAIL: Session = {
       content: "The WebSocket connection keeps dropping after ~30 seconds. Add reconnection logic with exponential backoff.",
       timestamp: "14:38",
       intentSummary: "Fix WS reconnection",
+      usage: { inputTokens: 36, outputTokens: 0, cost: 0.0001 },
     },
     {
       id: 7,
