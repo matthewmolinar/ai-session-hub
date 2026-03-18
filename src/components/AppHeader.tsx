@@ -92,6 +92,12 @@ export function AppHeader() {
           >
             Feed
           </Link>
+          <Link
+            to="/skills"
+            className={`transition-colors ${location.pathname === "/skills" ? "text-foreground font-medium" : "text-muted-foreground hover:text-foreground"}`}
+          >
+            Skills
+          </Link>
         </nav>
 
         <div className="ml-auto flex items-center gap-2">
