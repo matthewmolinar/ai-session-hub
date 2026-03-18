@@ -50,7 +50,9 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <AuthProvider>
-          <AppContent />
+          <MySessionsProvider>
+            <AppContent />
+          </MySessionsProvider>
         </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>
