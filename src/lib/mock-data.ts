@@ -16,12 +16,19 @@ export interface Session {
   transcript?: Turn[];
 }
 
+export interface TurnUsage {
+  inputTokens: number;
+  outputTokens: number;
+  cost: number; // USD
+}
+
 export interface Turn {
   id: number;
   role: "user" | "assistant" | "tool";
   content: string;
   timestamp: string;
   intentSummary?: string;
+  usage?: TurnUsage;
   toolCall?: {
     name: string;
     args: string;
