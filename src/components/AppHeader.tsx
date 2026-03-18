@@ -43,13 +43,30 @@ export function AppHeader() {
   }, [open]);
 
   const results = query.length > 0
-    ? SESSIONS.filter(
-        (s) =>
-          s.title.toLowerCase().includes(query.toLowerCase()) ||
-          s.openingPrompt.toLowerCase().includes(query.toLowerCase()) ||
-          s.author.username.toLowerCase().includes(query.toLowerCase()) ||
-          s.tags.some((t) => t.toLowerCase().includes(query.toLowerCase()))
-      )
+    ? SESSIONS.filter((s) => {
+        const q = query.toLowerCase();
+        // skill: operator
+        const skillMatch = q.match(/^skill:(\S+)$/);
+        if (skillMatch) {
+          return s.tags.some((t) => t.toLowerCase().includes(skillMatch[1]));
+        }
+        // model: operator
+        const modelMatch = q.match(/^model:(\S+)$/);
+        if (modelMatch) {
+          return s.model.toLowerCase().includes(modelMatch[1]);
+        }
+        // author: operator
+        const authorMatch = q.match(/^author:(\S+)$/);
+        if (authorMatch) {
+          return s.author.username.toLowerCase().includes(authorMatch[1]);
+        }
+        return (
+          s.title.toLowerCase().includes(q) ||
+          s.openingPrompt.toLowerCase().includes(q) ||
+          s.author.username.toLowerCase().includes(q) ||
+          s.tags.some((t) => t.toLowerCase().includes(q))
+        );
+      })
     : SESSIONS;
 
   return (
