@@ -170,6 +170,7 @@ export function AppHeader() {
           </div>
         </div>
       )}
+      <AuthModal open={authOpen} onOpenChange={setAuthOpen} />
     </>
   );
 }
