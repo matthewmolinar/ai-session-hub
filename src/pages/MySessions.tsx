@@ -385,7 +385,7 @@ function SessionPreview({ session, onClose }: { session: Session; onClose: () =>
 /* ─── Main Page ─── */
 export default function MySessions() {
   const { user } = useAuth();
-  const [activeSessionId, setActiveSessionId] = useState<string | null>(null);
+  const { activeSessionId, toggleSession, setActiveSessionId } = useMySessionsState();
 
   const totalFiles = useMemo(() => FILE_TREE.reduce((sum, n) => sum + countFiles(n), 0), []);
   const totalSessions = useMemo(() => {
@@ -400,15 +400,10 @@ export default function MySessions() {
 
   const activeSession = useMemo(() => {
     if (!activeSessionId) return null;
-    // For demo, only s1 has a transcript
     if (activeSessionId === "s1") return SESSION_DETAIL;
     const found = SESSIONS.find((s) => s.id === activeSessionId);
     return found ?? null;
   }, [activeSessionId]);
-
-  const handleSessionClick = useCallback((sessionId: string) => {
-    setActiveSessionId((prev) => (prev === sessionId ? null : sessionId));
-  }, []);
 
   if (!user) {
     return (
