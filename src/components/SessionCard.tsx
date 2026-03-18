@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
-import { GitFork, FileCode, MessageSquare } from "lucide-react";
+import { FileCode, MessageSquare } from "lucide-react";
 import { ModelBadge } from "./ModelBadge";
 import { Sparkline } from "./Sparkline";
+import { useAuth } from "@/contexts/AuthContext";
 import type { Session } from "@/lib/mock-data";
 
 interface SessionCardProps {
@@ -10,12 +11,15 @@ interface SessionCardProps {
 
 export function SessionCard({ session }: SessionCardProps) {
   const timeAgo = getTimeAgo(session.createdAt);
+  const { user } = useAuth();
+  const blurred = !user;
 
-  return (
-    <Link
-      to={`/session/${session.id}`}
-      className="block rounded-lg shadow-card border border-border bg-card p-4 transition-shadow hover:shadow-md"
-    >
+  const content = (
+    <div className="relative rounded-lg shadow-card border border-border bg-card p-4 transition-shadow hover:shadow-md overflow-hidden">
+      {blurred && (
+        <div className="absolute inset-0 z-10 backdrop-blur-sm bg-card/20 rounded-lg" />
+      )}
+
       {/* L1: Title */}
       <div className="flex items-start justify-between gap-3 mb-1.5">
         <h3 className="text-base font-semibold text-foreground leading-snug line-clamp-1">
@@ -45,6 +49,14 @@ export function SessionCard({ session }: SessionCardProps) {
         </span>
         <span className="ml-auto">{timeAgo}</span>
       </div>
+    </div>
+  );
+
+  if (blurred) return content;
+
+  return (
+    <Link to={`/session/${session.id}`} className="block">
+      {content}
     </Link>
   );
 }

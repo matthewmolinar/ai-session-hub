@@ -55,15 +55,10 @@ export function AuthGate() {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center pointer-events-none">
-      {/* Blur overlay — lets the feed show through */}
-      <div className="absolute inset-0 backdrop-blur-md bg-background/30 pointer-events-auto" />
-
-      {/* Bottom sheet auth card */}
-      <div className="relative z-10 w-full max-w-md mb-0 pointer-events-auto animate-in slide-in-from-bottom-4 duration-500">
-        <div className="bg-card border border-border rounded-t-2xl shadow-2xl px-6 pt-6 pb-8">
-          {/* Logo */}
-          <div className="flex flex-col items-center mb-5">
+    <div className="fixed bottom-0 left-0 right-0 z-50 flex justify-center pointer-events-none">
+      <div className="relative z-10 w-full max-w-md pointer-events-auto animate-in slide-in-from-bottom-4 duration-500">
+        <div className="bg-card border border-border border-b-0 rounded-t-2xl shadow-2xl px-6 pt-5 pb-6">
+          <div className="flex flex-col items-center mb-4">
             <div className="flex items-center gap-2 mb-1">
               <GitFork className="h-5 w-5 text-primary" />
               <span className="text-lg font-semibold text-foreground">Tanagram</span>
@@ -73,7 +68,6 @@ export function AuthGate() {
             </p>
           </div>
 
-          {/* Form */}
           <form onSubmit={handleSubmit} className="flex flex-col gap-2.5">
             {isSignUp && (
               <Input
@@ -109,7 +103,6 @@ export function AuthGate() {
             </Button>
           </form>
 
-          {/* Toggle */}
           <p className="text-center text-xs text-muted-foreground mt-3">
             {isSignUp ? "Already have an account?" : "Don't have an account?"}{" "}
             <button
