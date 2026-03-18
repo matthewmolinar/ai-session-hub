@@ -1,3 +1,4 @@
+import { Coins } from "lucide-react";
 import { DiffBlock } from "./DiffBlock";
 import { ToolCallBlock } from "./ToolCallBlock";
 import { TurnComment, type Comment } from "./TurnComment";
