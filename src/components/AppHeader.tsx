@@ -1,11 +1,18 @@
 import { useEffect, useState, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { GitFork, Search, LogOut } from "lucide-react";
+import { GitFork, Search, LogOut, User } from "lucide-react";
 import { SESSIONS } from "@/lib/mock-data";
 import { useAuth } from "@/contexts/AuthContext";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export function AppHeader() {
-  const { signOut } = useAuth();
+  const { signOut, user } = useAuth();
+  const username = user?.user_metadata?.username || user?.email?.split("@")[0] || "user";
   const location = useLocation();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
@@ -58,12 +65,6 @@ export function AppHeader() {
           >
             Feed
           </Link>
-          <Link
-            to="/profile/danabramov"
-            className={`transition-colors ${location.pathname.startsWith("/profile") ? "text-foreground font-medium" : "text-muted-foreground hover:text-foreground"}`}
-          >
-            Profile
-          </Link>
         </nav>
 
         <div className="ml-auto flex items-center gap-2">
@@ -75,13 +76,27 @@ export function AppHeader() {
             <span>Search sessions...</span>
             <kbd className="ml-2 text-2xs bg-background rounded px-1 py-0.5 border border-border">/</kbd>
           </button>
-          <button
-            onClick={signOut}
-            className="flex items-center gap-1.5 rounded-md px-2 py-1 text-xs text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
-            title="Sign out"
-          >
-            <LogOut className="h-3 w-3" />
-          </button>
+          {user && (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button className="h-7 w-7 rounded-full bg-secondary flex items-center justify-center text-xs font-semibold text-foreground hover:ring-2 hover:ring-ring transition-all cursor-pointer">
+                  {username[0].toUpperCase()}
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-40">
+                <DropdownMenuItem asChild>
+                  <Link to={`/profile/${username}`} className="flex items-center gap-2">
+                    <User className="h-3.5 w-3.5" />
+                    Profile
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={signOut} className="flex items-center gap-2">
+                  <LogOut className="h-3.5 w-3.5" />
+                  Sign out
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
         </div>
       </header>
 
