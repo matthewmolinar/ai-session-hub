@@ -43,10 +43,6 @@ export function SessionCard({ session }: SessionCardProps) {
           <FileCode className="h-3 w-3" />
           {session.filesChanged}
         </span>
-        <span className="flex items-center gap-1">
-          <GitFork className="h-3 w-3" />
-          {session.forks}
-        </span>
         <span className="ml-auto">{timeAgo}</span>
       </div>
     </Link>
