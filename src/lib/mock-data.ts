@@ -140,6 +140,7 @@ export const SESSION_DETAIL: Session = {
       content: "I'll set up the project structure with a Yjs document model and WebSocket provider. Let me create the core files:\n\n1. `src/editor/document.ts` — Y.Doc wrapper with text type\n2. `src/sync/ws-provider.ts` — WebSocket connection manager\n3. `src/editor/Editor.tsx` — React component binding\n\nStarting with the document model:",
       timestamp: "14:30",
       intentSummary: "Project scaffold",
+      usage: { inputTokens: 1240, outputTokens: 3820, cost: 0.0327 },
       diff: [
         {
           filename: "src/editor/document.ts",
