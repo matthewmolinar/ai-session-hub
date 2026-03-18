@@ -72,7 +72,7 @@ export function AppHeader() {
   return (
     <>
       <header className="h-11 border-b border-border flex items-center px-4 gap-6 bg-card shrink-0">
-        <Link to="/" className="flex items-center gap-1.5 font-semibold text-sm text-foreground">
+        <Link to={user ? "/my-sessions" : "/"} className="flex items-center gap-1.5 font-semibold text-sm text-foreground">
           <GitFork className="h-4 w-4 text-primary" />
           <span>Tanagram</span>
         </Link>
