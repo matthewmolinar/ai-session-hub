@@ -1,9 +1,11 @@
 import { useEffect, useState, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { GitFork, Search } from "lucide-react";
+import { GitFork, Search, LogOut } from "lucide-react";
 import { SESSIONS } from "@/lib/mock-data";
+import { useAuth } from "@/contexts/AuthContext";
 
 export function AppHeader() {
+  const { signOut } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
@@ -72,6 +74,13 @@ export function AppHeader() {
             <Search className="h-3 w-3" />
             <span>Search sessions...</span>
             <kbd className="ml-2 text-2xs bg-background rounded px-1 py-0.5 border border-border">/</kbd>
+          </button>
+          <button
+            onClick={signOut}
+            className="flex items-center gap-1.5 rounded-md px-2 py-1 text-xs text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+            title="Sign out"
+          >
+            <LogOut className="h-3 w-3" />
           </button>
         </div>
       </header>
