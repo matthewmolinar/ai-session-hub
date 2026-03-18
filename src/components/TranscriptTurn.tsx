@@ -1,12 +1,15 @@
 import { DiffBlock } from "./DiffBlock";
 import { ToolCallBlock } from "./ToolCallBlock";
+import { TurnComment, type Comment } from "./TurnComment";
 import type { Turn } from "@/lib/mock-data";
 
 interface TranscriptTurnProps {
   turn: Turn;
+  comments: Comment[];
+  onAddComment: (turnId: number, content: string) => void;
 }
 
-export function TranscriptTurn({ turn }: TranscriptTurnProps) {
+export function TranscriptTurn({ turn, comments, onAddComment }: TranscriptTurnProps) {
   if (turn.role === "tool" && turn.toolCall) {
     return <ToolCallBlock turn={turn} />;
   }
@@ -38,6 +41,13 @@ export function TranscriptTurn({ turn }: TranscriptTurnProps) {
         {turn.diff?.map((d, i) => (
           <DiffBlock key={i} diff={d} />
         ))}
+
+        {/* Inline comments */}
+        <TurnComment
+          turnId={turn.id}
+          comments={comments}
+          onAddComment={onAddComment}
+        />
       </div>
     </div>
   );

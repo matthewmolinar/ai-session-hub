@@ -1,12 +1,52 @@
+import { useState, useCallback } from "react";
 import { useParams, Link } from "react-router-dom";
 import { ArrowLeft, FileCode, GitFork, MessageSquare, Share2, Terminal, Zap } from "lucide-react";
 import { TranscriptTurn } from "@/components/TranscriptTurn";
 import { ModelBadge } from "@/components/ModelBadge";
 import { SESSION_DETAIL } from "@/lib/mock-data";
+import type { Comment } from "@/components/TurnComment";
 
 export default function SessionView() {
   const { id } = useParams();
-  const session = SESSION_DETAIL; // mock: always return same detail
+  const session = SESSION_DETAIL;
+
+  // Comments state: keyed by turn ID
+  const [commentsByTurn, setCommentsByTurn] = useState<Record<number, Comment[]>>(() => {
+    // Seed with a couple demo comments
+    return {
+      1: [
+        {
+          id: "demo-1",
+          author: "techleadmaria",
+          content: "This prompt could've been more specific — mention the target framework version and whether you want offline support.",
+          timestamp: "15:02",
+        },
+      ],
+      5: [
+        {
+          id: "demo-2",
+          author: "techleadmaria",
+          content: "Nice approach here. Using the awareness protocol from the start saves a refactor later.",
+          timestamp: "15:10",
+        },
+      ],
+    };
+  });
+
+  const handleAddComment = useCallback((turnId: number, content: string) => {
+    const newComment: Comment = {
+      id: `c-${Date.now()}`,
+      author: "you",
+      content,
+      timestamp: new Date().toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", hour12: false }),
+    };
+    setCommentsByTurn((prev) => ({
+      ...prev,
+      [turnId]: [...(prev[turnId] || []), newComment],
+    }));
+  }, []);
+
+  const totalComments = Object.values(commentsByTurn).reduce((sum, arr) => sum + arr.length, 0);
 
   const filesInSession = session.transcript
     ?.flatMap((t) => t.diff?.map((d) => d.filename) ?? [])
@@ -29,16 +69,25 @@ export default function SessionView() {
         </Link>
         <h4 className="text-label mb-2">Turns</h4>
         <div className="flex flex-col gap-0.5">
-          {session.transcript?.filter(t => t.role !== "tool").map((turn) => (
-            <a
-              key={turn.id}
-              href={`#turn-${turn.id}`}
-              className="flex items-start gap-2 px-2 py-1.5 rounded-sm text-xs text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
-            >
-              <span className="text-2xs font-mono shrink-0 mt-0.5">{turn.timestamp}</span>
-              <span className="line-clamp-1">{turn.intentSummary || turn.content.slice(0, 40)}</span>
-            </a>
-          ))}
+          {session.transcript?.filter(t => t.role !== "tool").map((turn) => {
+            const turnCommentCount = (commentsByTurn[turn.id] || []).length;
+            return (
+              <a
+                key={turn.id}
+                href={`#turn-${turn.id}`}
+                className="flex items-start gap-2 px-2 py-1.5 rounded-sm text-xs text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
+              >
+                <span className="text-2xs font-mono shrink-0 mt-0.5">{turn.timestamp}</span>
+                <span className="line-clamp-1 flex-1">{turn.intentSummary || turn.content.slice(0, 40)}</span>
+                {turnCommentCount > 0 && (
+                  <span className="shrink-0 flex items-center gap-0.5 text-primary text-2xs">
+                    <MessageSquare className="h-2.5 w-2.5" />
+                    {turnCommentCount}
+                  </span>
+                )}
+              </a>
+            );
+          })}
         </div>
       </aside>
 
@@ -70,6 +119,12 @@ export default function SessionView() {
               <GitFork className="h-3 w-3" />
               {session.forks} forks
             </span>
+            {totalComments > 0 && (
+              <span className="flex items-center gap-1 text-primary">
+                <MessageSquare className="h-3 w-3" />
+                {totalComments} comment{totalComments !== 1 ? "s" : ""}
+              </span>
+            )}
           </div>
         </div>
 
@@ -77,7 +132,11 @@ export default function SessionView() {
         <div className="px-6 py-4 divide-y divide-border">
           {session.transcript?.map((turn) => (
             <div key={turn.id} id={`turn-${turn.id}`}>
-              <TranscriptTurn turn={turn} />
+              <TranscriptTurn
+                turn={turn}
+                comments={commentsByTurn[turn.id] || []}
+                onAddComment={handleAddComment}
+              />
             </div>
           ))}
         </div>
