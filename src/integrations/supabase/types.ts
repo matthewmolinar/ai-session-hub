@@ -14,247 +14,6 @@ export type Database = {
   }
   public: {
     Tables: {
-      activities: {
-        Row: {
-          action: string
-          actor_id: string | null
-          actor_type: string
-          created_at: string | null
-          id: string
-          metadata: Json | null
-          project_id: string
-          target_id: string | null
-          target_type: string | null
-        }
-        Insert: {
-          action: string
-          actor_id?: string | null
-          actor_type: string
-          created_at?: string | null
-          id?: string
-          metadata?: Json | null
-          project_id: string
-          target_id?: string | null
-          target_type?: string | null
-        }
-        Update: {
-          action?: string
-          actor_id?: string | null
-          actor_type?: string
-          created_at?: string | null
-          id?: string
-          metadata?: Json | null
-          project_id?: string
-          target_id?: string | null
-          target_type?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "activities_project_id_fkey"
-            columns: ["project_id"]
-            isOneToOne: false
-            referencedRelation: "projects"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      activity_log: {
-        Row: {
-          actor_id: string
-          actor_type: string
-          created_at: string | null
-          event_type: string
-          id: string
-          instance_id: string
-          message: string
-          metadata: Json | null
-          org_id: string
-        }
-        Insert: {
-          actor_id: string
-          actor_type: string
-          created_at?: string | null
-          event_type: string
-          id?: string
-          instance_id: string
-          message: string
-          metadata?: Json | null
-          org_id: string
-        }
-        Update: {
-          actor_id?: string
-          actor_type?: string
-          created_at?: string | null
-          event_type?: string
-          id?: string
-          instance_id?: string
-          message?: string
-          metadata?: Json | null
-          org_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "activity_log_instance_id_fkey"
-            columns: ["instance_id"]
-            isOneToOne: false
-            referencedRelation: "openclaw_instances"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "activity_log_org_id_fkey"
-            columns: ["org_id"]
-            isOneToOne: false
-            referencedRelation: "organizations"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      agents: {
-        Row: {
-          created_at: string | null
-          heartbeat_cron: string | null
-          id: string
-          last_heartbeat_at: string | null
-          model: string | null
-          name: string
-          project_id: string
-          slug: string
-          status: string | null
-          system_prompt: string | null
-          updated_at: string | null
-        }
-        Insert: {
-          created_at?: string | null
-          heartbeat_cron?: string | null
-          id?: string
-          last_heartbeat_at?: string | null
-          model?: string | null
-          name: string
-          project_id: string
-          slug: string
-          status?: string | null
-          system_prompt?: string | null
-          updated_at?: string | null
-        }
-        Update: {
-          created_at?: string | null
-          heartbeat_cron?: string | null
-          id?: string
-          last_heartbeat_at?: string | null
-          model?: string | null
-          name?: string
-          project_id?: string
-          slug?: string
-          status?: string | null
-          system_prompt?: string | null
-          updated_at?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "agents_project_id_fkey"
-            columns: ["project_id"]
-            isOneToOne: false
-            referencedRelation: "projects"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      credit_transactions: {
-        Row: {
-          amount_cents: number
-          created_at: string | null
-          description: string | null
-          id: string
-          org_id: string
-          stripe_payment_id: string | null
-          type: string
-        }
-        Insert: {
-          amount_cents: number
-          created_at?: string | null
-          description?: string | null
-          id?: string
-          org_id: string
-          stripe_payment_id?: string | null
-          type: string
-        }
-        Update: {
-          amount_cents?: number
-          created_at?: string | null
-          description?: string | null
-          id?: string
-          org_id?: string
-          stripe_payment_id?: string | null
-          type?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "credit_transactions_org_id_fkey"
-            columns: ["org_id"]
-            isOneToOne: false
-            referencedRelation: "organizations"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      documents: {
-        Row: {
-          content: string | null
-          created_at: string | null
-          created_by_agent_id: string | null
-          created_by_member_id: string | null
-          doc_type: string | null
-          id: string
-          project_id: string
-          title: string
-          updated_at: string | null
-        }
-        Insert: {
-          content?: string | null
-          created_at?: string | null
-          created_by_agent_id?: string | null
-          created_by_member_id?: string | null
-          doc_type?: string | null
-          id?: string
-          project_id: string
-          title: string
-          updated_at?: string | null
-        }
-        Update: {
-          content?: string | null
-          created_at?: string | null
-          created_by_agent_id?: string | null
-          created_by_member_id?: string | null
-          doc_type?: string | null
-          id?: string
-          project_id?: string
-          title?: string
-          updated_at?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "documents_created_by_agent_id_fkey"
-            columns: ["created_by_agent_id"]
-            isOneToOne: false
-            referencedRelation: "agents"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "documents_created_by_member_id_fkey"
-            columns: ["created_by_member_id"]
-            isOneToOne: false
-            referencedRelation: "members"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "documents_project_id_fkey"
-            columns: ["project_id"]
-            isOneToOne: false
-            referencedRelation: "projects"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       instance_agents: {
         Row: {
           agent_id: string
@@ -330,13 +89,6 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "instance_agents_instance_id_fkey"
-            columns: ["instance_id"]
-            isOneToOne: false
-            referencedRelation: "openclaw_instances"
-            referencedColumns: ["id"]
-          },
-          {
             foreignKeyName: "instance_agents_org_id_fkey"
             columns: ["org_id"]
             isOneToOne: false
@@ -387,13 +139,6 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "instance_audit_logs_instance_id_fkey"
-            columns: ["instance_id"]
-            isOneToOne: false
-            referencedRelation: "openclaw_instances"
-            referencedColumns: ["id"]
-          },
-          {
             foreignKeyName: "instance_audit_logs_org_id_fkey"
             columns: ["org_id"]
             isOneToOne: false
@@ -432,13 +177,6 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "instance_secrets_instance_id_fkey"
-            columns: ["instance_id"]
-            isOneToOne: false
-            referencedRelation: "openclaw_instances"
-            referencedColumns: ["id"]
-          },
-          {
             foreignKeyName: "instance_secrets_org_id_fkey"
             columns: ["org_id"]
             isOneToOne: false
@@ -475,144 +213,6 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "members_org_id_fkey"
-            columns: ["org_id"]
-            isOneToOne: false
-            referencedRelation: "organizations"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      notifications: {
-        Row: {
-          body: string | null
-          created_at: string | null
-          id: string
-          project_id: string
-          read: boolean | null
-          reference_id: string | null
-          reference_type: string | null
-          target_agent_id: string | null
-          target_member_id: string | null
-          title: string
-          type: string
-        }
-        Insert: {
-          body?: string | null
-          created_at?: string | null
-          id?: string
-          project_id: string
-          read?: boolean | null
-          reference_id?: string | null
-          reference_type?: string | null
-          target_agent_id?: string | null
-          target_member_id?: string | null
-          title: string
-          type: string
-        }
-        Update: {
-          body?: string | null
-          created_at?: string | null
-          id?: string
-          project_id?: string
-          read?: boolean | null
-          reference_id?: string | null
-          reference_type?: string | null
-          target_agent_id?: string | null
-          target_member_id?: string | null
-          title?: string
-          type?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "notifications_project_id_fkey"
-            columns: ["project_id"]
-            isOneToOne: false
-            referencedRelation: "projects"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "notifications_target_agent_id_fkey"
-            columns: ["target_agent_id"]
-            isOneToOne: false
-            referencedRelation: "agents"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "notifications_target_member_id_fkey"
-            columns: ["target_member_id"]
-            isOneToOne: false
-            referencedRelation: "members"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      openclaw_instances: {
-        Row: {
-          billing_mode: string | null
-          created_at: string | null
-          ecs_task_arn: string | null
-          error_message: string | null
-          gateway_ip: string | null
-          gateway_token: string | null
-          id: string
-          model: string | null
-          name: string
-          org_id: string
-          setup_phase: string | null
-          setup_started_at: string | null
-          started_at: string | null
-          status: string | null
-          stopped_at: string | null
-          system_prompt: string | null
-          team_description: string | null
-          team_name: string | null
-          updated_at: string | null
-        }
-        Insert: {
-          billing_mode?: string | null
-          created_at?: string | null
-          ecs_task_arn?: string | null
-          error_message?: string | null
-          gateway_ip?: string | null
-          gateway_token?: string | null
-          id?: string
-          model?: string | null
-          name: string
-          org_id: string
-          setup_phase?: string | null
-          setup_started_at?: string | null
-          started_at?: string | null
-          status?: string | null
-          stopped_at?: string | null
-          system_prompt?: string | null
-          team_description?: string | null
-          team_name?: string | null
-          updated_at?: string | null
-        }
-        Update: {
-          billing_mode?: string | null
-          created_at?: string | null
-          ecs_task_arn?: string | null
-          error_message?: string | null
-          gateway_ip?: string | null
-          gateway_token?: string | null
-          id?: string
-          model?: string | null
-          name?: string
-          org_id?: string
-          setup_phase?: string | null
-          setup_started_at?: string | null
-          started_at?: string | null
-          status?: string | null
-          stopped_at?: string | null
-          system_prompt?: string | null
-          team_description?: string | null
-          team_name?: string | null
-          updated_at?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "openclaw_instances_org_id_fkey"
             columns: ["org_id"]
             isOneToOne: false
             referencedRelation: "organizations"
@@ -807,13 +407,6 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "shared_tasks_instance_id_fkey"
-            columns: ["instance_id"]
-            isOneToOne: false
-            referencedRelation: "openclaw_instances"
-            referencedColumns: ["id"]
-          },
-          {
             foreignKeyName: "shared_tasks_org_id_fkey"
             columns: ["org_id"]
             isOneToOne: false
@@ -861,13 +454,6 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "standup_reports_instance_id_fkey"
-            columns: ["instance_id"]
-            isOneToOne: false
-            referencedRelation: "openclaw_instances"
-            referencedColumns: ["id"]
-          },
-          {
             foreignKeyName: "standup_reports_org_id_fkey"
             columns: ["org_id"]
             isOneToOne: false
@@ -899,13 +485,6 @@ export type Database = {
           task_id?: string
         }
         Relationships: [
-          {
-            foreignKeyName: "task_assignments_agent_id_fkey"
-            columns: ["agent_id"]
-            isOneToOne: false
-            referencedRelation: "agents"
-            referencedColumns: ["id"]
-          },
           {
             foreignKeyName: "task_assignments_member_id_fkey"
             columns: ["member_id"]
@@ -955,13 +534,6 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "task_comments_instance_id_fkey"
-            columns: ["instance_id"]
-            isOneToOne: false
-            referencedRelation: "openclaw_instances"
-            referencedColumns: ["id"]
-          },
-          {
             foreignKeyName: "task_comments_org_id_fkey"
             columns: ["org_id"]
             isOneToOne: false
@@ -1004,13 +576,6 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "task_messages_agent_id_fkey"
-            columns: ["agent_id"]
-            isOneToOne: false
-            referencedRelation: "agents"
-            referencedColumns: ["id"]
-          },
-          {
             foreignKeyName: "task_messages_member_id_fkey"
             columns: ["member_id"]
             isOneToOne: false
@@ -1052,13 +617,6 @@ export type Database = {
           task_id?: string
         }
         Relationships: [
-          {
-            foreignKeyName: "task_subscriptions_instance_id_fkey"
-            columns: ["instance_id"]
-            isOneToOne: false
-            referencedRelation: "openclaw_instances"
-            referencedColumns: ["id"]
-          },
           {
             foreignKeyName: "task_subscriptions_task_id_fkey"
             columns: ["task_id"]
@@ -1115,54 +673,6 @@ export type Database = {
             columns: ["project_id"]
             isOneToOne: false
             referencedRelation: "projects"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      usage_records: {
-        Row: {
-          cost_cents: number
-          created_at: string | null
-          id: string
-          input_tokens: number
-          instance_id: string
-          model: string
-          org_id: string
-          output_tokens: number
-        }
-        Insert: {
-          cost_cents?: number
-          created_at?: string | null
-          id?: string
-          input_tokens?: number
-          instance_id: string
-          model: string
-          org_id: string
-          output_tokens?: number
-        }
-        Update: {
-          cost_cents?: number
-          created_at?: string | null
-          id?: string
-          input_tokens?: number
-          instance_id?: string
-          model?: string
-          org_id?: string
-          output_tokens?: number
-        }
-        Relationships: [
-          {
-            foreignKeyName: "usage_records_instance_id_fkey"
-            columns: ["instance_id"]
-            isOneToOne: false
-            referencedRelation: "openclaw_instances"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "usage_records_org_id_fkey"
-            columns: ["org_id"]
-            isOneToOne: false
-            referencedRelation: "organizations"
             referencedColumns: ["id"]
           },
         ]
