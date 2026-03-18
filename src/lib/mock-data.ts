@@ -183,6 +183,7 @@ export const SESSION_DETAIL: Session = {
       content: "I'll integrate the Yjs awareness protocol for cursor sharing. Each connected client will broadcast their cursor position and selection range.\n\nThe awareness state includes:\n- `cursor` — current position\n- `selection` — anchor + head for range selections\n- `user` — name and color for rendering",
       timestamp: "14:33",
       intentSummary: "Cursor awareness impl",
+      usage: { inputTokens: 4280, outputTokens: 5640, cost: 0.0812 },
       diff: [
         {
           filename: "src/sync/awareness.ts",
