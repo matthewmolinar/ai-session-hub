@@ -496,7 +496,7 @@ export default function MySessions() {
                 <FileTreeNode
                   key={node.path}
                   node={node}
-                  onSessionClick={handleSessionClick}
+                  onSessionClick={toggleSession}
                   activeSessionId={activeSessionId}
                 />
               ))}
