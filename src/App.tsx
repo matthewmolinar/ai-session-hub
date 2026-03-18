@@ -5,7 +5,6 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 import { AppHeader } from "@/components/AppHeader";
-import { AuthGate } from "@/components/AuthGate";
 import Index from "./pages/Index";
 import SessionView from "./pages/SessionView";
 import Profile from "./pages/Profile";
@@ -25,7 +24,7 @@ function AppContent() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-background relative">
+    <div className="min-h-screen flex flex-col bg-background">
       <AppHeader />
       <div className="flex-1">
         <Routes>
@@ -35,7 +34,6 @@ function AppContent() {
           <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
-      <AuthGate />
     </div>
   );
 }

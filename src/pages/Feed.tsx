@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { SessionCard } from "@/components/SessionCard";
 import { FilterBar } from "@/components/FilterBar";
+import { AuthModal } from "@/components/AuthModal";
 import { SESSIONS } from "@/lib/mock-data";
 
 export default function Feed() {
   const [model, setModel] = useState("All Models");
   const [language, setLanguage] = useState("All Languages");
   const [sort, setSort] = useState<"recent" | "trending">("recent");
+  const [authOpen, setAuthOpen] = useState(false);
 
   const filtered = SESSIONS.filter((s) => {
     if (model !== "All Models" && s.model !== model) return false;
@@ -29,12 +31,13 @@ export default function Feed() {
       />
       <div className="flex flex-col gap-3">
         {filtered.map((session) => (
-          <SessionCard key={session.id} session={session} />
+          <SessionCard key={session.id} session={session} onSignInClick={() => setAuthOpen(true)} />
         ))}
         {filtered.length === 0 && (
           <p className="text-sm text-muted-foreground text-center py-12">No sessions match your filters.</p>
         )}
       </div>
+      <AuthModal open={authOpen} onOpenChange={setAuthOpen} />
     </div>
   );
 }
