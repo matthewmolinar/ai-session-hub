@@ -424,6 +424,7 @@ export default function MySessions() {
       {/* File tree panel */}
       <motion.div
         className="shrink-0 overflow-y-auto border-r border-border bg-background"
+        initial={false}
         animate={{
           width: panelOpen ? "340px" : "100%",
           maxWidth: panelOpen ? "340px" : "720px",
