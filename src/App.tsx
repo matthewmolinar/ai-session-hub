@@ -8,6 +8,7 @@ import { AppHeader } from "@/components/AppHeader";
 import Index from "./pages/Index";
 import SessionView from "./pages/SessionView";
 import Profile from "./pages/Profile";
+import MySessions from "./pages/MySessions";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
