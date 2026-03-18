@@ -46,10 +46,6 @@ export default function SessionView() {
                 <Share2 className="h-3 w-3" />
                 Share
               </button>
-              <button className="flex items-center gap-1 px-2.5 py-1 rounded-md text-xs bg-primary text-primary-foreground hover:opacity-90 transition-opacity">
-                <GitFork className="h-3 w-3" />
-                Fork
-              </button>
             </div>
           </div>
           <div className="flex items-center gap-3 text-xs text-muted-foreground">
