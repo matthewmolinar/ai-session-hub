@@ -2,6 +2,7 @@ import { useState, useMemo, useCallback } from "react";
 import { ChevronRight, ChevronDown, Folder, FileText, GitFork, Search, Upload, Sparkles, X, FileCode, MessageSquare, Share2, Coins, Terminal, Zap } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
+import { useMySessionsState } from "@/contexts/MySessionsContext";
 import { ModelBadge } from "@/components/ModelBadge";
 import { TranscriptTurn } from "@/components/TranscriptTurn";
 import { SESSION_DETAIL, SESSIONS } from "@/lib/mock-data";
@@ -183,8 +184,9 @@ function FileTreeNode({
   onSessionClick: (sessionId: string) => void;
   activeSessionId: string | null;
 }) {
-  const [expanded, setExpanded] = useState(depth < 2);
-  const [showSessions, setShowSessions] = useState(false);
+  const { expandedPaths, toggleExpanded, openFilePaths, toggleFileOpen } = useMySessionsState();
+  const expanded = node.type === "folder" && expandedPaths.has(node.path);
+  const showSessions = node.type === "file" && openFilePaths.has(node.path);
 
   if (node.type === "folder") {
     const fileCount = countFiles(node);
@@ -193,7 +195,7 @@ function FileTreeNode({
     return (
       <div>
         <button
-          onClick={() => setExpanded(!expanded)}
+          onClick={() => toggleExpanded(node.path)}
           className="w-full flex items-center gap-1.5 py-1.5 px-2 text-sm hover:bg-secondary/60 rounded-md transition-colors group cursor-pointer"
           style={{ paddingLeft: `${depth * 16 + 8}px` }}
         >
@@ -227,7 +229,7 @@ function FileTreeNode({
   return (
     <div>
       <button
-        onClick={() => setShowSessions(!showSessions)}
+        onClick={() => toggleFileOpen(node.path)}
         className="w-full flex items-center gap-1.5 py-1.5 px-2 text-sm hover:bg-secondary/60 rounded-md transition-colors group cursor-pointer"
         style={{ paddingLeft: `${depth * 16 + 8}px` }}
       >
@@ -383,7 +385,7 @@ function SessionPreview({ session, onClose }: { session: Session; onClose: () =>
 /* ─── Main Page ─── */
 export default function MySessions() {
   const { user } = useAuth();
-  const [activeSessionId, setActiveSessionId] = useState<string | null>(null);
+  const { activeSessionId, toggleSession, setActiveSessionId } = useMySessionsState();
 
   const totalFiles = useMemo(() => FILE_TREE.reduce((sum, n) => sum + countFiles(n), 0), []);
   const totalSessions = useMemo(() => {
@@ -398,15 +400,10 @@ export default function MySessions() {
 
   const activeSession = useMemo(() => {
     if (!activeSessionId) return null;
-    // For demo, only s1 has a transcript
     if (activeSessionId === "s1") return SESSION_DETAIL;
     const found = SESSIONS.find((s) => s.id === activeSessionId);
     return found ?? null;
   }, [activeSessionId]);
-
-  const handleSessionClick = useCallback((sessionId: string) => {
-    setActiveSessionId((prev) => (prev === sessionId ? null : sessionId));
-  }, []);
 
   if (!user) {
     return (
@@ -499,7 +496,7 @@ export default function MySessions() {
                 <FileTreeNode
                   key={node.path}
                   node={node}
-                  onSessionClick={handleSessionClick}
+                  onSessionClick={toggleSession}
                   activeSessionId={activeSessionId}
                 />
               ))}

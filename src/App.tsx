@@ -4,6 +4,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider, useAuth } from "@/contexts/AuthContext";
+import { MySessionsProvider } from "@/contexts/MySessionsContext";
 import { AppHeader } from "@/components/AppHeader";
 import Index from "./pages/Index";
 import SessionView from "./pages/SessionView";
@@ -49,7 +50,9 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <AuthProvider>
-          <AppContent />
+          <MySessionsProvider>
+            <AppContent />
+          </MySessionsProvider>
         </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>
