@@ -84,8 +84,8 @@ function SacredGeometry() {
 
         {/* Inner ring */}
         <circle cx={cx} cy={cy} r={180} fill="none"
-          stroke={`${purple} / 0.14)`} strokeWidth="0.75" />
-        {ticks(174, 36, 12, 0.08)}
+          stroke={`${purple} / 0.1)`} strokeWidth="0.75" />
+        {ticks(174, 36, 12, 0.06)}
 
         {/* Innermost ring — close to card */}
         <circle cx={cx} cy={cy} r={140} fill="none"
