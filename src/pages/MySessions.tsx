@@ -407,36 +407,45 @@ function SessionPreview({ session, onClose }: { session: Session; onClose: () =>
 
 /* ─── Skills Sidebar ─── */
 function SkillsSidebar() {
-  const skillGroups = useMemo(() => {
-    const map = new Map<string, { count: number; authors: Set<string> }>();
+  const skillsWithUsage = useMemo(() => {
+    const usageMap = new Map<string, string[]>();
     for (const session of SESSIONS) {
       for (const tag of session.tags) {
-        const existing = map.get(tag) || { count: 0, authors: new Set<string>() };
-        existing.count += 1;
-        existing.authors.add(session.author.username);
-        map.set(tag, existing);
+        const existing = usageMap.get(tag) || [];
+        existing.push(session.id);
+        usageMap.set(tag, existing);
       }
     }
-    return Array.from(map.entries())
-      .map(([skill, data]) => ({ skill, count: data.count, authors: data.authors.size, teammates: SKILL_TEAMMATE_COUNTS[skill] || 0 }))
-      .sort((a, b) => b.count - a.count);
+    return SKILLS_CATALOG.map((skill) => ({
+      ...skill,
+      sessionCount: usageMap.get(skill.id)?.length || 0,
+    }));
   }, []);
 
+  const categoryColors: Record<string, string> = {
+    workflow: "text-primary",
+    quality: "text-amber-500",
+    devops: "text-emerald-500",
+  };
+
   return (
-    <div className="flex-1 overflow-y-auto px-2 py-3 space-y-1">
-      {skillGroups.map((g) => (
+    <div className="flex-1 overflow-y-auto px-2 py-2 space-y-1.5">
+      {skillsWithUsage.map((skill) => (
         <div
-          key={g.skill}
-          className="flex items-center gap-2 px-2 py-1.5 rounded hover:bg-secondary/50 transition-colors"
+          key={skill.id}
+          className="rounded-lg border border-border bg-card p-2.5 hover:border-primary/30 hover:shadow-sm transition-all"
         >
-          <Zap className="h-3 w-3 text-primary shrink-0" />
-          <span className="text-xs font-mono text-foreground flex-1 truncate">{g.skill}</span>
-          <span className="text-2xs text-muted-foreground">{g.count}</span>
-          {g.teammates > 0 && (
-            <span className="text-2xs text-primary font-medium flex items-center gap-0.5">
-              <Users className="h-2.5 w-2.5" />
-              {g.teammates}
-            </span>
+          <div className="flex items-center gap-2 mb-1">
+            <Zap className={`h-3 w-3 shrink-0 ${categoryColors[skill.category]}`} />
+            <span className="text-xs font-semibold font-mono text-foreground">{skill.name}</span>
+            <span className="ml-auto text-2xs text-muted-foreground">{(skill.installs / 1000).toFixed(1)}k</span>
+          </div>
+          <p className="text-2xs text-muted-foreground leading-relaxed mb-1.5 line-clamp-2">{skill.description}</p>
+          {skill.sessionCount > 0 && (
+            <div className="flex items-center gap-1 text-2xs text-primary font-medium">
+              <BarChart3 className="h-2.5 w-2.5" />
+              {skill.sessionCount} session{skill.sessionCount !== 1 ? "s" : ""}
+            </div>
           )}
         </div>
       ))}
