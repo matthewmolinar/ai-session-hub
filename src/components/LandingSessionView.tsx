@@ -142,7 +142,7 @@ function SacredGeometry() {
           return (
             <text key={text} x={x} y={y}
               textAnchor="middle" dominantBaseline="middle"
-              fill={`${purple} / 0.25)`}
+              fill={`${purple} / 0.18)`}
               fontSize="8" fontFamily="'Geist Mono', monospace"
             >
               {text}
