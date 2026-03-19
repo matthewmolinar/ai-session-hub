@@ -596,7 +596,7 @@ export default function MySessions() {
           >
             <div className="text-center">
               <p className="text-sm text-muted-foreground">
-                {selectedFilePath ? "Pick a session" : "Select a file to start"}
+                {selectedFilePath || selectedSkillId ? "Pick a session" : "Select a file or skill to start"}
               </p>
             </div>
           </motion.div>
