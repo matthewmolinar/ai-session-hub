@@ -5,6 +5,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useMySessionsState } from "@/contexts/MySessionsContext";
 import { ModelBadge } from "@/components/ModelBadge";
 import { TranscriptTurn } from "@/components/TranscriptTurn";
+import { LandingSessionView } from "@/components/LandingSessionView";
 import { SESSION_DETAIL, SESSIONS } from "@/lib/mock-data";
 import type { Session } from "@/lib/mock-data";
 import type { Comment } from "@/components/TurnComment";
