@@ -4,7 +4,29 @@ import { ArrowLeft, Coins, FileCode, GitFork, MessageSquare, Share2, Terminal, Z
 import { TranscriptTurn } from "@/components/TranscriptTurn";
 import { ModelBadge } from "@/components/ModelBadge";
 import { SESSION_DETAIL, SESSIONS } from "@/lib/mock-data";
+import type { Session, Turn } from "@/lib/mock-data";
 import type { Comment } from "@/components/TurnComment";
+
+interface TurnGroup {
+  userTurn: Turn;
+  responseTurns: Turn[];
+}
+
+function groupTurns(transcript: Session["transcript"]): TurnGroup[] {
+  if (!transcript) return [];
+  const groups: TurnGroup[] = [];
+  let current: TurnGroup | null = null;
+  for (const turn of transcript) {
+    if (turn.role === "user") {
+      if (current) groups.push(current);
+      current = { userTurn: turn, responseTurns: [] };
+    } else if (current) {
+      current.responseTurns.push(turn);
+    }
+  }
+  if (current) groups.push(current);
+  return groups;
+}
 
 export default function SessionView() {
   const { id } = useParams();
