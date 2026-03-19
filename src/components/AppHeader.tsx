@@ -5,6 +5,7 @@ import tanagramLogo from "@/assets/tanagram-logo.svg";
 import { SESSIONS } from "@/lib/mock-data";
 import { useAuth } from "@/contexts/AuthContext";
 import { useMySessionsState } from "@/contexts/MySessionsContext";
+import { AuthModal } from "@/components/AuthModal";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -21,6 +22,7 @@ export function AppHeader() {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [authOpen, setAuthOpen] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -155,12 +157,15 @@ export function AppHeader() {
               </button>
             </>
           ) : (
-            <button
-              onClick={() => navigate("/get-started")}
-              className="h-8 px-3.5 rounded-md bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 transition-colors"
-            >
-              Get Started Free
-            </button>
+            <>
+              <button
+                onClick={() => setAuthOpen(true)}
+                className="h-8 px-3.5 rounded-md bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 transition-colors"
+              >
+                Get Started Free
+              </button>
+              <AuthModal open={authOpen} onOpenChange={setAuthOpen} />
+            </>
           )}
         </div>
       </header>
