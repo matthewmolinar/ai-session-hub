@@ -79,7 +79,7 @@ function SacredGeometry() {
 
         {/* Middle ring — thinner dashed */}
         <circle cx={cx} cy={cy} r={220} fill="none"
-          stroke={`${pink} / 0.1)`} strokeWidth="0.75"
+          stroke={`${pink} / 0.07)`} strokeWidth="0.75"
           strokeDasharray="1 6" />
 
         {/* Inner ring */}
