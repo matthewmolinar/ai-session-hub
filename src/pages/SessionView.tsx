@@ -73,7 +73,7 @@ export default function SessionView() {
   const skills = session.tags;
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-[200px_1fr_200px] gap-0 h-[calc(100vh-44px)]">
+    <div className="grid grid-cols-1 lg:grid-cols-[200px_1fr_200px] gap-0 h-full flex-1">
       {/* Left sidebar: Turn Navigator */}
       <aside className="hidden lg:block border-r border-border p-3 overflow-y-auto sticky top-0 h-[calc(100vh-44px)]">
         <h4 className="text-label mb-2">Turns</h4>
