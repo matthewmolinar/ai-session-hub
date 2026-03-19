@@ -95,22 +95,19 @@ export function AppHeader() {
           </Link>
         </nav>
 
-        <div className="ml-auto flex items-center gap-3">
-          <span className="flex items-center gap-1.5 text-xs text-emerald-600">
-            <span className="relative flex h-1.5 w-1.5">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-              <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500" />
-            </span>
-            CLI connected
-          </span>
+        {/* Centered search */}
+        <div className="flex-1 max-w-md mx-4">
           <button
             onClick={() => setOpen(true)}
-            className="flex items-center gap-2 bg-secondary rounded-lg px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors cursor-pointer border border-border"
+            className="w-full flex items-center gap-2 bg-background rounded-lg px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors cursor-pointer border border-border"
           >
-            <Search className="h-3.5 w-3.5" />
-            <span>Search sessions...</span>
-            <kbd className="ml-1 text-2xs bg-background rounded px-1.5 py-0.5 border border-border">/</kbd>
+            <Search className="h-3.5 w-3.5 shrink-0" />
+            <span className="flex-1 text-left">Search sessions...</span>
+            <kbd className="text-2xs bg-card rounded px-1.5 py-0.5 border border-border">/</kbd>
           </button>
+        </div>
+
+        <div className="flex items-center gap-3">
           {user && (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
