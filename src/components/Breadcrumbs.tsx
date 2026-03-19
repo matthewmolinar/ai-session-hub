@@ -11,7 +11,6 @@ const ROUTE_LABELS: Record<string, string> = {
   "/my-sessions": "My Sessions",
   "/": "My Sessions",
   "/explore": "Shared",
-  "/skills": "Skills",
 };
 
 function useBreadcrumbs(): Crumb[] {
