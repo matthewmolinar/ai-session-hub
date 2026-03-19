@@ -189,6 +189,16 @@ function SacredGeometry() {
 }
 
 export function LandingSessionView() {
+  const navigate = useNavigate();
+  const { setSelectedFilePath, setActiveSessionId } = useMySessionsState();
+
+  const handleCardClick = () => {
+    // Pre-select first file that has s1 and open the session
+    setSelectedFilePath("src/editor/document.ts");
+    setActiveSessionId("s1");
+    navigate("/my-sessions");
+  };
+
   return (
     <div className="h-[calc(100vh-44px)] flex items-center justify-center bg-starfield relative">
       <div className="max-w-lg w-full px-6 relative z-10">
@@ -214,7 +224,8 @@ export function LandingSessionView() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.15, duration: 0.6 }}
-            className="relative z-10"
+            className="relative z-10 cursor-pointer"
+            onClick={handleCardClick}
           >
             <div className="glow-card glow-border rounded-lg breathing-glow">
               <SessionCard session={SESSION_DETAIL} landing />
