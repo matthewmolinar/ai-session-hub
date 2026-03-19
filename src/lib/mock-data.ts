@@ -165,7 +165,7 @@ export const SESSIONS: Session[] = [
     filesChanged: 15,
     forks: 4,
     createdAt: "2026-03-15T18:45:00Z",
-    tags: ["astro", "migration", "nextjs"],
+    tags: ["/fix-issue", "/commit", "/docs"],
     sparkline: [5, 7, 9, 8, 6, 4, 3, 5, 7, 8, 6, 4],
     transcript: [
       {
