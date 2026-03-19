@@ -553,16 +553,20 @@ export default function MySessions() {
 
       {/* Column 2: Session feed cards */}
       <AnimatePresence mode="wait">
-        {selectedFilePath && (
+        {(selectedFilePath || selectedSkillId) && (
           <motion.div
-            key={selectedFilePath}
+            key={selectedFilePath || selectedSkillId}
             className="w-[320px] shrink-0 border-r border-border bg-background overflow-hidden"
             initial={{ opacity: 0, x: -12 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -12 }}
             transition={{ type: "spring", stiffness: 500, damping: 35 }}
           >
-            <SessionFeed filePath={selectedFilePath} />
+            {selectedFilePath ? (
+              <SessionFeed filePath={selectedFilePath} />
+            ) : selectedSkillId ? (
+              <SkillFeed skillId={selectedSkillId} />
+            ) : null}
           </motion.div>
         )}
       </AnimatePresence>
