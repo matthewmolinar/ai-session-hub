@@ -1,6 +1,6 @@
 import { useState, useCallback, useMemo } from "react";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
-import { ArrowLeft, Coins, FileCode, GitFork, MessageSquare, Share2, Terminal, Zap, ChevronDown } from "lucide-react";
+import { Coins, FileCode, MessageSquare, Share2, Terminal, Zap, ChevronDown } from "lucide-react";
 import { TranscriptTurn } from "@/components/TranscriptTurn";
 import { ModelBadge } from "@/components/ModelBadge";
 import { SESSION_DETAIL, SESSIONS } from "@/lib/mock-data";
@@ -121,16 +121,7 @@ export default function SessionView() {
         {/* Session header */}
         <div className="border-b border-border px-4 sm:px-6 py-4">
           <div className="flex items-start justify-between gap-3 mb-2">
-            <div className="flex items-center gap-2.5 min-w-0">
-              <button
-                onClick={() => from ? navigate(from) : navigate(-1)}
-                className="shrink-0 flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-secondary border border-border transition-colors cursor-pointer"
-              >
-                <ArrowLeft className="h-3.5 w-3.5" />
-                <span className="hidden sm:inline">{from === "/explore" ? "Feed" : "Back"}</span>
-              </button>
-              <h1 className="text-base sm:text-lg font-semibold text-foreground truncate">{session.title}</h1>
-            </div>
+            <h1 className="text-base sm:text-lg font-semibold text-foreground truncate">{session.title}</h1>
             <div className="flex items-center gap-2 shrink-0">
               <button className="relative flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-md text-xs font-medium bg-primary text-primary-foreground hover:bg-primary/90 transition-all shadow-[0_0_12px_hsl(var(--primary)/0.4)] hover:shadow-[0_0_20px_hsl(var(--primary)/0.6)]">
                 <Share2 className="h-3.5 w-3.5" />
