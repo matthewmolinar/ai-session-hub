@@ -511,10 +511,23 @@ export default function MySessions() {
   }, [activeSessionId]);
 
 
+  // On mobile, if a session is active, show it full-screen with a back button
+  const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
+
   return (
-    <div className="flex-1 flex overflow-hidden">
+    <div className="flex-1 flex overflow-hidden relative">
+      {/* Mobile: full-screen session preview overlay */}
+      {activeSession && (
+        <div className="md:hidden absolute inset-0 z-30 bg-background flex flex-col overflow-hidden">
+          <SessionPreview
+            session={activeSession}
+            onClose={() => setActiveSessionId(null)}
+          />
+        </div>
+      )}
+
       {/* Column 1: Sidebar with Files/Skills tabs */}
-      <div className="w-[220px] shrink-0 overflow-y-auto border-r border-border bg-background flex flex-col">
+      <div className="hidden md:flex w-[220px] shrink-0 overflow-y-auto border-r border-border bg-background flex-col">
         <div className="flex border-b border-border shrink-0">
           <button
             onClick={() => { setSidebarTab("files"); setSelectedSkillId(null); }}
@@ -551,12 +564,69 @@ export default function MySessions() {
         )}
       </div>
 
-      {/* Column 2: Session feed cards */}
+      {/* Mobile: Stacked layout — tabs + content */}
+      <div className="md:hidden flex-1 flex flex-col overflow-hidden">
+        {/* Tabs */}
+        <div className="flex border-b border-border shrink-0">
+          <button
+            onClick={() => { setSidebarTab("files"); setSelectedSkillId(null); }}
+            className={`flex-1 px-3 py-2.5 text-xs font-medium transition-colors cursor-pointer ${
+              sidebarTab === "files"
+                ? "text-foreground border-b-2 border-primary"
+                : "text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            Files
+          </button>
+          <button
+            onClick={() => { setSidebarTab("skills"); setSelectedFilePath(null); }}
+            className={`flex-1 px-3 py-2.5 text-xs font-medium transition-colors cursor-pointer ${
+              sidebarTab === "skills"
+                ? "text-foreground border-b-2 border-primary"
+                : "text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            Skills
+          </button>
+        </div>
+
+        {/* Mobile content: file tree or skills, then session feed below */}
+        <div className="flex-1 overflow-y-auto">
+          {sidebarTab === "files" ? (
+            <>
+              <div className="px-3 py-3 border-b border-border">
+                {FILE_TREE.map((node) => (
+                  <FileTreeNode key={node.path} node={node} />
+                ))}
+              </div>
+              {selectedFilePath && (
+                <SessionFeed filePath={selectedFilePath} />
+              )}
+            </>
+          ) : (
+            <>
+              <div className="border-b border-border">
+                <SkillsSidebar selectedSkillId={selectedSkillId} onSelectSkill={(id) => { setSelectedSkillId(id); setActiveSessionId(null); }} />
+              </div>
+              {selectedSkillId && (
+                <SkillFeed skillId={selectedSkillId} />
+              )}
+            </>
+          )}
+          {!selectedFilePath && !selectedSkillId && (
+            <div className="flex items-center justify-center py-12">
+              <p className="text-sm text-muted-foreground">Select a file or skill to start</p>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Desktop: Column 2 — Session feed cards */}
       <AnimatePresence mode="wait">
         {(selectedFilePath || selectedSkillId) && (
           <motion.div
             key={selectedFilePath || selectedSkillId}
-            className="w-[320px] shrink-0 border-r border-border bg-background overflow-hidden"
+            className="hidden md:block w-[320px] shrink-0 border-r border-border bg-background overflow-hidden"
             initial={{ opacity: 0, x: -12 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -12 }}
@@ -571,12 +641,12 @@ export default function MySessions() {
         )}
       </AnimatePresence>
 
-      {/* Column 3: Session transcript */}
+      {/* Desktop: Column 3 — Session transcript */}
       <AnimatePresence mode="wait">
         {activeSession ? (
           <motion.div
             key={activeSession.id}
-            className="flex-1 min-w-0 bg-background overflow-hidden"
+            className="hidden md:block flex-1 min-w-0 bg-background overflow-hidden"
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: 20 }}
@@ -590,7 +660,7 @@ export default function MySessions() {
         ) : (
           <motion.div
             key="empty"
-            className="flex-1 min-w-0 flex items-center justify-center"
+            className="hidden md:flex flex-1 min-w-0 items-center justify-center"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
           >

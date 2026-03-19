@@ -72,11 +72,11 @@ export function SessionCard({ session, onSignInClick, landing }: SessionCardProp
       <div className="p-4 pb-0">
         {/* Author row */}
         <div className="flex items-start gap-2.5 mb-3">
-          <div className="h-9 w-9 rounded-full bg-primary/10 flex items-center justify-center text-sm font-semibold text-primary shrink-0">
+          <div className="h-8 w-8 sm:h-9 sm:w-9 rounded-full bg-primary/10 flex items-center justify-center text-xs sm:text-sm font-semibold text-primary shrink-0">
             {session.author.username[0].toUpperCase()}
           </div>
           <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-wrap">
               <span className="font-semibold text-sm text-foreground">@{session.author.username}</span>
               <span className="text-xs text-muted-foreground">{timeAgo}</span>
             </div>
@@ -86,13 +86,21 @@ export function SessionCard({ session, onSignInClick, landing }: SessionCardProp
               </p>
             )}
           </div>
-          <div className="flex items-center gap-1.5 shrink-0">
+          <div className="flex items-center gap-1.5 shrink-0 max-sm:hidden">
             <span className={`inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-2xs font-medium border ${SOURCE_COLORS[session.source]}`}>
               <Terminal className="h-2.5 w-2.5" />
               {SOURCE_LABELS[session.source]}
             </span>
             <ModelBadge model={session.model} />
           </div>
+        </div>
+        {/* Badges on mobile — below author row */}
+        <div className="flex items-center gap-1.5 mb-2 sm:hidden">
+          <span className={`inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-2xs font-medium border ${SOURCE_COLORS[session.source]}`}>
+            <Terminal className="h-2.5 w-2.5" />
+            {SOURCE_LABELS[session.source]}
+          </span>
+          <ModelBadge model={session.model} />
         </div>
 
         {/* Title */}
@@ -110,7 +118,7 @@ export function SessionCard({ session, onSignInClick, landing }: SessionCardProp
 
         {/* Skill tags */}
         {session.tags.length > 0 && (
-          <div className="flex items-center gap-1.5 mb-3">
+          <div className="flex items-center gap-1.5 mb-3 flex-wrap">
             {session.tags.map((tag) => (
               <span key={tag} className="text-2xs font-mono text-primary bg-primary/8 rounded-md px-2 py-0.5 border border-primary/15">
                 {tag}
