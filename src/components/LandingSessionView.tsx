@@ -157,7 +157,7 @@ function SacredGeometry() {
             const a = (i / 6) * Math.PI * 2 - Math.PI / 2;
             return `${cx + Math.cos(a) * r},${cy + Math.sin(a) * r}`;
           }).join(' ');
-          return <polygon points={pts} fill="none" stroke={`${purple} / 0.1)`} strokeWidth="0.75" />;
+          return <polygon points={pts} fill="none" stroke={`${purple} / 0.07)`} strokeWidth="0.75" />;
         })()}
 
         {/* Triangle inscribed */}
