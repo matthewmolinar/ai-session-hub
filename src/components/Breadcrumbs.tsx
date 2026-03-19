@@ -27,9 +27,6 @@ function useBreadcrumbs(): Crumb[] {
     return [{ label: "Shared" }];
   }
 
-  if (path === "/skills") {
-    return [{ label: "Skills" }];
-  }
 
   // Determine parent crumb from navigation origin
   const parentPath = from && ROUTE_LABELS[from] ? from : "/my-sessions";
