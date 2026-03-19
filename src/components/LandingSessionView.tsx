@@ -1,7 +1,9 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Copy, Check } from "lucide-react";
 import { motion } from "framer-motion";
 import { SessionCard } from "@/components/SessionCard";
+import { useMySessionsState } from "@/contexts/MySessionsContext";
 import { SESSION_DETAIL } from "@/lib/mock-data";
 
 function CopyButton({ text }: { text: string }) {
