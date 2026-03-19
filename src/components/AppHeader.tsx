@@ -1,8 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Search, LogOut, User, LogIn } from "lucide-react";
+import { Search, LogOut, User } from "lucide-react";
 import tanagramLogo from "@/assets/tanagram-logo.svg";
-import { AuthModal } from "@/components/AuthModal";
 import { SESSIONS } from "@/lib/mock-data";
 import { useAuth } from "@/contexts/AuthContext";
 import { useMySessionsState } from "@/contexts/MySessionsContext";
@@ -22,7 +21,7 @@ export function AppHeader() {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
-  const [authOpen, setAuthOpen] = useState(false);
+  
 
   // "/" shortcut
   useEffect(() => {
@@ -118,7 +117,7 @@ export function AppHeader() {
             <span>Search sessions...</span>
             <kbd className="ml-2 text-2xs bg-background rounded px-1 py-0.5 border border-border">/</kbd>
           </button>
-          {user ? (
+          {user && (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <button className="h-7 w-7 rounded-full bg-secondary flex items-center justify-center text-xs font-semibold text-foreground hover:ring-2 hover:ring-ring transition-all cursor-pointer">
@@ -138,14 +137,6 @@ export function AppHeader() {
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
-          ) : (
-            <button
-              onClick={() => setAuthOpen(true)}
-              className="flex items-center gap-1.5 bg-primary text-primary-foreground rounded-md px-3 py-1 text-xs font-medium hover:bg-primary/90 transition-colors cursor-pointer"
-            >
-              <LogIn className="h-3 w-3" />
-              Sign in
-            </button>
           )}
         </div>
       </header>
@@ -202,7 +193,7 @@ export function AppHeader() {
           </div>
         </div>
       )}
-      <AuthModal open={authOpen} onOpenChange={setAuthOpen} />
+      
     </>
   );
 }
