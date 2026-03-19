@@ -708,27 +708,26 @@ export const TEAMMATE_ACTIVITY: Record<string, { username: string; avatar?: stri
   s6: [{ username: "sarah_edo" }, { username: "danabramov" }, { username: "tkdodo" }, { username: "phil_eaton" }],
 };
 
-// Teammate usage counts per skill tag
-export const SKILL_TEAMMATE_COUNTS: Record<string, number> = {
-  typescript: 5,
-  collaboration: 2,
-  crdt: 1,
-  rust: 3,
-  async: 2,
-  systems: 2,
-  astro: 1,
-  migration: 2,
-  nextjs: 3,
-  "state-machine": 2,
-  forms: 4,
-  go: 2,
-  database: 3,
-  "data-structures": 2,
-  css: 4,
-  animation: 3,
-  library: 2,
-  python: 3,
-};
+export interface SkillDefinition {
+  id: string;
+  name: string;
+  description: string;
+  installs: number;
+  category: "workflow" | "quality" | "devops";
+}
+
+export const SKILLS_CATALOG: SkillDefinition[] = [
+  { id: "/commit",        name: "/commit",        description: "Auto-generates conventional commit messages",                    installs: 12_400, category: "workflow" },
+  { id: "/review",        name: "/review",        description: "Multi-angle code review — security, perf, quality",             installs: 9_800,  category: "quality" },
+  { id: "/fix-issue",     name: "/fix-issue",     description: "Takes a GitHub/Linear issue number, implements the fix",        installs: 8_200,  category: "workflow" },
+  { id: "/tdd",           name: "/tdd",           description: "Red-green-refactor cycle orchestration",                        installs: 6_500,  category: "quality" },
+  { id: "/pr-review",     name: "/pr-review",     description: "Fetches PR diff, writes structured review comments",           installs: 5_900,  category: "quality" },
+  { id: "/deploy",        name: "/deploy",        description: "Runs tests, builds, pushes to prod",                            installs: 5_100,  category: "devops" },
+  { id: "/test",          name: "/test",          description: "Generates test suites for specified code",                      installs: 7_300,  category: "quality" },
+  { id: "/docs",          name: "/docs",          description: "Generates API docs from code (OpenAPI, JSDoc)",                 installs: 4_200,  category: "workflow" },
+  { id: "/security-scan", name: "/security-scan", description: "OWASP-style vulnerability scan",                               installs: 3_800,  category: "devops" },
+  { id: "/refactor",      name: "/refactor",      description: "Dead code removal, pattern cleanup",                            installs: 4_600,  category: "quality" },
+];
 
 export const MODELS = ["All Models", "claude-3.5-sonnet", "gpt-4o", "gemini-2.5-pro"] as const;
-export const LANGUAGES = ["All Languages", "typescript", "rust", "go", "python", "css"] as const;
+export const LANGUAGES = ["All Languages", "/commit", "/review", "/fix-issue", "/tdd", "/test", "/deploy"] as const;
