@@ -32,7 +32,6 @@ export function SessionCard({ session, onSignInClick, landing }: SessionCardProp
   const location = useLocation();
   const blurred = false;
   const [liked, setLiked] = useState(false);
-  const [bookmarked, setBookmarked] = useState(false);
   const [likeCount, setLikeCount] = useState(session.likes);
 
   const handleLike = (e: React.MouseEvent) => {
