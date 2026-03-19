@@ -154,7 +154,7 @@ export function SessionCard({ session, onSignInClick, landing }: SessionCardProp
           Like
         </button>
         <button
-          onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
+          onClick={(e) => { e.preventDefault(); e.stopPropagation(); inputRef.current?.focus(); }}
           className="flex-1 flex items-center justify-center gap-2 py-2 text-sm font-medium text-muted-foreground hover:bg-secondary transition-colors cursor-pointer rounded-md my-0.5"
         >
           <MessageSquare className="h-4 w-4" />
