@@ -14,8 +14,8 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ["Geist", "system-ui", "-apple-system", "sans-serif"],
-        mono: ["Geist Mono", "ui-monospace", "monospace"],
+        sans: ["Inter", "system-ui", "-apple-system", "sans-serif"],
+        mono: ["SF Mono", "Cascadia Code", "ui-monospace", "monospace"],
       },
       fontSize: {
         "2xs": ["11px", "1.4"],
@@ -85,6 +85,7 @@ export default {
       },
       boxShadow: {
         card: "var(--shadow-card)",
+        elevated: "var(--shadow-elevated)",
       },
       keyframes: {
         "accordion-down": {

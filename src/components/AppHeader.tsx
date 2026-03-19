@@ -21,9 +21,7 @@ export function AppHeader() {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
-  
 
-  // "/" shortcut
   useEffect(() => {
     function onKeyDown(e: KeyboardEvent) {
       if (e.key === "/" && !open && !(e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement)) {
@@ -39,7 +37,6 @@ export function AppHeader() {
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [open]);
 
-  // Focus input when opened
   useEffect(() => {
     if (open) inputRef.current?.focus();
   }, [open]);
@@ -47,21 +44,12 @@ export function AppHeader() {
   const results = query.length > 0
     ? SESSIONS.filter((s) => {
         const q = query.toLowerCase();
-        // skill: operator
         const skillMatch = q.match(/^skill:(\S+)$/);
-        if (skillMatch) {
-          return s.tags.some((t) => t.toLowerCase().includes(skillMatch[1]));
-        }
-        // model: operator
+        if (skillMatch) return s.tags.some((t) => t.toLowerCase().includes(skillMatch[1]));
         const modelMatch = q.match(/^model:(\S+)$/);
-        if (modelMatch) {
-          return s.model.toLowerCase().includes(modelMatch[1]);
-        }
-        // author: operator
+        if (modelMatch) return s.model.toLowerCase().includes(modelMatch[1]);
         const authorMatch = q.match(/^author:(\S+)$/);
-        if (authorMatch) {
-          return s.author.username.toLowerCase().includes(authorMatch[1]);
-        }
+        if (authorMatch) return s.author.username.toLowerCase().includes(authorMatch[1]);
         return (
           s.title.toLowerCase().includes(q) ||
           s.openingPrompt.toLowerCase().includes(q) ||
@@ -73,37 +61,37 @@ export function AppHeader() {
 
   return (
     <>
-      <header className="h-11 border-b border-border flex items-center px-4 gap-6 bg-background shrink-0 relative z-50">
+      <header className="h-12 border-b border-border flex items-center px-4 gap-6 bg-card shrink-0 relative z-50 shadow-card">
         <Link
           to="/my-sessions"
-          className="flex items-center gap-1.5 font-semibold text-sm text-foreground"
+          className="flex items-center gap-2 font-semibold text-sm text-foreground"
           onClick={() => {
             setDemoMode(false);
             setActiveSessionId(null);
             setSelectedFilePath(null);
           }}
         >
-          <img src={tanagramLogo} alt="Tanagram" className="h-5 w-5 translate-y-[1px]" />
+          <img src={tanagramLogo} alt="Tanagram" className="h-5 w-5 translate-y-[1px]" style={{ filter: "invert(1)" }} />
           <span>Tanagram</span>
         </Link>
 
-        <nav className="flex items-center gap-4 text-xs">
+        <nav className="flex items-center gap-1 text-sm">
           <Link
             to="/my-sessions"
-            className={`transition-colors ${location.pathname === "/my-sessions" || location.pathname === "/" ? "text-foreground font-medium" : "text-muted-foreground hover:text-foreground"}`}
+            className={`px-3 py-1.5 rounded-md transition-colors ${location.pathname === "/my-sessions" || location.pathname === "/" ? "bg-secondary text-foreground font-medium" : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"}`}
           >
             Explorer
           </Link>
           <Link
             to="/explore"
-            className={`transition-colors ${location.pathname === "/explore" ? "text-foreground font-medium" : "text-muted-foreground hover:text-foreground"}`}
+            className={`px-3 py-1.5 rounded-md transition-colors ${location.pathname === "/explore" ? "bg-secondary text-foreground font-medium" : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"}`}
           >
-            Shared
+            Feed
           </Link>
         </nav>
 
-        <div className="ml-auto flex items-center gap-2">
-          <span className="flex items-center gap-1.5 text-2xs text-emerald-500">
+        <div className="ml-auto flex items-center gap-3">
+          <span className="flex items-center gap-1.5 text-xs text-emerald-600">
             <span className="relative flex h-1.5 w-1.5">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
               <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500" />
@@ -112,16 +100,16 @@ export function AppHeader() {
           </span>
           <button
             onClick={() => setOpen(true)}
-            className="flex items-center gap-1.5 bg-secondary rounded-md px-2.5 py-1 text-xs text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+            className="flex items-center gap-2 bg-secondary rounded-lg px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors cursor-pointer border border-border"
           >
-            <Search className="h-3 w-3" />
+            <Search className="h-3.5 w-3.5" />
             <span>Search sessions...</span>
-            <kbd className="ml-2 text-2xs bg-background rounded px-1 py-0.5 border border-border">/</kbd>
+            <kbd className="ml-1 text-2xs bg-background rounded px-1.5 py-0.5 border border-border">/</kbd>
           </button>
           {user && (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <button className="h-7 w-7 rounded-full bg-secondary flex items-center justify-center text-xs font-semibold text-foreground hover:ring-2 hover:ring-ring transition-all cursor-pointer">
+                <button className="h-8 w-8 rounded-full bg-primary flex items-center justify-center text-xs font-semibold text-primary-foreground hover:opacity-90 transition-all cursor-pointer">
                   {username[0].toUpperCase()}
                 </button>
               </DropdownMenuTrigger>
@@ -145,25 +133,23 @@ export function AppHeader() {
       {/* Search overlay */}
       {open && (
         <div className="fixed inset-0 z-50 flex items-start justify-center pt-[15vh]" onClick={() => { setOpen(false); setQuery(""); }}>
-          <div className="absolute inset-0 bg-background/80 backdrop-blur-sm" />
+          <div className="absolute inset-0 bg-foreground/20 backdrop-blur-sm" />
           <div
-            className="relative w-full max-w-lg bg-card border border-border rounded-lg shadow-2xl overflow-hidden"
+            className="relative w-full max-w-lg bg-card border border-border rounded-xl shadow-elevated overflow-hidden"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Search input */}
             <div className="flex items-center gap-2 px-4 py-3 border-b border-border">
               <Search className="h-4 w-4 text-muted-foreground shrink-0" />
               <input
                 ref={inputRef}
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                placeholder="Search... try skill:typescript or model:gpt-4o"
+                placeholder="Search... try skill:/commit or model:gpt-4o"
                 className="flex-1 bg-transparent text-sm text-foreground placeholder:text-muted-foreground outline-none"
               />
               <kbd className="text-2xs bg-secondary text-muted-foreground rounded px-1.5 py-0.5 border border-border">esc</kbd>
             </div>
 
-            {/* Results */}
             <div className="max-h-80 overflow-y-auto">
               {results.length === 0 ? (
                 <div className="px-4 py-8 text-center text-sm text-muted-foreground">
@@ -194,7 +180,6 @@ export function AppHeader() {
           </div>
         </div>
       )}
-      
     </>
   );
 }
