@@ -99,7 +99,7 @@ export default function SessionView() {
                     {turnCommentCount}
                   </span>
                 )}
-              </a>
+              </button>
             );
           })}
         </div>
