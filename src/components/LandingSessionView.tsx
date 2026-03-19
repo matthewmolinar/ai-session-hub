@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Terminal } from "lucide-react";
 import { Terminal } from "lucide-react";
 import { motion } from "framer-motion";
 import { SessionCard } from "@/components/SessionCard";
