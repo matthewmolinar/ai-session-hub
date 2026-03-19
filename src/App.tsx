@@ -6,6 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 import { MySessionsProvider } from "@/contexts/MySessionsContext";
 import { AppHeader } from "@/components/AppHeader";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
 import Index from "./pages/Index";
 import SessionView from "./pages/SessionView";
 import Profile from "./pages/Profile";
