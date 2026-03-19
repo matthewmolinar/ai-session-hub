@@ -422,16 +422,42 @@ export default function MySessions() {
 
   return (
     <div className="flex-1 flex overflow-hidden">
-      {/* Column 1: File tree — minimal */}
-      <div className="w-[220px] shrink-0 overflow-y-auto border-r border-border bg-background">
-        <div className="px-3 py-3">
-          <p className="text-xs font-medium text-muted-foreground mb-2 px-2">Files</p>
-          <div className="py-0.5">
-            {FILE_TREE.map((node) => (
-              <FileTreeNode key={node.path} node={node} />
-            ))}
-          </div>
+      {/* Column 1: Sidebar with Files/Skills tabs */}
+      <div className="w-[220px] shrink-0 overflow-y-auto border-r border-border bg-background flex flex-col">
+        <div className="flex border-b border-border shrink-0">
+          <button
+            onClick={() => setSidebarTab("files")}
+            className={`flex-1 px-3 py-2 text-xs font-medium transition-colors cursor-pointer ${
+              sidebarTab === "files"
+                ? "text-foreground border-b-2 border-primary"
+                : "text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            Files
+          </button>
+          <button
+            onClick={() => setSidebarTab("skills")}
+            className={`flex-1 px-3 py-2 text-xs font-medium transition-colors cursor-pointer ${
+              sidebarTab === "skills"
+                ? "text-foreground border-b-2 border-primary"
+                : "text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            Skills
+          </button>
         </div>
+
+        {sidebarTab === "files" ? (
+          <div className="px-3 py-3 flex-1 overflow-y-auto">
+            <div className="py-0.5">
+              {FILE_TREE.map((node) => (
+                <FileTreeNode key={node.path} node={node} />
+              ))}
+            </div>
+          </div>
+        ) : (
+          <SkillsSidebar />
+        )}
       </div>
 
       {/* Column 2: Session feed cards */}
