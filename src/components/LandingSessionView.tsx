@@ -73,9 +73,9 @@ function SacredGeometry() {
 
         {/* Outer ring with tick marks */}
         <circle cx={cx} cy={cy} r={260} fill="none"
-          stroke={`${purple} / 0.18)`} strokeWidth="0.75" />
-        {ticks(254, 72, 12, 0.1)}
-        {ticks(254, 12, 18, 0.2)}
+          stroke={`${purple} / 0.12)`} strokeWidth="0.75" />
+        {ticks(254, 72, 12, 0.07)}
+        {ticks(254, 12, 18, 0.14)}
 
         {/* Middle ring — thinner dashed */}
         <circle cx={cx} cy={cy} r={220} fill="none"
