@@ -6,8 +6,8 @@ interface MySessionsState {
   toggleSession: (id: string) => void;
   expandedPaths: Set<string>;
   toggleExpanded: (path: string) => void;
-  openFilePaths: Set<string>;
-  toggleFileOpen: (path: string) => void;
+  selectedFilePath: string | null;
+  setSelectedFilePath: (path: string | null) => void;
 }
 
 const MySessionsContext = createContext<MySessionsState | null>(null);
@@ -15,7 +15,7 @@ const MySessionsContext = createContext<MySessionsState | null>(null);
 export function MySessionsProvider({ children }: { children: ReactNode }) {
   const [activeSessionId, setActiveSessionId] = useState<string | null>(null);
   const [expandedPaths, setExpandedPaths] = useState<Set<string>>(() => new Set(["src", "src/editor", "src/sync", "src/components", "src/lib"]));
-  const [openFilePaths, setOpenFilePaths] = useState<Set<string>>(new Set());
+  const [selectedFilePath, setSelectedFilePath] = useState<string | null>(null);
 
   const toggleSession = useCallback((id: string) => {
     setActiveSessionId((prev) => (prev === id ? null : id));
@@ -23,15 +23,6 @@ export function MySessionsProvider({ children }: { children: ReactNode }) {
 
   const toggleExpanded = useCallback((path: string) => {
     setExpandedPaths((prev) => {
-      const next = new Set(prev);
-      if (next.has(path)) next.delete(path);
-      else next.add(path);
-      return next;
-    });
-  }, []);
-
-  const toggleFileOpen = useCallback((path: string) => {
-    setOpenFilePaths((prev) => {
       const next = new Set(prev);
       if (next.has(path)) next.delete(path);
       else next.add(path);
@@ -47,8 +38,8 @@ export function MySessionsProvider({ children }: { children: ReactNode }) {
         toggleSession,
         expandedPaths,
         toggleExpanded,
-        openFilePaths,
-        toggleFileOpen,
+        selectedFilePath,
+        setSelectedFilePath,
       }}
     >
       {children}
