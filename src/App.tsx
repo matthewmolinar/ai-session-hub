@@ -30,6 +30,7 @@ function AppContent() {
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <AppHeader />
+      <Breadcrumbs />
       <div className="flex-1">
         <Routes>
           <Route path="/" element={<MySessions />} />
