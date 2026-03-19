@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { FileCode, MessageSquare, Lock, Heart, Bookmark, Share2, Terminal } from "lucide-react";
+import { MessageSquare, Lock, Heart, Share2, Terminal } from "lucide-react";
 import { ModelBadge } from "./ModelBadge";
 import { Sparkline } from "./Sparkline";
 import type { Session, SourceTool } from "@/lib/mock-data";
