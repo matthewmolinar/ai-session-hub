@@ -18,7 +18,7 @@ export function SessionCard({ session, onSignInClick, landing }: SessionCardProp
 
   const content = (
     <div
-      className="relative rounded-lg shadow-card border border-border bg-card p-4 transition-shadow hover:shadow-md overflow-hidden"
+      className="relative rounded-lg border border-border bg-card p-4 overflow-hidden glow-card glow-border"
       onClick={blurred && onSignInClick ? () => onSignInClick() : undefined}
       role={blurred ? "button" : undefined}
       style={blurred ? { cursor: "pointer" } : undefined}
