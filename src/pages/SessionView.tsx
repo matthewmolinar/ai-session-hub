@@ -148,7 +148,7 @@ export default function SessionView() {
       </main>
 
       {/* Right sidebar: Environment State */}
-      <aside className="hidden lg:block border-l border-border p-3 overflow-y-auto sticky top-0 h-[calc(100vh-44px)]">
+      <aside className="hidden lg:block border-l border-border p-3 overflow-y-auto">
         {/* Cost & Tokens */}
         <h4 className="text-label mb-2 flex items-center gap-1.5">
           <Coins className="h-3 w-3 text-primary" />

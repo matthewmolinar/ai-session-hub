@@ -420,7 +420,7 @@ export default function MySessions() {
 
 
   return (
-    <div className="h-[calc(100vh-44px)] flex overflow-hidden">
+    <div className="flex-1 flex overflow-hidden">
       {/* Column 1: File tree — minimal */}
       <div className="w-[220px] shrink-0 overflow-y-auto border-r border-border bg-background">
         <div className="px-3 py-3">
