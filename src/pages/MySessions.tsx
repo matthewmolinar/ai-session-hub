@@ -547,7 +547,7 @@ export default function MySessions() {
             </div>
           </div>
         ) : (
-          <SkillsSidebar />
+          <SkillsSidebar selectedSkillId={selectedSkillId} onSelectSkill={(id) => { setSelectedSkillId(id); setActiveSessionId(null); }} />
         )}
       </div>
 
