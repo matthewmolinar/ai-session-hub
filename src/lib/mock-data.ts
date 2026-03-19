@@ -730,4 +730,6 @@ export const SKILLS_CATALOG: SkillDefinition[] = [
 ];
 
 export const MODELS = ["All Models", "claude-3.5-sonnet", "gpt-4o", "gemini-2.5-pro"] as const;
-export const LANGUAGES = ["All Languages", "/commit", "/review", "/fix-issue", "/tdd", "/test", "/deploy"] as const;
+export const SKILLS_FILTERS = ["All Skills", "/commit", "/review", "/fix-issue", "/tdd", "/test", "/deploy", "/pr-review", "/docs", "/security-scan", "/refactor"] as const;
+export const LANGUAGES = SKILLS_FILTERS;
+export const AUTHORS = ["All Authors", ...Array.from(new Set(SESSIONS.map(s => s.author.username)))] as const;

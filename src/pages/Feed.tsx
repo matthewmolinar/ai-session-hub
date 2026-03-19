@@ -6,13 +6,15 @@ import { SESSIONS } from "@/lib/mock-data";
 
 export default function Feed() {
   const [model, setModel] = useState("All Models");
-  const [language, setLanguage] = useState("All Languages");
+  const [skill, setSkill] = useState("All Skills");
+  const [author, setAuthor] = useState("All Authors");
   const [sort, setSort] = useState<"recent" | "trending">("recent");
   const [authOpen, setAuthOpen] = useState(false);
 
   const filtered = SESSIONS.filter((s) => {
     if (model !== "All Models" && s.model !== model) return false;
-    if (language !== "All Languages" && !s.tags.includes(language)) return false;
+    if (skill !== "All Skills" && !s.tags.includes(skill)) return false;
+    if (author !== "All Authors" && s.author.username !== author) return false;
     return true;
   }).sort((a, b) => {
     if (sort === "trending") return b.forks - a.forks;
@@ -23,10 +25,12 @@ export default function Feed() {
     <div className="max-w-2xl mx-auto px-4 py-6">
       <FilterBar
         model={model}
-        language={language}
+        skill={skill}
+        author={author}
         sort={sort}
         onModelChange={setModel}
-        onLanguageChange={setLanguage}
+        onSkillChange={setSkill}
+        onAuthorChange={setAuthor}
         onSortChange={setSort}
       />
       <div className="flex flex-col gap-3">
