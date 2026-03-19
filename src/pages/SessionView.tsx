@@ -202,13 +202,14 @@ export default function SessionView() {
           )}
         </div>
 
-        {/* Transcript */}
+        {/* Transcript — grouped like Explorer */}
         <div className="px-4 sm:px-6 py-4 divide-y divide-border">
-          {session.transcript?.map((turn) => (
-            <div key={turn.id} id={`turn-${turn.id}`}>
+          {groups.map((group) => (
+            <div key={group.userTurn.id} id={`turn-${group.userTurn.id}`}>
               <TranscriptTurn
-                turn={turn}
-                comments={commentsByTurn[turn.id] || []}
+                turn={group.userTurn}
+                responseTurns={group.responseTurns}
+                comments={commentsByTurn[group.userTurn.id] || []}
                 onAddComment={handleAddComment}
               />
             </div>
