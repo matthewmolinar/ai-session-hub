@@ -1,6 +1,6 @@
 import { useState, useCallback, useMemo } from "react";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
-import { ArrowLeft, Coins, FileCode, GitFork, MessageSquare, Share2, Terminal, Zap, ChevronDown } from "lucide-react";
+import { Coins, FileCode, MessageSquare, Share2, Terminal, Zap, ChevronDown } from "lucide-react";
 import { TranscriptTurn } from "@/components/TranscriptTurn";
 import { ModelBadge } from "@/components/ModelBadge";
 import { SESSION_DETAIL, SESSIONS } from "@/lib/mock-data";
