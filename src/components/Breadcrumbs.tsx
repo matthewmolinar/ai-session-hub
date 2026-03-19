@@ -1,5 +1,5 @@
-import { Link, useLocation, useParams } from "react-router-dom";
-import { ChevronRight } from "lucide-react";
+import { Link, useLocation, useParams, useNavigate } from "react-router-dom";
+import { ArrowLeft, ChevronRight } from "lucide-react";
 import { SESSIONS, SESSION_DETAIL } from "@/lib/mock-data";
 
 interface Crumb {
