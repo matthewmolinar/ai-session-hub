@@ -1,7 +1,25 @@
-import { Terminal } from "lucide-react";
+import { useState } from "react";
+import { Terminal, Check, Copy } from "lucide-react";
 import { motion } from "framer-motion";
 import { SessionCard } from "@/components/SessionCard";
 import { SESSION_DETAIL } from "@/lib/mock-data";
+
+function CopyButton({ text }: { text: string }) {
+  const [copied, setCopied] = useState(false);
+  const handleCopy = () => {
+    navigator.clipboard.writeText(text);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+  return (
+    <button
+      onClick={handleCopy}
+      className="h-6 w-6 rounded flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors cursor-pointer"
+    >
+      {copied ? <Check className="h-3 w-3 text-primary" /> : <Copy className="h-3 w-3" />}
+    </button>
+  );
+}
 
 export function LandingSessionView() {
   return (
@@ -45,11 +63,12 @@ export function LandingSessionView() {
               <Terminal className="h-3 w-3 text-muted-foreground" />
               <span className="text-2xs text-muted-foreground font-mono">Terminal</span>
             </div>
-            <div className="px-4 py-3">
+            <div className="px-4 py-3 flex items-center justify-between gap-2">
               <div className="flex items-center gap-2">
                 <span className="text-primary font-mono text-sm">$</span>
                 <code className="text-sm font-mono text-foreground font-medium">npx tanagram</code>
               </div>
+              <CopyButton text="npx tanagram" />
               <p className="text-2xs text-muted-foreground mt-2">
                 Your sessions are already on your machine.
               </p>
