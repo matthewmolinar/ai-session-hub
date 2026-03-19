@@ -10,7 +10,7 @@ interface Crumb {
 const ROUTE_LABELS: Record<string, string> = {
   "/my-sessions": "My Sessions",
   "/": "My Sessions",
-  "/explore": "Team",
+  "/explore": "Shared",
   "/skills": "Skills",
 };
 
