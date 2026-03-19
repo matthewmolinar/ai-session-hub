@@ -1,6 +1,6 @@
 import { useState, useCallback, useMemo } from "react";
 import { useParams, Link } from "react-router-dom";
-import { ArrowLeft, Coins, FileCode, GitFork, MessageSquare, Share2, Terminal, Zap } from "lucide-react";
+import { Coins, FileCode, GitFork, MessageSquare, Share2, Terminal, Zap } from "lucide-react";
 import { TranscriptTurn } from "@/components/TranscriptTurn";
 import { ModelBadge } from "@/components/ModelBadge";
 import { SESSION_DETAIL } from "@/lib/mock-data";
@@ -73,13 +73,9 @@ export default function SessionView() {
   const skills = session.tags;
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-[200px_1fr_200px] gap-0 h-[calc(100vh-44px)]">
+    <div className="grid grid-cols-1 lg:grid-cols-[200px_1fr_200px] gap-0 h-full flex-1">
       {/* Left sidebar: Turn Navigator */}
-      <aside className="hidden lg:block border-r border-border p-3 overflow-y-auto sticky top-0 h-[calc(100vh-44px)]">
-        <Link to="/" className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground mb-4 transition-colors">
-          <ArrowLeft className="h-3 w-3" />
-          Back to feed
-        </Link>
+      <aside className="hidden lg:block border-r border-border p-3 overflow-y-auto">
         <h4 className="text-label mb-2">Turns</h4>
         <div className="flex flex-col gap-0.5">
           {session.transcript?.filter(t => t.role !== "tool").map((turn) => {
@@ -105,7 +101,7 @@ export default function SessionView() {
       </aside>
 
       {/* Main transcript */}
-      <main className="overflow-y-auto h-[calc(100vh-44px)]">
+      <main className="overflow-y-auto">
         {/* Session header */}
         <div className="border-b border-border px-6 py-4">
           <div className="flex items-start justify-between gap-4 mb-2">
@@ -152,7 +148,7 @@ export default function SessionView() {
       </main>
 
       {/* Right sidebar: Environment State */}
-      <aside className="hidden lg:block border-l border-border p-3 overflow-y-auto sticky top-0 h-[calc(100vh-44px)]">
+      <aside className="hidden lg:block border-l border-border p-3 overflow-y-auto">
         {/* Cost & Tokens */}
         <h4 className="text-label mb-2 flex items-center gap-1.5">
           <Coins className="h-3 w-3 text-primary" />

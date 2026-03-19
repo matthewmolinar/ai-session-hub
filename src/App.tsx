@@ -6,6 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 import { MySessionsProvider } from "@/contexts/MySessionsContext";
 import { AppHeader } from "@/components/AppHeader";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
 import Index from "./pages/Index";
 import SessionView from "./pages/SessionView";
 import Profile from "./pages/Profile";
@@ -29,7 +30,8 @@ function AppContent() {
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <AppHeader />
-      <div className="flex-1">
+      <Breadcrumbs />
+      <div className="flex-1 flex flex-col overflow-hidden">
         <Routes>
           <Route path="/" element={<MySessions />} />
           <Route path="/explore" element={<Index />} />
