@@ -4,6 +4,23 @@ import { motion } from "framer-motion";
 import { SessionCard } from "@/components/SessionCard";
 import { SESSION_DETAIL } from "@/lib/mock-data";
 
+function CopyButton({ text }: { text: string }) {
+  const [copied, setCopied] = useState(false);
+  const handleCopy = () => {
+    navigator.clipboard.writeText(text);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+  return (
+    <button
+      onClick={handleCopy}
+      className="h-6 w-6 rounded flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors cursor-pointer"
+    >
+      {copied ? <Check className="h-3 w-3 text-primary" /> : <Copy className="h-3 w-3" />}
+    </button>
+  );
+}
+
 export function LandingSessionView() {
   return (
     <div className="h-[calc(100vh-44px)] flex items-center justify-center bg-halftone overflow-hidden relative">
