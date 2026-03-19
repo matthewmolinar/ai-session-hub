@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { Zap, ChevronRight, FileCode, MessageSquare, Users, Clock, BarChart3 } from "lucide-react";
-import { SESSIONS } from "@/lib/mock-data";
+import { SESSIONS, SKILL_TEAMMATE_COUNTS } from "@/lib/mock-data";
 import { ModelBadge } from "@/components/ModelBadge";
 import { motion, AnimatePresence } from "framer-motion";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from "recharts";
