@@ -69,7 +69,7 @@ export function SessionCard({ session, onSignInClick, landing }: SessionCardProp
     </div>
   );
 
-  if (blurred) return content;
+  if (blurred || landing) return content;
 
   return (
     <Link to={`/session/${session.id}`} className="block">
