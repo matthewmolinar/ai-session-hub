@@ -79,17 +79,17 @@ function SacredGeometry() {
 
         {/* Middle ring — thinner dashed */}
         <circle cx={cx} cy={cy} r={220} fill="none"
-          stroke={`${pink} / 0.15)`} strokeWidth="0.75"
+          stroke={`${pink} / 0.1)`} strokeWidth="0.75"
           strokeDasharray="1 6" />
 
         {/* Inner ring */}
         <circle cx={cx} cy={cy} r={180} fill="none"
-          stroke={`${purple} / 0.2)`} strokeWidth="0.75" />
-        {ticks(174, 36, 12, 0.12)}
+          stroke={`${purple} / 0.14)`} strokeWidth="0.75" />
+        {ticks(174, 36, 12, 0.08)}
 
         {/* Innermost ring — close to card */}
         <circle cx={cx} cy={cy} r={140} fill="none"
-          stroke={`${pink} / 0.15)`} strokeWidth="0.75" />
+          stroke={`${pink} / 0.1)`} strokeWidth="0.75" />
 
         {/* Axis lines — full cross */}
         {[0, 45, 90, 135].map((deg) => {
