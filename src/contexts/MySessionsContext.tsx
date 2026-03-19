@@ -8,6 +8,8 @@ interface MySessionsState {
   toggleExpanded: (path: string) => void;
   selectedFilePath: string | null;
   setSelectedFilePath: (path: string | null) => void;
+  demoMode: boolean;
+  setDemoMode: (v: boolean) => void;
 }
 
 const MySessionsContext = createContext<MySessionsState | null>(null);
@@ -16,6 +18,7 @@ export function MySessionsProvider({ children }: { children: ReactNode }) {
   const [activeSessionId, setActiveSessionId] = useState<string | null>(null);
   const [expandedPaths, setExpandedPaths] = useState<Set<string>>(() => new Set(["src", "src/editor", "src/sync", "src/components", "src/lib"]));
   const [selectedFilePath, setSelectedFilePath] = useState<string | null>(null);
+  const [demoMode, setDemoMode] = useState(false);
 
   const toggleSession = useCallback((id: string) => {
     setActiveSessionId((prev) => (prev === id ? null : id));
@@ -40,6 +43,8 @@ export function MySessionsProvider({ children }: { children: ReactNode }) {
         toggleExpanded,
         selectedFilePath,
         setSelectedFilePath,
+        demoMode,
+        setDemoMode,
       }}
     >
       {children}

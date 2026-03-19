@@ -190,12 +190,12 @@ function SacredGeometry() {
 
 export function LandingSessionView() {
   const navigate = useNavigate();
-  const { setSelectedFilePath, setActiveSessionId } = useMySessionsState();
+  const { setSelectedFilePath, setActiveSessionId, setDemoMode } = useMySessionsState();
 
   const handleCardClick = () => {
-    // Pre-select first file that has s1 and open the session
     setSelectedFilePath("src/editor/document.ts");
     setActiveSessionId("s1");
+    setDemoMode(true);
     navigate("/my-sessions");
   };
 

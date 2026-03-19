@@ -395,7 +395,7 @@ function SessionPreview({ session, onClose }: { session: Session; onClose: () =>
 /* ─── Main Page ─── */
 export default function MySessions() {
   const { user } = useAuth();
-  const { activeSessionId, setActiveSessionId, selectedFilePath } = useMySessionsState();
+  const { activeSessionId, setActiveSessionId, selectedFilePath, demoMode } = useMySessionsState();
 
   const totalFiles = useMemo(() => FILE_TREE.reduce((sum, n) => sum + countFiles(n), 0), []);
   const totalSessions = useMemo(() => {
@@ -415,7 +415,7 @@ export default function MySessions() {
     return found ?? null;
   }, [activeSessionId]);
 
-  if (!user) {
+  if (!user && !demoMode) {
     return <LandingSessionView />;
   }
 
