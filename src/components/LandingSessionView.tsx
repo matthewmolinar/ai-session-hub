@@ -68,28 +68,28 @@ function SacredGeometry() {
       >
         {/* Outermost ring — dashed */}
         <circle cx={cx} cy={cy} r={300} fill="none"
-          stroke={`${purple} / 0.18)`} strokeWidth="0.75"
+          stroke={`${purple} / 0.12)`} strokeWidth="0.75"
           strokeDasharray="2 8" />
 
         {/* Outer ring with tick marks */}
         <circle cx={cx} cy={cy} r={260} fill="none"
-          stroke={`${purple} / 0.25)`} strokeWidth="0.75" />
-        {ticks(254, 72, 12, 0.15)}
-        {ticks(254, 12, 18, 0.3)}
+          stroke={`${purple} / 0.18)`} strokeWidth="0.75" />
+        {ticks(254, 72, 12, 0.1)}
+        {ticks(254, 12, 18, 0.2)}
 
         {/* Middle ring — thinner dashed */}
         <circle cx={cx} cy={cy} r={220} fill="none"
-          stroke={`${pink} / 0.15)`} strokeWidth="0.75"
+          stroke={`${pink} / 0.1)`} strokeWidth="0.75"
           strokeDasharray="1 6" />
 
         {/* Inner ring */}
         <circle cx={cx} cy={cy} r={180} fill="none"
-          stroke={`${purple} / 0.2)`} strokeWidth="0.75" />
-        {ticks(174, 36, 12, 0.12)}
+          stroke={`${purple} / 0.14)`} strokeWidth="0.75" />
+        {ticks(174, 36, 12, 0.08)}
 
         {/* Innermost ring — close to card */}
         <circle cx={cx} cy={cy} r={140} fill="none"
-          stroke={`${pink} / 0.15)`} strokeWidth="0.75" />
+          stroke={`${pink} / 0.1)`} strokeWidth="0.75" />
 
         {/* Axis lines — full cross */}
         {[0, 45, 90, 135].map((deg) => {
@@ -99,7 +99,7 @@ function SacredGeometry() {
             <line key={deg}
               x1={cx + Math.cos(rad) * r} y1={cy + Math.sin(rad) * r}
               x2={cx - Math.cos(rad) * r} y2={cy - Math.sin(rad) * r}
-              stroke={`${deg % 90 === 0 ? purple : pink} / ${deg % 90 === 0 ? 0.15 : 0.08})`}
+              stroke={`${deg % 90 === 0 ? purple : pink} / ${deg % 90 === 0 ? 0.1 : 0.06})`}
               strokeWidth="0.5"
               strokeDasharray={deg % 90 === 0 ? "none" : "3 6"}
             />
@@ -116,8 +116,8 @@ function SacredGeometry() {
             <g key={`d-${deg}`}>
               <rect x={x - 4} y={y - 4} width={8} height={8}
                 transform={`rotate(45 ${x} ${y})`}
-                fill="none" stroke={`${purple} / 0.4)`} strokeWidth="0.75" />
-              <circle cx={x} cy={y} r={2} fill={`${purple} / 0.3)`} />
+                fill="none" stroke={`${purple} / 0.25)`} strokeWidth="0.75" />
+              <circle cx={x} cy={y} r={2} fill={`${purple} / 0.2)`} />
             </g>
           );
         })}
@@ -130,7 +130,7 @@ function SacredGeometry() {
           const y = cy + Math.sin(rad) * r;
           return (
             <circle key={`c-${deg}`} cx={x} cy={y} r={3}
-              fill="none" stroke={`${pink} / 0.3)`} strokeWidth="0.75" />
+              fill="none" stroke={`${pink} / 0.2)`} strokeWidth="0.75" />
           );
         })}
 
@@ -142,7 +142,7 @@ function SacredGeometry() {
           return (
             <text key={text} x={x} y={y}
               textAnchor="middle" dominantBaseline="middle"
-              fill={`${purple} / 0.35)`}
+              fill={`${purple} / 0.25)`}
               fontSize="8" fontFamily="'Geist Mono', monospace"
             >
               {text}
@@ -157,7 +157,7 @@ function SacredGeometry() {
             const a = (i / 6) * Math.PI * 2 - Math.PI / 2;
             return `${cx + Math.cos(a) * r},${cy + Math.sin(a) * r}`;
           }).join(' ');
-          return <polygon points={pts} fill="none" stroke={`${purple} / 0.1)`} strokeWidth="0.75" />;
+          return <polygon points={pts} fill="none" stroke={`${purple} / 0.07)`} strokeWidth="0.75" />;
         })()}
 
         {/* Triangle inscribed */}
@@ -167,7 +167,7 @@ function SacredGeometry() {
             const a = (i / 3) * Math.PI * 2 - Math.PI / 2;
             return `${cx + Math.cos(a) * r},${cy + Math.sin(a) * r}`;
           }).join(' ');
-          return <polygon points={pts} fill="none" stroke={`${pink} / 0.1)`} strokeWidth="0.75"
+          return <polygon points={pts} fill="none" stroke={`${pink} / 0.07)`} strokeWidth="0.75"
             strokeDasharray="4 8" />;
         })()}
 
@@ -178,7 +178,7 @@ function SacredGeometry() {
             const a = (i / 3) * Math.PI * 2 + Math.PI / 6;
             return `${cx + Math.cos(a) * r},${cy + Math.sin(a) * r}`;
           }).join(' ');
-          return <polygon points={pts} fill="none" stroke={`${purple} / 0.08)`} strokeWidth="0.75"
+          return <polygon points={pts} fill="none" stroke={`${purple} / 0.05)`} strokeWidth="0.75"
             strokeDasharray="4 8" />;
         })()}
       </motion.svg>
