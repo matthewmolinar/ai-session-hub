@@ -60,7 +60,7 @@ function SacredGeometry() {
     <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
       <motion.svg
         viewBox="0 0 800 700"
-        className="absolute w-[160%] max-w-none"
+        className="absolute w-[280%] max-w-none"
         style={{ top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
