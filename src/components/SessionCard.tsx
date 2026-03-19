@@ -41,12 +41,6 @@ export function SessionCard({ session, onSignInClick, landing }: SessionCardProp
     setLikeCount(liked ? likeCount - 1 : likeCount + 1);
   };
 
-  const handleBookmark = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setBookmarked(!bookmarked);
-  };
-
   const handleShare = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
