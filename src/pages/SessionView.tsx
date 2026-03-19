@@ -8,6 +8,9 @@ import type { Comment } from "@/components/TurnComment";
 
 export default function SessionView() {
   const { id } = useParams();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const from = (location.state as any)?.from as string | undefined;
   const session = useMemo(() => {
     if (id === SESSION_DETAIL.id) return SESSION_DETAIL;
     return SESSIONS.find((s) => s.id === id) ?? SESSION_DETAIL;
