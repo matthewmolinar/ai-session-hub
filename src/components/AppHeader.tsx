@@ -5,6 +5,7 @@ import tanagramLogo from "@/assets/tanagram-logo.svg";
 import { AuthModal } from "@/components/AuthModal";
 import { SESSIONS } from "@/lib/mock-data";
 import { useAuth } from "@/contexts/AuthContext";
+import { useMySessionsState } from "@/contexts/MySessionsContext";
 import {
   DropdownMenu,
   DropdownMenuContent,
