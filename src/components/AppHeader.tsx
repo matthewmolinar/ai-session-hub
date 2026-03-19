@@ -64,14 +64,14 @@ export function AppHeader() {
       <header className="h-12 border-b border-border flex items-center px-4 gap-6 bg-card shrink-0 relative z-50 shadow-card">
         <Link
           to="/my-sessions"
-          className="flex items-center gap-2 font-semibold text-sm text-foreground"
+          className="flex items-center gap-2 font-semibold text-sm text-primary"
           onClick={() => {
             setDemoMode(false);
             setActiveSessionId(null);
             setSelectedFilePath(null);
           }}
         >
-          <img src={tanagramLogo} alt="Tanagram" className="h-5 w-5 translate-y-[1px]" style={{ filter: "invert(1) sepia(1) saturate(5) hue-rotate(200deg) brightness(0.9)" }} />
+          <img src={tanagramLogo} alt="Tanagram" className="h-5 w-5 translate-y-[1px]" style={{ filter: "brightness(0) saturate(100%) invert(32%) sepia(93%) saturate(1752%) hue-rotate(207deg) brightness(97%) contrast(101%)" }} />
           <span>Tanagram</span>
         </Link>
 
