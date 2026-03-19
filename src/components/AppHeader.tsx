@@ -21,7 +21,7 @@ export function AppHeader() {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
-  const [authOpen, setAuthOpen] = useState(false);
+  
 
   // "/" shortcut
   useEffect(() => {
