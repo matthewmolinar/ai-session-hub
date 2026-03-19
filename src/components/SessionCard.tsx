@@ -8,12 +8,13 @@ import type { Session } from "@/lib/mock-data";
 interface SessionCardProps {
   session: Session;
   onSignInClick?: () => void;
+  landing?: boolean;
 }
 
-export function SessionCard({ session, onSignInClick }: SessionCardProps) {
+export function SessionCard({ session, onSignInClick, landing }: SessionCardProps) {
   const timeAgo = getTimeAgo(session.createdAt);
   const { user } = useAuth();
-  const blurred = !user;
+  const blurred = !landing && !user;
 
   const content = (
     <div
