@@ -24,8 +24,8 @@ function CopyButton({ text }: { text: string }) {
 /* Sacred geometry diagram — SVG schematic behind the card */
 function SacredGeometry() {
   const cx = 400, cy = 350;
-  const purple = "hsl(289 100% 50%";
-  const pink = "hsl(313 74% 54%";
+  const purple = "hsl(0 0% 100%";
+  const pink = "hsl(0 0% 100%";
 
   // Generate tick marks around a circle
   const ticks = (r: number, count: number, len: number, opacity: number) => {
