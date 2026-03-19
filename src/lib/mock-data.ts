@@ -375,7 +375,7 @@ export const SESSIONS: Session[] = [
     filesChanged: 4,
     forks: 16,
     createdAt: "2026-03-13T08:00:00Z",
-    tags: ["go", "database", "data-structures"],
+    tags: ["/test", "/commit", "/security-scan"],
     sparkline: [3, 5, 7, 9, 8, 7, 6, 8, 9, 7, 5, 4, 6, 8, 7, 5, 3],
     transcript: [
       {
