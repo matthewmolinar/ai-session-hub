@@ -3,12 +3,15 @@ import { useParams, Link } from "react-router-dom";
 import { Coins, FileCode, GitFork, MessageSquare, Share2, Terminal, Zap } from "lucide-react";
 import { TranscriptTurn } from "@/components/TranscriptTurn";
 import { ModelBadge } from "@/components/ModelBadge";
-import { SESSION_DETAIL } from "@/lib/mock-data";
+import { SESSION_DETAIL, SESSIONS } from "@/lib/mock-data";
 import type { Comment } from "@/components/TurnComment";
 
 export default function SessionView() {
   const { id } = useParams();
-  const session = SESSION_DETAIL;
+  const session = useMemo(() => {
+    if (id === SESSION_DETAIL.id) return SESSION_DETAIL;
+    return SESSIONS.find((s) => s.id === id) ?? SESSION_DETAIL;
+  }, [id]);
 
   // Comments state: keyed by turn ID
   const [commentsByTurn, setCommentsByTurn] = useState<Record<number, Comment[]>>(() => {
