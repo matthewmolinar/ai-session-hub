@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { MessageSquare, Lock, Heart, Share2, Terminal } from "lucide-react";
 import { ModelBadge } from "./ModelBadge";
 import { Sparkline } from "./Sparkline";
-import type { Session, SourceTool } from "@/lib/mock-data";
+import type { Session, SessionComment, SourceTool } from "@/lib/mock-data";
 
 interface SessionCardProps {
   session: Session;
@@ -33,6 +33,10 @@ export function SessionCard({ session, onSignInClick, landing }: SessionCardProp
   const blurred = false;
   const [liked, setLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(session.likes);
+  const [comments, setComments] = useState<SessionComment[]>(session.comments);
+  const [commentText, setCommentText] = useState("");
+  const [showAllComments, setShowAllComments] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const handleLike = (e: React.MouseEvent) => {
     e.preventDefault();
