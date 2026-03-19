@@ -67,7 +67,7 @@ export function AppHeader() {
 
   return (
     <>
-      <header className="h-12 border-b border-border flex items-center px-3 sm:px-4 gap-2 sm:gap-6 bg-card shrink-0 relative z-50 shadow-card">
+      <header className="h-12 border-b border-border flex items-center px-3 sm:px-4 gap-2 sm:gap-6 bg-card shrink-0 sticky top-0 z-50 shadow-card">
         <Link
           to="/my-sessions"
           className="flex items-center gap-2 font-semibold text-sm text-primary shrink-0"
