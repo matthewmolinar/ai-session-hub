@@ -1,5 +1,4 @@
 import { Terminal } from "lucide-react";
-import { Terminal } from "lucide-react";
 import { motion } from "framer-motion";
 import { SessionCard } from "@/components/SessionCard";
 import { SESSION_DETAIL } from "@/lib/mock-data";
