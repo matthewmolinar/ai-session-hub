@@ -118,7 +118,7 @@ export function AppHeader() {
             <span>Search sessions...</span>
             <kbd className="ml-2 text-2xs bg-background rounded px-1 py-0.5 border border-border">/</kbd>
           </button>
-          {user ? (
+          {user && (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <button className="h-7 w-7 rounded-full bg-secondary flex items-center justify-center text-xs font-semibold text-foreground hover:ring-2 hover:ring-ring transition-all cursor-pointer">
@@ -138,14 +138,6 @@ export function AppHeader() {
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
-          ) : (
-            <button
-              onClick={() => setAuthOpen(true)}
-              className="flex items-center gap-1.5 bg-primary text-primary-foreground rounded-md px-3 py-1 text-xs font-medium hover:bg-primary/90 transition-colors cursor-pointer"
-            >
-              <LogIn className="h-3 w-3" />
-              Sign in
-            </button>
           )}
         </div>
       </header>
