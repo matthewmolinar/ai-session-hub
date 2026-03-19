@@ -5,6 +5,7 @@ import tanagramLogo from "@/assets/tanagram-logo.svg";
 import { AuthModal } from "@/components/AuthModal";
 import { SESSIONS } from "@/lib/mock-data";
 import { useAuth } from "@/contexts/AuthContext";
+import { useMySessionsState } from "@/contexts/MySessionsContext";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,6 +15,7 @@ import {
 
 export function AppHeader() {
   const { signOut, user } = useAuth();
+  const { setDemoMode, setActiveSessionId, setSelectedFilePath } = useMySessionsState();
   const username = user?.user_metadata?.username || user?.email?.split("@")[0] || "user";
   const location = useLocation();
   const navigate = useNavigate();
@@ -73,7 +75,15 @@ export function AppHeader() {
   return (
     <>
       <header className="h-11 border-b border-border flex items-center px-4 gap-6 bg-background shrink-0 relative z-50">
-        <Link to="/my-sessions" className="flex items-center gap-1.5 font-semibold text-sm text-foreground">
+        <Link
+          to="/my-sessions"
+          className="flex items-center gap-1.5 font-semibold text-sm text-foreground"
+          onClick={() => {
+            setDemoMode(false);
+            setActiveSessionId(null);
+            setSelectedFilePath(null);
+          }}
+        >
           <img src={tanagramLogo} alt="Tanagram" className="h-5 w-5 translate-y-[1px]" />
           <span>Tanagram</span>
         </Link>
