@@ -156,12 +156,15 @@ export function AppHeader() {
               </button>
             </>
           ) : (
-            <button
-              onClick={() => navigate("/get-started")}
-              className="h-8 px-3.5 rounded-md bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 transition-colors"
-            >
-              Get Started Free
-            </button>
+            <>
+              <button
+                onClick={() => setAuthOpen(true)}
+                className="h-8 px-3.5 rounded-md bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 transition-colors"
+              >
+                Get Started Free
+              </button>
+              <AuthModal open={authOpen} onOpenChange={setAuthOpen} />
+            </>
           )}
         </div>
       </header>
