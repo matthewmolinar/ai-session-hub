@@ -406,49 +406,90 @@ function SessionPreview({ session, onClose }: { session: Session; onClose: () =>
 }
 
 /* ─── Skills Sidebar ─── */
-function SkillsSidebar() {
-  const skillsWithUsage = useMemo(() => {
-    const usageMap = new Map<string, string[]>();
-    for (const session of SESSIONS) {
-      for (const tag of session.tags) {
-        const existing = usageMap.get(tag) || [];
-        existing.push(session.id);
-        usageMap.set(tag, existing);
-      }
-    }
-    return SKILLS_CATALOG.map((skill) => ({
-      ...skill,
-      sessionCount: usageMap.get(skill.id)?.length || 0,
-    }));
-  }, []);
+function SkillsSidebar({ selectedSkillId, onSelectSkill }: { selectedSkillId: string | null; onSelectSkill: (id: string | null) => void }) {
+  return (
+    <div className="flex-1 overflow-y-auto px-3 py-3">
+      <div className="py-0.5">
+        {SKILLS_CATALOG.map((skill) => {
+          const isSelected = selectedSkillId === skill.id;
+          return (
+            <button
+              key={skill.id}
+              onClick={() => onSelectSkill(isSelected ? null : skill.id)}
+              className={`w-full flex items-center gap-1.5 py-1 px-2 text-[13px] rounded transition-colors cursor-pointer ${
+                isSelected ? "bg-primary/10 text-primary" : "hover:bg-secondary/50 text-foreground/80"
+              }`}
+            >
+              <Zap className={`h-3 w-3 shrink-0 ${isSelected ? "text-primary" : "text-muted-foreground/50"}`} />
+              <span className="font-mono text-xs truncate">{skill.name}</span>
+              <span className="ml-auto text-2xs text-muted-foreground">{(skill.installs / 1000).toFixed(1)}k</span>
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
 
-  const categoryColors: Record<string, string> = {
-    workflow: "text-primary",
-    quality: "text-amber-500",
-    devops: "text-emerald-500",
-  };
+/* ─── Column 2: Skill Feed ─── */
+function SkillFeed({ skillId }: { skillId: string }) {
+  const { activeSessionId, setActiveSessionId } = useMySessionsState();
+  const skill = SKILLS_CATALOG.find((s) => s.id === skillId);
+  const sessions = SESSIONS.filter((s) => s.tags.includes(skillId));
 
   return (
-    <div className="flex-1 overflow-y-auto px-2 py-2 space-y-1.5">
-      {skillsWithUsage.map((skill) => (
-        <div
-          key={skill.id}
-          className="rounded-lg border border-border bg-card p-2.5 hover:border-primary/30 hover:shadow-sm transition-all"
-        >
-          <div className="flex items-center gap-2 mb-1">
-            <Zap className={`h-3 w-3 shrink-0 ${categoryColors[skill.category]}`} />
-            <span className="text-xs font-semibold font-mono text-foreground">{skill.name}</span>
-            <span className="ml-auto text-2xs text-muted-foreground">{(skill.installs / 1000).toFixed(1)}k</span>
-          </div>
-          <p className="text-2xs text-muted-foreground leading-relaxed mb-1.5 line-clamp-2">{skill.description}</p>
-          {skill.sessionCount > 0 && (
-            <div className="flex items-center gap-1 text-2xs text-primary font-medium">
-              <BarChart3 className="h-2.5 w-2.5" />
-              {skill.sessionCount} session{skill.sessionCount !== 1 ? "s" : ""}
-            </div>
-          )}
+    <div className="flex flex-col h-full">
+      <div className="px-4 py-3 border-b border-border shrink-0">
+        <div className="flex items-center gap-2">
+          <Zap className="h-3.5 w-3.5 text-primary" />
+          <span className="font-mono text-xs font-semibold text-foreground">{skill?.name}</span>
         </div>
-      ))}
+        {skill && (
+          <p className="text-2xs text-muted-foreground mt-1">{skill.description}</p>
+        )}
+      </div>
+      <div className="flex-1 overflow-y-auto p-3 space-y-3">
+        {sessions.map((s) => {
+          const isActive = activeSessionId === s.id;
+          return (
+            <button
+              key={s.id}
+              onClick={() => setActiveSessionId(isActive ? null : s.id)}
+              className={`w-full text-left rounded-lg border transition-all cursor-pointer ${
+                isActive
+                  ? "border-primary/30 bg-primary/5 shadow-sm"
+                  : "border-border bg-card hover:border-muted-foreground/20 hover:shadow-sm"
+              }`}
+            >
+              <div className="flex items-center gap-2.5 px-3.5 pt-3">
+                <Avatar className="h-6 w-6">
+                  <AvatarFallback className="text-2xs bg-secondary text-muted-foreground">
+                    {s.author.username[0].toUpperCase()}
+                  </AvatarFallback>
+                </Avatar>
+                <span className="text-xs font-medium text-foreground">{s.author.username}</span>
+                <span className="text-2xs text-muted-foreground ml-auto">{getTimeAgo(s.createdAt)}</span>
+              </div>
+              <div className="px-3.5 pt-2">
+                <p className="text-sm font-medium text-foreground leading-snug line-clamp-2">{s.title}</p>
+              </div>
+              <div className="px-3.5 pt-1.5">
+                <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed">{s.openingPrompt}</p>
+              </div>
+              <div className="flex items-center gap-3 px-3.5 py-2.5 mt-1">
+                <ModelBadge model={s.model} />
+                <span className="flex items-center gap-1 text-2xs text-muted-foreground">
+                  <MessageSquare className="h-3 w-3" />
+                  {s.turns}
+                </span>
+              </div>
+            </button>
+          );
+        })}
+        {sessions.length === 0 && (
+          <p className="text-xs text-muted-foreground text-center py-8">No sessions use this skill yet.</p>
+        )}
+      </div>
     </div>
   );
 }
