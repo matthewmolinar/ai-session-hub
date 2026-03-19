@@ -104,14 +104,16 @@ export function AppHeader() {
         </nav>
 
         <div className="ml-auto flex items-center gap-2">
-          <button
-            onClick={() => setOpen(true)}
-            className="flex items-center gap-1.5 bg-secondary rounded-md px-2.5 py-1 text-xs text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
-          >
-            <Search className="h-3 w-3" />
-            <span>Search sessions...</span>
-            <kbd className="ml-2 text-2xs bg-background rounded px-1 py-0.5 border border-border">/</kbd>
-          </button>
+          {user && (
+            <button
+              onClick={() => setOpen(true)}
+              className="flex items-center gap-1.5 bg-secondary rounded-md px-2.5 py-1 text-xs text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+            >
+              <Search className="h-3 w-3" />
+              <span>Search sessions...</span>
+              <kbd className="ml-2 text-2xs bg-background rounded px-1 py-0.5 border border-border">/</kbd>
+            </button>
+          )}
           {user ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
