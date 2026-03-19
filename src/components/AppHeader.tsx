@@ -123,7 +123,7 @@ export function AppHeader() {
           <Search className="h-4 w-4" />
         </button>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 ml-auto">
           {user ? (
             <>
               <DropdownMenu>
