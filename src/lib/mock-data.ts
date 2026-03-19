@@ -1,18 +1,32 @@
+export type SourceTool = "claude-code" | "cursor" | "codex" | "amp" | "windsurf";
+
+export interface SessionComment {
+  id: string;
+  author: string;
+  content: string;
+  timeAgo: string;
+}
+
 export interface Session {
   id: string;
   title: string;
   openingPrompt: string;
   model: string;
+  source: SourceTool;
   author: {
     username: string;
     avatar?: string;
+    role?: string;
+    team?: string;
   };
   turns: number;
   filesChanged: number;
   forks: number;
+  likes: number;
   createdAt: string;
   tags: string[];
   sparkline: number[]; // activity density per segment
+  comments: SessionComment[];
   transcript?: Turn[];
 }
 
@@ -48,21 +62,32 @@ export const SESSIONS: Session[] = [
     title: "Building a real-time collaborative editor with CRDTs",
     openingPrompt: "I want to build a collaborative text editor using Yjs CRDTs. Start with a basic document model and WebSocket sync...",
     model: "claude-3.5-sonnet",
-    author: { username: "danabramov" },
+    source: "claude-code",
+    author: { username: "danabramov", role: "Staff Engineer", team: "Frontend Platform" },
     turns: 42,
     filesChanged: 12,
     forks: 7,
+    likes: 24,
     createdAt: "2026-03-17T14:30:00Z",
     tags: ["/commit", "/review", "/test"],
     sparkline: [3, 5, 8, 6, 9, 4, 7, 8, 5, 3, 6, 8, 9, 7, 4, 2],
+    comments: [
+      { id: "c1", author: "techleadmaria", content: "The CRDT approach here is clean — we should adopt this for the shared notes feature.", timeAgo: "2h" },
+      { id: "c2", author: "sarah_edo", content: "Nice prompt structure. Bookmarking this for reference.", timeAgo: "5h" },
+    ],
   },
   {
     id: "s2",
     title: "Rust async runtime from scratch",
     openingPrompt: "Let's build a minimal async runtime in Rust. I want to understand how tokio works under the hood, starting with a simple executor...",
     model: "gpt-4o",
-    author: { username: "fasterthanlime" },
+    source: "codex",
+    author: { username: "fasterthanlime", role: "Systems Engineer", team: "Infrastructure" },
     turns: 67,
+    likes: 31,
+    comments: [
+      { id: "c3", author: "phil_eaton", content: "This is exactly how I'd teach async runtimes. The waker explanation is 🔥", timeAgo: "1d" },
+    ],
     filesChanged: 8,
     forks: 23,
     createdAt: "2026-03-16T09:15:00Z",
@@ -160,8 +185,15 @@ export const SESSIONS: Session[] = [
     title: "Migrating a Next.js app to Astro with view transitions",
     openingPrompt: "I have a Next.js 14 app with app router. Help me migrate it to Astro 4 with view transitions API...",
     model: "claude-3.5-sonnet",
-    author: { username: "sarah_edo" },
+    source: "cursor",
+    author: { username: "sarah_edo", role: "Senior Developer", team: "Web Platform" },
     turns: 28,
+    likes: 18,
+    comments: [
+      { id: "c4", author: "danabramov", content: "The view transitions pattern here is really elegant.", timeAgo: "2d" },
+      { id: "c5", author: "jh3yy", content: "We should write this up as a migration guide for the team wiki.", timeAgo: "2d" },
+      { id: "c6", author: "tkdodo", content: "How did the client-side routing compare perf-wise?", timeAgo: "3d" },
+    ],
     filesChanged: 15,
     forks: 4,
     createdAt: "2026-03-15T18:45:00Z",
@@ -265,8 +297,13 @@ export const SESSIONS: Session[] = [
     title: "Zero-dependency state machine for form validation",
     openingPrompt: "Design a typesafe state machine library in TypeScript for complex form validation workflows. No external deps...",
     model: "gemini-2.5-pro",
-    author: { username: "tkdodo" },
+    source: "amp",
+    author: { username: "tkdodo", role: "Tech Lead", team: "Developer Experience" },
     turns: 35,
+    likes: 14,
+    comments: [
+      { id: "c7", author: "fasterthanlime", content: "The guard pattern is clean. Might adapt this for our config validation.", timeAgo: "4d" },
+    ],
     filesChanged: 6,
     forks: 11,
     createdAt: "2026-03-14T11:20:00Z",
@@ -370,8 +407,11 @@ export const SESSIONS: Session[] = [
     title: "Implementing a B-tree index in Go",
     openingPrompt: "Walk me through implementing a B-tree for a toy database engine in Go. Start with the node structure and insertion...",
     model: "gpt-4o",
-    author: { username: "phil_eaton" },
+    source: "windsurf",
+    author: { username: "phil_eaton", role: "Principal Engineer", team: "Storage" },
     turns: 51,
+    likes: 22,
+    comments: [],
     filesChanged: 4,
     forks: 16,
     createdAt: "2026-03-13T08:00:00Z",
@@ -478,8 +518,13 @@ export const SESSIONS: Session[] = [
     title: "CSS-only animation library with @property",
     openingPrompt: "Let's create a modern CSS animation library using @property for type-safe custom properties and complex spring animations...",
     model: "claude-3.5-sonnet",
-    author: { username: "jh3yy" },
+    source: "claude-code",
+    author: { username: "jh3yy", role: "Creative Engineer", team: "Design Systems" },
     turns: 19,
+    likes: 9,
+    comments: [
+      { id: "c8", author: "sarah_edo", content: "The @property approach is so much better than JS-based springs!", timeAgo: "6d" },
+    ],
     filesChanged: 3,
     forks: 8,
     createdAt: "2026-03-12T16:30:00Z",
