@@ -167,7 +167,7 @@ function SacredGeometry() {
             const a = (i / 3) * Math.PI * 2 - Math.PI / 2;
             return `${cx + Math.cos(a) * r},${cy + Math.sin(a) * r}`;
           }).join(' ');
-          return <polygon points={pts} fill="none" stroke={`${pink} / 0.07)`} strokeWidth="0.75"
+          return <polygon points={pts} fill="none" stroke={`${pink} / 0.05)`} strokeWidth="0.75"
             strokeDasharray="4 8" />;
         })()}
 
