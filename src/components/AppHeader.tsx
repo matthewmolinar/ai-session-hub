@@ -89,22 +89,18 @@ export function AppHeader() {
         </Link>
 
         <nav className="flex items-center gap-4 text-xs">
-          {user && (
-            <Link
-              to="/my-sessions"
-              className={`transition-colors ${location.pathname === "/my-sessions" ? "text-foreground font-medium" : "text-muted-foreground hover:text-foreground"}`}
-            >
-              My Sessions
-            </Link>
-          )}
-          {user && (
-            <Link
-              to="/skills"
-              className={`transition-colors ${location.pathname === "/skills" ? "text-foreground font-medium" : "text-muted-foreground hover:text-foreground"}`}
-            >
-              Skills
-            </Link>
-          )}
+          <Link
+            to="/my-sessions"
+            className={`transition-colors ${location.pathname === "/my-sessions" ? "text-foreground font-medium" : "text-muted-foreground hover:text-foreground"}`}
+          >
+            My Sessions
+          </Link>
+          <Link
+            to="/skills"
+            className={`transition-colors ${location.pathname === "/skills" ? "text-foreground font-medium" : "text-muted-foreground hover:text-foreground"}`}
+          >
+            Skills
+          </Link>
           <Link
             to="/explore"
             className={`transition-colors ${location.pathname === "/explore" ? "text-foreground font-medium" : "text-muted-foreground hover:text-foreground"}`}
