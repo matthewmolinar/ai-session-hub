@@ -61,12 +61,6 @@ function SkillCard({ group, rank }: { group: SkillGroup; rank: number }) {
               <Users className="h-3 w-3" />
               {group.authors.length} author{group.authors.length !== 1 ? "s" : ""}
             </span>
-            {SKILL_TEAMMATE_COUNTS[group.skill] && (
-              <span className="flex items-center gap-1 text-primary font-medium">
-                <Users className="h-3 w-3" />
-                {SKILL_TEAMMATE_COUNTS[group.skill]} teammates
-              </span>
-            )}
             <span className="flex items-center gap-1">
               <Clock className="h-3 w-3" />
               {getTimeAgo(group.lastUsed)}
