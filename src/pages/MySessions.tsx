@@ -418,9 +418,6 @@ export default function MySessions() {
     return found ?? null;
   }, [activeSessionId]);
 
-  if (!user && !demoMode) {
-    return <LandingSessionView />;
-  }
 
   return (
     <div className="h-[calc(100vh-44px)] flex overflow-hidden">

@@ -13,8 +13,7 @@ interface SessionCardProps {
 
 export function SessionCard({ session, onSignInClick, landing }: SessionCardProps) {
   const timeAgo = getTimeAgo(session.createdAt);
-  const { user } = useAuth();
-  const blurred = !landing && !user;
+  const blurred = false;
 
   const content = (
     <div
