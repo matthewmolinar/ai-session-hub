@@ -1,12 +1,13 @@
 import { useState, useMemo, useCallback } from "react";
-import { ChevronRight, ChevronDown, Folder, FileText, X, MessageSquare, Clock, User } from "lucide-react";
+import { ChevronRight, ChevronDown, Folder, FileText, X, MessageSquare, Clock, User, Zap, BarChart3, Users } from "lucide-react";
+import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 import { useMySessionsState } from "@/contexts/MySessionsContext";
 import { ModelBadge } from "@/components/ModelBadge";
 import { TranscriptTurn } from "@/components/TranscriptTurn";
 import { LandingSessionView } from "@/components/LandingSessionView";
-import { SESSION_DETAIL, SESSIONS } from "@/lib/mock-data";
+import { SESSION_DETAIL, SESSIONS, SKILL_TEAMMATE_COUNTS } from "@/lib/mock-data";
 import type { Session } from "@/lib/mock-data";
 import type { Comment } from "@/components/TurnComment";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -404,10 +405,50 @@ function SessionPreview({ session, onClose }: { session: Session; onClose: () =>
   );
 }
 
+/* ─── Skills Sidebar ─── */
+function SkillsSidebar() {
+  const skillGroups = useMemo(() => {
+    const map = new Map<string, { count: number; authors: Set<string> }>();
+    for (const session of SESSIONS) {
+      for (const tag of session.tags) {
+        const existing = map.get(tag) || { count: 0, authors: new Set<string>() };
+        existing.count += 1;
+        existing.authors.add(session.author.username);
+        map.set(tag, existing);
+      }
+    }
+    return Array.from(map.entries())
+      .map(([skill, data]) => ({ skill, count: data.count, authors: data.authors.size, teammates: SKILL_TEAMMATE_COUNTS[skill] || 0 }))
+      .sort((a, b) => b.count - a.count);
+  }, []);
+
+  return (
+    <div className="flex-1 overflow-y-auto px-2 py-3 space-y-1">
+      {skillGroups.map((g) => (
+        <div
+          key={g.skill}
+          className="flex items-center gap-2 px-2 py-1.5 rounded hover:bg-secondary/50 transition-colors"
+        >
+          <Zap className="h-3 w-3 text-primary shrink-0" />
+          <span className="text-xs font-mono text-foreground flex-1 truncate">{g.skill}</span>
+          <span className="text-2xs text-muted-foreground">{g.count}</span>
+          {g.teammates > 0 && (
+            <span className="text-2xs text-primary font-medium flex items-center gap-0.5">
+              <Users className="h-2.5 w-2.5" />
+              {g.teammates}
+            </span>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+}
+
 /* ─── Main Page ─── */
 export default function MySessions() {
   const { user } = useAuth();
   const { activeSessionId, setActiveSessionId, selectedFilePath, demoMode } = useMySessionsState();
+  const [sidebarTab, setSidebarTab] = useState<"files" | "skills">("files");
 
   const totalFiles = useMemo(() => FILE_TREE.reduce((sum, n) => sum + countFiles(n), 0), []);
 
@@ -421,16 +462,42 @@ export default function MySessions() {
 
   return (
     <div className="flex-1 flex overflow-hidden">
-      {/* Column 1: File tree — minimal */}
-      <div className="w-[220px] shrink-0 overflow-y-auto border-r border-border bg-background">
-        <div className="px-3 py-3">
-          <p className="text-xs font-medium text-muted-foreground mb-2 px-2">Files</p>
-          <div className="py-0.5">
-            {FILE_TREE.map((node) => (
-              <FileTreeNode key={node.path} node={node} />
-            ))}
-          </div>
+      {/* Column 1: Sidebar with Files/Skills tabs */}
+      <div className="w-[220px] shrink-0 overflow-y-auto border-r border-border bg-background flex flex-col">
+        <div className="flex border-b border-border shrink-0">
+          <button
+            onClick={() => setSidebarTab("files")}
+            className={`flex-1 px-3 py-2 text-xs font-medium transition-colors cursor-pointer ${
+              sidebarTab === "files"
+                ? "text-foreground border-b-2 border-primary"
+                : "text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            Files
+          </button>
+          <button
+            onClick={() => setSidebarTab("skills")}
+            className={`flex-1 px-3 py-2 text-xs font-medium transition-colors cursor-pointer ${
+              sidebarTab === "skills"
+                ? "text-foreground border-b-2 border-primary"
+                : "text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            Skills
+          </button>
         </div>
+
+        {sidebarTab === "files" ? (
+          <div className="px-3 py-3 flex-1 overflow-y-auto">
+            <div className="py-0.5">
+              {FILE_TREE.map((node) => (
+                <FileTreeNode key={node.path} node={node} />
+              ))}
+            </div>
+          </div>
+        ) : (
+          <SkillsSidebar />
+        )}
       </div>
 
       {/* Column 2: Session feed cards */}

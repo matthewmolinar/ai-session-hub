@@ -95,12 +95,6 @@ export function AppHeader() {
             Explorer
           </Link>
           <Link
-            to="/skills"
-            className={`transition-colors ${location.pathname === "/skills" ? "text-foreground font-medium" : "text-muted-foreground hover:text-foreground"}`}
-          >
-            Skills
-          </Link>
-          <Link
             to="/explore"
             className={`transition-colors ${location.pathname === "/explore" ? "text-foreground font-medium" : "text-muted-foreground hover:text-foreground"}`}
           >

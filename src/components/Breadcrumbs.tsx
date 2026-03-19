@@ -11,7 +11,6 @@ const ROUTE_LABELS: Record<string, string> = {
   "/my-sessions": "My Sessions",
   "/": "My Sessions",
   "/explore": "Shared",
-  "/skills": "Skills",
 };
 
 function useBreadcrumbs(): Crumb[] {
@@ -28,9 +27,6 @@ function useBreadcrumbs(): Crumb[] {
     return [{ label: "Shared" }];
   }
 
-  if (path === "/skills") {
-    return [{ label: "Skills" }];
-  }
 
   // Determine parent crumb from navigation origin
   const parentPath = from && ROUTE_LABELS[from] ? from : "/my-sessions";
