@@ -7,37 +7,40 @@
 @layer base {
   :root {
     --background: 0 0% 100%;
-    --foreground: 240 10% 4%;
+    --foreground: 258 44% 11%;
 
     --card: 0 0% 100%;
-    --card-foreground: 240 10% 4%;
+    --card-foreground: 258 44% 11%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 4%;
+    --popover-foreground: 258 44% 11%;
 
-    --primary: 221 83% 53%;
+    --primary: 289 100% 41%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 240 5% 96%;
-    --secondary-foreground: 240 10% 4%;
+    --secondary: 289 20% 95%;
+    --secondary-foreground: 258 44% 11%;
 
-    --muted: 240 5% 96%;
-    --muted-foreground: 240 4% 46%;
+    --muted: 289 15% 95%;
+    --muted-foreground: 258 20% 46%;
 
-    --accent: 221 83% 53%;
+    --accent: 313 74% 54%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 240 6% 90%;
-    --input: 240 6% 90%;
-    --ring: 221 83% 53%;
+    --border: 289 10% 90%;
+    --input: 289 10% 90%;
+    --ring: 289 100% 41%;
 
     --radius: 0.375rem;
 
     /* Custom tokens */
-    --subtle: 240 5% 96%;
+    --subtle: 289 10% 96%;
+    --supportive: 283 99% 26%;
+    --supportive-deep: 258 44% 11%;
+    --gradient-brand: linear-gradient(135deg, hsl(313 74% 54%), hsl(283 99% 26%));
     --diff-add-bg: 142 70% 45% / 0.1;
     --diff-add-text: 142 76% 36%;
     --diff-remove-bg: 0 84% 60% / 0.1;
@@ -46,13 +49,13 @@
     --ease-smooth: cubic-bezier(0.2, 0, 0, 1);
 
     --sidebar-background: 0 0% 100%;
-    --sidebar-foreground: 240 10% 4%;
-    --sidebar-primary: 221 83% 53%;
+    --sidebar-foreground: 258 44% 11%;
+    --sidebar-primary: 289 100% 41%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 5% 96%;
-    --sidebar-accent-foreground: 240 10% 4%;
-    --sidebar-border: 240 6% 90%;
-    --sidebar-ring: 221 83% 53%;
+    --sidebar-accent: 289 15% 95%;
+    --sidebar-accent-foreground: 258 44% 11%;
+    --sidebar-border: 289 10% 90%;
+    --sidebar-ring: 289 100% 41%;
   }
 
   .dark {
