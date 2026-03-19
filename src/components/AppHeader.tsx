@@ -95,8 +95,8 @@ export function AppHeader() {
             </Link>
           )}
           <Link
-            to="/"
-            className={`transition-colors ${location.pathname === "/" ? "text-foreground font-medium" : "text-muted-foreground hover:text-foreground"}`}
+            to="/explore"
+            className={`transition-colors ${location.pathname === "/explore" ? "text-foreground font-medium" : "text-muted-foreground hover:text-foreground"}`}
           >
             Explore
           </Link>
