@@ -101,7 +101,7 @@ export default function SessionView() {
       </aside>
 
       {/* Main transcript */}
-      <main className="overflow-y-auto h-[calc(100vh-44px)]">
+      <main className="overflow-y-auto">
         {/* Session header */}
         <div className="border-b border-border px-6 py-4">
           <div className="flex items-start justify-between gap-4 mb-2">
