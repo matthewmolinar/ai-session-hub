@@ -407,8 +407,82 @@ export default function MySessions() {
 
   if (!user) {
     return (
-      <div className="max-w-2xl mx-auto px-4 py-20 text-center">
-        <p className="text-muted-foreground text-sm">Sign in to view your sessions.</p>
+      <div className="h-[calc(100vh-44px)] flex items-center justify-center">
+        <div className="max-w-md w-full px-6">
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+            className="text-center"
+          >
+            <h1 className="text-2xl font-bold text-foreground tracking-tight leading-snug mb-1">
+              See your AI coding sessions.
+            </h1>
+            <p className="text-lg text-muted-foreground font-medium">
+              Searchable. Organized. <span className="text-foreground">Yours.</span>
+            </p>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1, duration: 0.4 }}
+            className="mt-8"
+          >
+            <div className="rounded-lg border border-border bg-card overflow-hidden">
+              <div className="px-4 py-3 bg-secondary/30 border-b border-border flex items-center gap-2">
+                <div className="flex gap-1.5">
+                  <div className="h-2.5 w-2.5 rounded-full bg-border" />
+                  <div className="h-2.5 w-2.5 rounded-full bg-border" />
+                  <div className="h-2.5 w-2.5 rounded-full bg-border" />
+                </div>
+                <span className="text-2xs text-muted-foreground font-mono ml-1">Terminal</span>
+              </div>
+              <div className="px-4 py-4">
+                <div className="flex items-center gap-2">
+                  <span className="text-primary font-mono text-sm">$</span>
+                  <code className="text-sm font-mono text-foreground font-medium">npx tanagram</code>
+                </div>
+                <p className="text-xs text-muted-foreground mt-3 leading-relaxed">
+                  Reads your local Claude Code sessions from <code className="font-mono bg-secondary rounded px-1 py-0.5">~/.claude/</code> — nothing leaves your machine.
+                </p>
+              </div>
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.25, duration: 0.4 }}
+            className="mt-6"
+          >
+            <div className="flex items-center gap-3 text-xs text-muted-foreground">
+              <div className="flex-1 h-px bg-border" />
+              <span>or</span>
+              <div className="flex-1 h-px bg-border" />
+            </div>
+
+            <button className="mt-4 w-full text-left group cursor-pointer">
+              <div className="rounded-lg border border-border bg-card px-4 py-3 hover:border-primary/30 hover:bg-primary/[0.02] transition-colors">
+                <div className="text-sm font-medium text-foreground group-hover:text-primary transition-colors">
+                  Join a team instance →
+                </div>
+                <p className="text-xs text-muted-foreground mt-0.5">
+                  Your tech lead sent you a link? Connect to your team's Tanagram.
+                </p>
+              </div>
+            </button>
+          </motion.div>
+
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.35, duration: 0.4 }}
+            className="text-center text-2xs text-muted-foreground/60 mt-6"
+          >
+            Local-first. Your code stays on your machine.
+          </motion.p>
+        </div>
       </div>
     );
   }
