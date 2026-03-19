@@ -25,7 +25,7 @@ function useBreadcrumbs(): Crumb[] {
   }
 
   if (path === "/explore") {
-    return [{ label: "Team" }];
+    return [{ label: "Shared" }];
   }
 
   if (path === "/skills") {

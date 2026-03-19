@@ -104,7 +104,7 @@ export function AppHeader() {
             to="/explore"
             className={`transition-colors ${location.pathname === "/explore" ? "text-foreground font-medium" : "text-muted-foreground hover:text-foreground"}`}
           >
-            Team
+            Shared
           </Link>
         </nav>
 
