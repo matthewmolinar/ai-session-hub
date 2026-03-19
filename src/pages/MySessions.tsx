@@ -1,5 +1,5 @@
 import { useState, useMemo, useCallback } from "react";
-import { ChevronRight, ChevronDown, Folder, FileText, GitFork, Search, Upload, Sparkles, X, FileCode, MessageSquare, Share2, Coins, Terminal, Zap } from "lucide-react";
+import { ChevronRight, ChevronDown, Folder, FileText, GitFork, X, FileCode, MessageSquare, Coins } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 import { useMySessionsState } from "@/contexts/MySessionsContext";
@@ -174,25 +174,35 @@ function countSessions(node: FileNode): number {
   return node.children?.reduce((sum, c) => sum + countSessions(c), 0) ?? 0;
 }
 
-function FileTreeNode({
-  node,
-  depth = 0,
-  onSessionClick,
-  activeSessionId,
-}: {
-  node: FileNode;
-  depth?: number;
-  onSessionClick: (sessionId: string) => void;
-  activeSessionId: string | null;
-}) {
-  const { expandedPaths, toggleExpanded, openFilePaths, toggleFileOpen } = useMySessionsState();
+function findFileNode(nodes: FileNode[], path: string): FileNode | null {
+  for (const node of nodes) {
+    if (node.path === path) return node;
+    if (node.children) {
+      const found = findFileNode(node.children, path);
+      if (found) return found;
+    }
+  }
+  return null;
+}
+
+function getTimeAgo(dateStr: string): string {
+  const diff = Date.now() - new Date(dateStr).getTime();
+  const hours = Math.floor(diff / 3600000);
+  if (hours < 1) return "just now";
+  if (hours < 24) return `${hours}h ago`;
+  const days = Math.floor(hours / 24);
+  if (days < 7) return `${days}d ago`;
+  return `${Math.floor(days / 7)}w ago`;
+}
+
+/* ─── Column 1: File Tree ─── */
+function FileTreeNode({ node, depth = 0 }: { node: FileNode; depth?: number }) {
+  const { expandedPaths, toggleExpanded, selectedFilePath, setSelectedFilePath, setActiveSessionId } = useMySessionsState();
   const expanded = node.type === "folder" && expandedPaths.has(node.path);
-  const showSessions = node.type === "file" && openFilePaths.has(node.path);
+  const isSelected = node.type === "file" && selectedFilePath === node.path;
 
   if (node.type === "folder") {
-    const fileCount = countFiles(node);
     const sessionCount = countSessions(node);
-
     return (
       <div>
         <button
@@ -208,81 +218,84 @@ function FileTreeNode({
           <Folder className="h-3.5 w-3.5 text-primary shrink-0" />
           <span className="font-medium text-foreground">{node.name}</span>
           <span className="ml-auto text-2xs text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity">
-            {fileCount} files · {sessionCount} sessions
+            {sessionCount}
           </span>
         </button>
         {expanded && node.children?.map((child) => (
-          <FileTreeNode
-            key={child.path}
-            node={child}
-            depth={depth + 1}
-            onSessionClick={onSessionClick}
-            activeSessionId={activeSessionId}
-          />
+          <FileTreeNode key={child.path} node={child} depth={depth + 1} />
         ))}
       </div>
     );
   }
 
-  // File node
   const sessionCount = node.sessions?.length ?? 0;
 
   return (
-    <div>
-      <button
-        onClick={() => toggleFileOpen(node.path)}
-        className="w-full flex items-center gap-1.5 py-1.5 px-2 text-sm hover:bg-secondary/60 rounded-md transition-colors group cursor-pointer"
-        style={{ paddingLeft: `${depth * 16 + 8}px` }}
-      >
-        <span className="w-3.5" />
-        <FileText className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
-        <span className="text-foreground font-mono text-xs">{node.name}</span>
-        <span className="ml-auto flex items-center gap-1 text-2xs text-muted-foreground">
-          <GitFork className="h-3 w-3" />
-          {sessionCount}
-        </span>
-      </button>
-      {showSessions && node.sessions && (
-        <div
-          className="border-l border-border ml-4 mb-1"
-          style={{ marginLeft: `${depth * 16 + 26}px` }}
-        >
-          {node.sessions.map((s) => (
-            <button
-              key={s.sessionId}
-              onClick={() => onSessionClick(s.sessionId)}
-              className={`w-full text-left flex items-center gap-2 py-2 px-3 text-xs rounded-r-md transition-colors group cursor-pointer ${
-                activeSessionId === s.sessionId
-                  ? "bg-primary/10 border-l-2 border-primary"
-                  : "hover:bg-secondary/40"
-              }`}
-            >
-              <div className="flex-1 min-w-0">
-                <div className="text-foreground font-medium line-clamp-1">{s.sessionTitle}</div>
-                <div className="text-muted-foreground mt-0.5">
-                  {s.turns} turns · {getTimeAgo(s.createdAt)}
-                </div>
-              </div>
-              <ModelBadge model={s.model} />
-            </button>
-          ))}
+    <button
+      onClick={() => {
+        setSelectedFilePath(isSelected ? null : node.path);
+        if (isSelected) setActiveSessionId(null);
+      }}
+      className={`w-full flex items-center gap-1.5 py-1.5 px-2 text-sm rounded-md transition-colors group cursor-pointer ${
+        isSelected ? "bg-primary/10 text-primary" : "hover:bg-secondary/60 text-foreground"
+      }`}
+      style={{ paddingLeft: `${depth * 16 + 8}px` }}
+    >
+      <span className="w-3.5" />
+      <FileText className={`h-3.5 w-3.5 shrink-0 ${isSelected ? "text-primary" : "text-muted-foreground"}`} />
+      <span className="font-mono text-xs truncate">{node.name}</span>
+      <span className="ml-auto flex items-center gap-1 text-2xs text-muted-foreground shrink-0">
+        <GitFork className="h-3 w-3" />
+        {sessionCount}
+      </span>
+    </button>
+  );
+}
+
+/* ─── Column 2: Sessions List ─── */
+function SessionsList({ filePath }: { filePath: string }) {
+  const { activeSessionId, setActiveSessionId } = useMySessionsState();
+  const fileNode = findFileNode(FILE_TREE, filePath);
+  const sessions = fileNode?.sessions ?? [];
+  const fileName = filePath.split("/").pop() ?? filePath;
+
+  return (
+    <div className="flex flex-col h-full">
+      <div className="px-4 py-3 border-b border-border shrink-0">
+        <div className="flex items-center gap-2 text-xs text-muted-foreground mb-1">
+          <FileCode className="h-3.5 w-3.5" />
+          <span className="font-mono">{fileName}</span>
         </div>
-      )}
+        <p className="text-2xs text-muted-foreground">
+          {sessions.length} session{sessions.length !== 1 ? "s" : ""} touched this file
+        </p>
+      </div>
+      <div className="flex-1 overflow-y-auto py-2">
+        {sessions.map((s) => (
+          <button
+            key={s.sessionId}
+            onClick={() => setActiveSessionId(activeSessionId === s.sessionId ? null : s.sessionId)}
+            className={`w-full text-left px-4 py-3 transition-colors cursor-pointer ${
+              activeSessionId === s.sessionId
+                ? "bg-primary/10 border-l-2 border-primary"
+                : "hover:bg-secondary/40 border-l-2 border-transparent"
+            }`}
+          >
+            <div className="text-sm font-medium text-foreground line-clamp-2 mb-1.5">{s.sessionTitle}</div>
+            <div className="flex items-center gap-2 text-2xs text-muted-foreground flex-wrap">
+              <ModelBadge model={s.model} />
+              <span>{s.turns} turns</span>
+              <span>·</span>
+              <span>{getTimeAgo(s.createdAt)}</span>
+            </div>
+          </button>
+        ))}
+      </div>
     </div>
   );
 }
 
-function getTimeAgo(dateStr: string): string {
-  const diff = Date.now() - new Date(dateStr).getTime();
-  const hours = Math.floor(diff / 3600000);
-  if (hours < 1) return "just now";
-  if (hours < 24) return `${hours}h ago`;
-  const days = Math.floor(hours / 24);
-  if (days < 7) return `${days}d ago`;
-  return `${Math.floor(days / 7)}w ago`;
-}
-
-/* ─── Session Preview Panel ─── */
+/* ─── Column 3: Session Preview ─── */
 function SessionPreview({ session, onClose }: { session: Session; onClose: () => void }) {
   const [commentsByTurn, setCommentsByTurn] = useState<Record<number, Comment[]>>(() => ({
     1: [
@@ -303,8 +316,6 @@ function SessionPreview({ session, onClose }: { session: Session; onClose: () =>
     }));
   }, []);
 
-  const totalComments = Object.values(commentsByTurn).reduce((sum, arr) => sum + arr.length, 0);
-
   const costData = useMemo(() => {
     const turns = session.transcript ?? [];
     const totalInput = turns.reduce((s, t) => s + (t.usage?.inputTokens ?? 0), 0);
@@ -319,7 +330,6 @@ function SessionPreview({ session, onClose }: { session: Session; onClose: () =>
 
   return (
     <div className="flex flex-col h-full">
-      {/* Header */}
       <div className="border-b border-border px-4 py-3 shrink-0">
         <div className="flex items-start justify-between gap-3 mb-1.5">
           <h2 className="text-sm font-semibold text-foreground line-clamp-2">{session.title}</h2>
@@ -360,7 +370,6 @@ function SessionPreview({ session, onClose }: { session: Session; onClose: () =>
         )}
       </div>
 
-      {/* Transcript */}
       <div className="flex-1 overflow-y-auto">
         <div className="px-4 py-3 divide-y divide-border">
           {session.transcript?.map((turn) => (
@@ -386,7 +395,7 @@ function SessionPreview({ session, onClose }: { session: Session; onClose: () =>
 /* ─── Main Page ─── */
 export default function MySessions() {
   const { user } = useAuth();
-  const { activeSessionId, toggleSession, setActiveSessionId } = useMySessionsState();
+  const { activeSessionId, setActiveSessionId, selectedFilePath } = useMySessionsState();
 
   const totalFiles = useMemo(() => FILE_TREE.reduce((sum, n) => sum + countFiles(n), 0), []);
   const totalSessions = useMemo(() => {
@@ -410,98 +419,76 @@ export default function MySessions() {
     return <LandingSessionView />;
   }
 
-  const isDemo = true;
-  const panelOpen = activeSession !== null;
-
   return (
     <div className="h-[calc(100vh-44px)] flex overflow-hidden">
-      {/* File tree panel */}
-      <motion.div
-        className="shrink-0 overflow-y-auto border-r border-border bg-background"
-        initial={false}
-        animate={{
-          width: panelOpen ? "340px" : "100%",
-          maxWidth: panelOpen ? "340px" : "720px",
-        }}
-        transition={{ type: "spring", stiffness: 300, damping: 30 }}
-        style={{ marginLeft: panelOpen ? 0 : "auto", marginRight: panelOpen ? 0 : "auto" }}
-      >
+      {/* Column 1: File tree */}
+      <div className="w-[260px] shrink-0 overflow-y-auto border-r border-border bg-background">
         <div className="px-4 py-4">
-          <div className="mb-4">
-            <h1 className="text-lg font-semibold text-foreground">My Sessions</h1>
-            <p className="text-xs text-muted-foreground mt-0.5">
-              {totalFiles} files across {totalSessions} sessions
+          <div className="mb-3">
+            <h1 className="text-sm font-semibold text-foreground">Files</h1>
+            <p className="text-2xs text-muted-foreground mt-0.5">
+              {totalFiles} files · {totalSessions} sessions
             </p>
           </div>
-
-          {/* Hero — hide when panel is open */}
-          <AnimatePresence>
-            {isDemo && !panelOpen && (
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: "auto" }}
-                exit={{ opacity: 0, height: 0 }}
-                transition={{ duration: 0.2 }}
-                className="overflow-hidden"
-              >
-                <div className="mb-5 py-10 text-center">
-                  <motion.h2
-                    initial={{ opacity: 0, y: 8 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.05, duration: 0.4 }}
-                    className="text-2xl font-bold text-foreground tracking-tight leading-snug"
-                  >
-                    Your sessions.{" "}
-                    <span className="text-primary">One search away.</span>
-                  </motion.h2>
-                  <motion.p
-                    initial={{ opacity: 0, y: 8 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.15, duration: 0.4 }}
-                    className="text-sm text-muted-foreground mt-2 max-w-sm mx-auto"
-                  >
-                    Click any file to see the AI conversations behind it.
-                  </motion.p>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
 
           <div className="border border-border rounded-lg bg-card overflow-hidden">
             <div className="px-3 py-2 border-b border-border bg-secondary/30 flex items-center gap-2 text-xs text-muted-foreground">
               <Folder className="h-3.5 w-3.5" />
               <span className="font-medium text-foreground">Project root</span>
-              {isDemo && <span className="ml-auto text-2xs text-muted-foreground/50 font-mono">sample data</span>}
             </div>
             <div className="py-1">
               {FILE_TREE.map((node) => (
-                <FileTreeNode
-                  key={node.path}
-                  node={node}
-                  onSessionClick={toggleSession}
-                  activeSessionId={activeSessionId}
-                />
+                <FileTreeNode key={node.path} node={node} />
               ))}
             </div>
           </div>
         </div>
-      </motion.div>
+      </div>
 
-      {/* Session preview panel */}
+      {/* Column 2: Sessions for selected file */}
       <AnimatePresence mode="wait">
-        {activeSession && (
+        {selectedFilePath && (
+          <motion.div
+            key={selectedFilePath}
+            className="w-[300px] shrink-0 border-r border-border bg-card overflow-hidden"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -20 }}
+            transition={{ type: "spring", stiffness: 400, damping: 30 }}
+          >
+            <SessionsList filePath={selectedFilePath} />
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Column 3: Session transcript */}
+      <AnimatePresence mode="wait">
+        {activeSession ? (
           <motion.div
             key={activeSession.id}
-            className="flex-1 min-w-0 bg-card overflow-hidden"
+            className="flex-1 min-w-0 bg-background overflow-hidden"
             initial={{ opacity: 0, x: 40 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: 40 }}
-            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            transition={{ type: "spring", stiffness: 400, damping: 30 }}
           >
             <SessionPreview
               session={activeSession}
               onClose={() => setActiveSessionId(null)}
             />
+          </motion.div>
+        ) : (
+          <motion.div
+            key="empty"
+            className="flex-1 min-w-0 flex items-center justify-center"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+          >
+            <div className="text-center">
+              <p className="text-sm text-muted-foreground">
+                {selectedFilePath ? "Select a session to view" : "Select a file to see its sessions"}
+              </p>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
