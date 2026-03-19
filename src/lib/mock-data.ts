@@ -270,7 +270,7 @@ export const SESSIONS: Session[] = [
     filesChanged: 6,
     forks: 11,
     createdAt: "2026-03-14T11:20:00Z",
-    tags: ["typescript", "state-machine", "forms"],
+    tags: ["/tdd", "/refactor", "/review"],
     sparkline: [4, 6, 8, 7, 5, 8, 9, 7, 6, 4, 5, 7, 8, 6],
     transcript: [
       {
