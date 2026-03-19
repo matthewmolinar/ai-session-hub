@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { FileCode, MessageSquare, Lock } from "lucide-react";
 import { ModelBadge } from "./ModelBadge";
 import { Sparkline } from "./Sparkline";
@@ -13,6 +13,7 @@ interface SessionCardProps {
 
 export function SessionCard({ session, onSignInClick, landing }: SessionCardProps) {
   const timeAgo = getTimeAgo(session.createdAt);
+  const location = useLocation();
   const blurred = false;
 
   const content = (
@@ -71,7 +72,7 @@ export function SessionCard({ session, onSignInClick, landing }: SessionCardProp
   if (blurred || landing) return content;
 
   return (
-    <Link to={`/session/${session.id}`} className="block">
+    <Link to={`/session/${session.id}`} state={{ from: location.pathname }} className="block">
       {content}
     </Link>
   );

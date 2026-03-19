@@ -174,7 +174,7 @@ export function AppHeader() {
                     key={session.id}
                     className="w-full text-left px-4 py-3 hover:bg-secondary transition-colors border-b border-border last:border-b-0"
                     onClick={() => {
-                      navigate(`/session/${session.id}`);
+                      navigate(`/session/${session.id}`, { state: { from: location.pathname } });
                       setOpen(false);
                       setQuery("");
                     }}
