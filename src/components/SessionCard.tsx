@@ -118,7 +118,7 @@ export function SessionCard({ session, onSignInClick, landing }: SessionCardProp
 
         {/* Skill tags */}
         {session.tags.length > 0 && (
-          <div className="flex items-center gap-1.5 mb-3">
+          <div className="flex items-center gap-1.5 mb-3 flex-wrap">
             {session.tags.map((tag) => (
               <span key={tag} className="text-2xs font-mono text-primary bg-primary/8 rounded-md px-2 py-0.5 border border-primary/15">
                 {tag}
