@@ -1,44 +1,14 @@
 import { Link, useLocation } from "react-router-dom";
-import { FileCode, MessageSquare, Lock, Users } from "lucide-react";
+import { FileCode, MessageSquare, Lock } from "lucide-react";
 import { ModelBadge } from "./ModelBadge";
 import { Sparkline } from "./Sparkline";
 import { useAuth } from "@/contexts/AuthContext";
-import { TEAMMATE_ACTIVITY } from "@/lib/mock-data";
 import type { Session } from "@/lib/mock-data";
 
 interface SessionCardProps {
   session: Session;
   onSignInClick?: () => void;
   landing?: boolean;
-}
-
-function TeammateIndicator({ sessionId }: { sessionId: string }) {
-  const teammates = TEAMMATE_ACTIVITY[sessionId];
-  if (!teammates || teammates.length === 0) return null;
-
-  const shown = teammates.slice(0, 3);
-  const extra = teammates.length - shown.length;
-
-  return (
-    <div className="flex items-center gap-1.5">
-      <div className="flex -space-x-1.5">
-        {shown.map((t) => (
-          <div
-            key={t.username}
-            className="h-5 w-5 rounded-full bg-primary/15 border-2 border-card flex items-center justify-center text-2xs font-semibold text-primary"
-            title={`@${t.username}`}
-          >
-            {t.username[0].toUpperCase()}
-          </div>
-        ))}
-      </div>
-      <span className="text-2xs text-muted-foreground">
-        {teammates.length === 1
-          ? `@${teammates[0].username} also explored`
-          : `${teammates.length} teammates also explored`}
-      </span>
-    </div>
-  );
 }
 
 export function SessionCard({ session, onSignInClick, landing }: SessionCardProps) {
@@ -48,14 +18,14 @@ export function SessionCard({ session, onSignInClick, landing }: SessionCardProp
 
   const content = (
     <div
-      className="relative rounded-lg border border-border bg-card p-4 overflow-hidden glow-card glow-border"
+      className="relative rounded-xl border border-border bg-card p-4 overflow-hidden hover:shadow-elevated transition-shadow"
       onClick={blurred && onSignInClick ? () => onSignInClick() : undefined}
       role={blurred ? "button" : undefined}
       style={blurred ? { cursor: "pointer" } : undefined}
     >
       {blurred && (
         <>
-          <div className="absolute inset-0 z-10 backdrop-blur-[6px] bg-card/30 rounded-lg" style={{ top: '3.5rem' }} />
+          <div className="absolute inset-0 z-10 backdrop-blur-[6px] bg-card/30 rounded-xl" style={{ top: '3.5rem' }} />
           <div className="absolute inset-0 z-20 flex items-center justify-center" style={{ top: '3.5rem' }}>
             <span className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground bg-card/80 backdrop-blur-sm border border-border rounded-full px-3 py-1.5 shadow-sm">
               <Lock className="h-3 w-3" />
@@ -65,18 +35,27 @@ export function SessionCard({ session, onSignInClick, landing }: SessionCardProp
         </>
       )}
 
-      {/* L1: Title + author (always visible) */}
-      <div className="flex items-center gap-2 mb-1.5">
-        <span className="font-medium text-xs text-muted-foreground">@{session.author.username}</span>
-        <span className="text-border">·</span>
-        <h3 className="text-base font-semibold text-foreground leading-snug line-clamp-1 flex-1">
-          {session.title}
-        </h3>
+      {/* Author + title */}
+      <div className="flex items-center gap-2 mb-2">
+        <div className="h-7 w-7 rounded-full bg-primary/10 flex items-center justify-center text-xs font-semibold text-primary shrink-0">
+          {session.author.username[0].toUpperCase()}
+        </div>
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2">
+            <span className="font-medium text-sm text-foreground">@{session.author.username}</span>
+            <span className="text-xs text-muted-foreground">{timeAgo}</span>
+          </div>
+        </div>
         <ModelBadge model={session.model} />
       </div>
 
-      {/* L2: Opening prompt */}
-      <p className="text-sm text-muted-foreground line-clamp-2 mb-3 font-mono">
+      {/* Title */}
+      <h3 className="text-sm font-semibold text-foreground leading-snug line-clamp-2 mb-1.5">
+        {session.title}
+      </h3>
+
+      {/* Opening prompt */}
+      <p className="text-sm text-muted-foreground line-clamp-2 mb-3">
         {session.openingPrompt}
       </p>
 
@@ -85,21 +64,17 @@ export function SessionCard({ session, onSignInClick, landing }: SessionCardProp
 
       {/* Skill tags */}
       {session.tags.length > 0 && (
-        <div className="flex items-center gap-1.5 mb-1">
+        <div className="flex items-center gap-1.5 mb-2">
           {session.tags.map((tag) => (
-            <span key={tag} className="text-2xs font-mono text-primary bg-primary/10 rounded px-1.5 py-0.5">
+            <span key={tag} className="text-2xs font-mono text-primary bg-primary/8 rounded-md px-2 py-0.5 border border-primary/15">
               {tag}
             </span>
           ))}
         </div>
       )}
 
-      {/* Teammate indicator */}
-      <TeammateIndicator sessionId={session.id} />
-
-      {/* L3: Metadata */}
-      <div className="flex items-center gap-4 text-xs text-muted-foreground mt-2">
-        <span className="font-medium text-foreground">@{session.author.username}</span>
+      {/* Metadata */}
+      <div className="flex items-center gap-4 text-xs text-muted-foreground pt-2 border-t border-border">
         <span className="flex items-center gap-1">
           <MessageSquare className="h-3 w-3" />
           {session.turns}
@@ -108,7 +83,6 @@ export function SessionCard({ session, onSignInClick, landing }: SessionCardProp
           <FileCode className="h-3 w-3" />
           {session.filesChanged}
         </span>
-        <span className="ml-auto">{timeAgo}</span>
       </div>
     </div>
   );
