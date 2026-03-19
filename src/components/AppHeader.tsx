@@ -71,7 +71,7 @@ export function AppHeader() {
             setSelectedFilePath(null);
           }}
         >
-          <img src={tanagramLogo} alt="Tanagram" className="h-5 w-5 translate-y-[1px]" style={{ filter: "invert(1)" }} />
+          <img src={tanagramLogo} alt="Tanagram" className="h-5 w-5 translate-y-[1px]" style={{ filter: "invert(1) sepia(1) saturate(5) hue-rotate(200deg) brightness(0.9)" }} />
           <span>Tanagram</span>
         </Link>
 
