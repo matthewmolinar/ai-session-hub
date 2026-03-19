@@ -38,7 +38,7 @@ export default function Profile() {
   const bio = profile?.bio || "No bio yet";
 
   return (
-    <div className="max-w-2xl mx-auto px-4 py-6">
+    <div className="max-w-2xl mx-auto px-3 sm:px-4 py-4 sm:py-6">
       {/* Profile header */}
       <div className="border-b border-border pb-4 mb-6">
         <div className="flex items-start gap-4">
