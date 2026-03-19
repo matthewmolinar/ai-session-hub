@@ -124,35 +124,44 @@ export function AppHeader() {
         </button>
 
         <div className="flex items-center gap-2">
-          {user && (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <button className="hidden sm:flex h-8 w-8 rounded-full bg-primary items-center justify-center text-xs font-semibold text-primary-foreground hover:opacity-90 transition-all cursor-pointer">
-                  {username[0].toUpperCase()}
-                </button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-40">
-                <DropdownMenuItem asChild>
-                  <Link to={`/profile/${username}`} className="flex items-center gap-2">
-                    <User className="h-3.5 w-3.5" />
-                    Profile
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={signOut} className="flex items-center gap-2">
-                  <LogOut className="h-3.5 w-3.5" />
-                  Sign out
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          )}
+          {user ? (
+            <>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button className="hidden sm:flex h-8 w-8 rounded-full bg-primary items-center justify-center text-xs font-semibold text-primary-foreground hover:opacity-90 transition-all cursor-pointer">
+                    {username[0].toUpperCase()}
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-40">
+                  <DropdownMenuItem asChild>
+                    <Link to={`/profile/${username}`} className="flex items-center gap-2">
+                      <User className="h-3.5 w-3.5" />
+                      Profile
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={signOut} className="flex items-center gap-2">
+                    <LogOut className="h-3.5 w-3.5" />
+                    Sign out
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
 
-          {/* Mobile hamburger */}
-          <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="sm:hidden h-8 w-8 flex items-center justify-center rounded-md text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
-          >
-            {mobileMenuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
-          </button>
+              {/* Mobile hamburger */}
+              <button
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="sm:hidden h-8 w-8 flex items-center justify-center rounded-md text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
+              >
+                {mobileMenuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+              </button>
+            </>
+          ) : (
+            <button
+              onClick={() => navigate("/get-started")}
+              className="h-8 px-3.5 rounded-md bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 transition-colors"
+            >
+              Get Started Free
+            </button>
+          )}
         </div>
       </header>
 
