@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { GitFork, Search, LogOut, User, LogIn } from "lucide-react";
+import { Search, LogOut, User, LogIn } from "lucide-react";
+import tanagramLogo from "@/assets/tanagram-logo.svg";
 import { AuthModal } from "@/components/AuthModal";
 import { SESSIONS } from "@/lib/mock-data";
 import { useAuth } from "@/contexts/AuthContext";
@@ -73,7 +74,7 @@ export function AppHeader() {
     <>
       <header className="h-11 border-b border-border flex items-center px-4 gap-6 bg-card shrink-0">
         <Link to="/my-sessions" className="flex items-center gap-1.5 font-semibold text-sm text-foreground">
-          <GitFork className="h-4 w-4 text-primary" />
+          <img src={tanagramLogo} alt="Tanagram" className="h-5 w-5 rounded" />
           <span>Tanagram</span>
         </Link>
 
