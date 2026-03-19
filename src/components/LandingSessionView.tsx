@@ -116,8 +116,8 @@ function SacredGeometry() {
             <g key={`d-${deg}`}>
               <rect x={x - 4} y={y - 4} width={8} height={8}
                 transform={`rotate(45 ${x} ${y})`}
-                fill="none" stroke={`${purple} / 0.25)`} strokeWidth="0.75" />
-              <circle cx={x} cy={y} r={2} fill={`${purple} / 0.2)`} />
+                fill="none" stroke={`${purple} / 0.18)`} strokeWidth="0.75" />
+              <circle cx={x} cy={y} r={2} fill={`${purple} / 0.14)`} />
             </g>
           );
         })}
