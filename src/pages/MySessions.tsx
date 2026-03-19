@@ -303,6 +303,29 @@ function SessionFeed({ filePath }: { filePath: string }) {
   );
 }
 
+/* ─── Group turns: user prompt + following assistant/tool turns ─── */
+interface TurnGroup {
+  userTurn: typeof SESSION_DETAIL.transcript extends (infer T)[] | undefined ? NonNullable<T> : never;
+  responseTurns: typeof SESSION_DETAIL.transcript extends (infer T)[] | undefined ? NonNullable<T>[] : never;
+}
+
+function groupTurns(transcript: Session["transcript"]): TurnGroup[] {
+  if (!transcript) return [];
+  const groups: TurnGroup[] = [];
+  let current: TurnGroup | null = null;
+
+  for (const turn of transcript) {
+    if (turn.role === "user") {
+      if (current) groups.push(current);
+      current = { userTurn: turn, responseTurns: [] };
+    } else if (current) {
+      current.responseTurns.push(turn);
+    }
+  }
+  if (current) groups.push(current);
+  return groups;
+}
+
 /* ─── Column 3: Session Preview ─── */
 function SessionPreview({ session, onClose }: { session: Session; onClose: () => void }) {
   const [commentsByTurn, setCommentsByTurn] = useState<Record<number, Comment[]>>(() => ({
@@ -323,6 +346,8 @@ function SessionPreview({ session, onClose }: { session: Session; onClose: () =>
       [turnId]: [...(prev[turnId] || []), newComment],
     }));
   }, []);
+
+  const groups = useMemo(() => groupTurns(session.transcript), [session.transcript]);
 
   return (
     <div className="flex flex-col h-full">
@@ -355,19 +380,20 @@ function SessionPreview({ session, onClose }: { session: Session; onClose: () =>
         </div>
       </div>
 
-      {/* Transcript */}
+      {/* Grouped transcript — posts with expandable responses */}
       <div className="flex-1 overflow-y-auto">
-        <div className="px-4 py-3 divide-y divide-border">
-          {session.transcript?.map((turn) => (
-            <div key={turn.id} id={`preview-turn-${turn.id}`}>
+        <div className="divide-y divide-border/60">
+          {groups.map((group) => (
+            <div key={group.userTurn.id} className="px-4">
               <TranscriptTurn
-                turn={turn}
-                comments={commentsByTurn[turn.id] || []}
+                turn={group.userTurn}
+                responseTurns={group.responseTurns}
+                comments={commentsByTurn[group.userTurn.id] || []}
                 onAddComment={handleAddComment}
               />
             </div>
           ))}
-          {!session.transcript && (
+          {groups.length === 0 && (
             <div className="py-12 text-center text-sm text-muted-foreground">
               No transcript available.
             </div>
