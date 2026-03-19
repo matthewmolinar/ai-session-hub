@@ -169,3 +169,12 @@
   pointer-events: none;
   z-index: -1;
 }
+
+/* Breathing glow — slow pulse on card border */
+@keyframes breathe {
+  0%, 100% { box-shadow: 0 0 0 1px hsl(258 20% 14%), 0 4px 24px -4px hsl(289 100% 50% / 0.04); }
+  50% { box-shadow: 0 0 0 1px hsl(289 100% 50% / 0.12), 0 0 40px -8px hsl(289 100% 50% / 0.12), 0 0 80px -16px hsl(313 74% 54% / 0.06); }
+}
+.breathing-glow {
+  animation: breathe 6s ease-in-out infinite;
+}
