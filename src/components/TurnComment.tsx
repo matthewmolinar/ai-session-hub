@@ -38,7 +38,10 @@ export function TurnComment({ turnId, comments, onAddComment }: TurnCommentProps
 
   return (
     <div className="mt-2">
-      {/* Existing comments */}
+      {/* Comments header */}
+      {comments.length > 0 && (
+        <p className="text-2xs font-medium text-muted-foreground mb-1.5">Comments</p>
+      )}
       {comments.map((comment) => (
         <div
           key={comment.id}
