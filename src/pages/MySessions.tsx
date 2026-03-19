@@ -517,7 +517,7 @@ export default function MySessions() {
       <div className="w-[220px] shrink-0 overflow-y-auto border-r border-border bg-background flex flex-col">
         <div className="flex border-b border-border shrink-0">
           <button
-            onClick={() => setSidebarTab("files")}
+            onClick={() => { setSidebarTab("files"); setSelectedSkillId(null); }}
             className={`flex-1 px-3 py-2 text-xs font-medium transition-colors cursor-pointer ${
               sidebarTab === "files"
                 ? "text-foreground border-b-2 border-primary"
