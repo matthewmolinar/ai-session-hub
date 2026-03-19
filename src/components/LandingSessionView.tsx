@@ -24,11 +24,7 @@ export function LandingSessionView() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1, duration: 0.4 }}
         >
-          <Link to={`/session/${SESSION_DETAIL.id}`} className="block">
-            <div className="rounded-lg shadow-card border border-border bg-card p-4 transition-shadow hover:shadow-md hover:border-primary/30 cursor-pointer">
-              <SessionCard session={SESSION_DETAIL} landing />
-            </div>
-          </Link>
+          <SessionCard session={SESSION_DETAIL} landing />
         </motion.div>
 
         {/* One command */}
