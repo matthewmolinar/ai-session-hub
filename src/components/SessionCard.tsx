@@ -83,6 +83,17 @@ export function SessionCard({ session, onSignInClick, landing }: SessionCardProp
       {/* Sparkline */}
       <Sparkline data={session.sparkline} className="mb-3" />
 
+      {/* Skill tags */}
+      {session.tags.length > 0 && (
+        <div className="flex items-center gap-1.5 mb-1">
+          {session.tags.map((tag) => (
+            <span key={tag} className="text-2xs font-mono text-primary bg-primary/10 rounded px-1.5 py-0.5">
+              {tag}
+            </span>
+          ))}
+        </div>
+      )}
+
       {/* Teammate indicator */}
       <TeammateIndicator sessionId={session.id} />
 

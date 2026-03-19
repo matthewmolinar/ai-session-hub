@@ -53,7 +53,7 @@ export const SESSIONS: Session[] = [
     filesChanged: 12,
     forks: 7,
     createdAt: "2026-03-17T14:30:00Z",
-    tags: ["typescript", "collaboration", "crdt"],
+    tags: ["/commit", "/review", "/test"],
     sparkline: [3, 5, 8, 6, 9, 4, 7, 8, 5, 3, 6, 8, 9, 7, 4, 2],
   },
   {
@@ -66,7 +66,7 @@ export const SESSIONS: Session[] = [
     filesChanged: 8,
     forks: 23,
     createdAt: "2026-03-16T09:15:00Z",
-    tags: ["rust", "async", "systems"],
+    tags: ["/commit", "/tdd", "/deploy"],
     sparkline: [2, 4, 6, 8, 9, 9, 7, 8, 9, 6, 5, 7, 8, 9, 8, 6, 4, 3, 5, 7],
     transcript: [
       {
@@ -165,7 +165,7 @@ export const SESSIONS: Session[] = [
     filesChanged: 15,
     forks: 4,
     createdAt: "2026-03-15T18:45:00Z",
-    tags: ["astro", "migration", "nextjs"],
+    tags: ["/fix-issue", "/commit", "/docs"],
     sparkline: [5, 7, 9, 8, 6, 4, 3, 5, 7, 8, 6, 4],
     transcript: [
       {
@@ -270,7 +270,7 @@ export const SESSIONS: Session[] = [
     filesChanged: 6,
     forks: 11,
     createdAt: "2026-03-14T11:20:00Z",
-    tags: ["typescript", "state-machine", "forms"],
+    tags: ["/tdd", "/refactor", "/review"],
     sparkline: [4, 6, 8, 7, 5, 8, 9, 7, 6, 4, 5, 7, 8, 6],
     transcript: [
       {
@@ -375,7 +375,7 @@ export const SESSIONS: Session[] = [
     filesChanged: 4,
     forks: 16,
     createdAt: "2026-03-13T08:00:00Z",
-    tags: ["go", "database", "data-structures"],
+    tags: ["/test", "/commit", "/security-scan"],
     sparkline: [3, 5, 7, 9, 8, 7, 6, 8, 9, 7, 5, 4, 6, 8, 7, 5, 3],
     transcript: [
       {
@@ -483,7 +483,7 @@ export const SESSIONS: Session[] = [
     filesChanged: 3,
     forks: 8,
     createdAt: "2026-03-12T16:30:00Z",
-    tags: ["css", "animation", "library"],
+    tags: ["/pr-review", "/refactor", "/docs"],
     sparkline: [6, 8, 9, 7, 5, 8, 9, 6, 4],
     transcript: [
       {
@@ -708,27 +708,26 @@ export const TEAMMATE_ACTIVITY: Record<string, { username: string; avatar?: stri
   s6: [{ username: "sarah_edo" }, { username: "danabramov" }, { username: "tkdodo" }, { username: "phil_eaton" }],
 };
 
-// Teammate usage counts per skill tag
-export const SKILL_TEAMMATE_COUNTS: Record<string, number> = {
-  typescript: 5,
-  collaboration: 2,
-  crdt: 1,
-  rust: 3,
-  async: 2,
-  systems: 2,
-  astro: 1,
-  migration: 2,
-  nextjs: 3,
-  "state-machine": 2,
-  forms: 4,
-  go: 2,
-  database: 3,
-  "data-structures": 2,
-  css: 4,
-  animation: 3,
-  library: 2,
-  python: 3,
-};
+export interface SkillDefinition {
+  id: string;
+  name: string;
+  description: string;
+  installs: number;
+  category: "workflow" | "quality" | "devops";
+}
+
+export const SKILLS_CATALOG: SkillDefinition[] = [
+  { id: "/commit",        name: "/commit",        description: "Auto-generates conventional commit messages",                    installs: 12_400, category: "workflow" },
+  { id: "/review",        name: "/review",        description: "Multi-angle code review — security, perf, quality",             installs: 9_800,  category: "quality" },
+  { id: "/fix-issue",     name: "/fix-issue",     description: "Takes a GitHub/Linear issue number, implements the fix",        installs: 8_200,  category: "workflow" },
+  { id: "/tdd",           name: "/tdd",           description: "Red-green-refactor cycle orchestration",                        installs: 6_500,  category: "quality" },
+  { id: "/pr-review",     name: "/pr-review",     description: "Fetches PR diff, writes structured review comments",           installs: 5_900,  category: "quality" },
+  { id: "/deploy",        name: "/deploy",        description: "Runs tests, builds, pushes to prod",                            installs: 5_100,  category: "devops" },
+  { id: "/test",          name: "/test",          description: "Generates test suites for specified code",                      installs: 7_300,  category: "quality" },
+  { id: "/docs",          name: "/docs",          description: "Generates API docs from code (OpenAPI, JSDoc)",                 installs: 4_200,  category: "workflow" },
+  { id: "/security-scan", name: "/security-scan", description: "OWASP-style vulnerability scan",                               installs: 3_800,  category: "devops" },
+  { id: "/refactor",      name: "/refactor",      description: "Dead code removal, pattern cleanup",                            installs: 4_600,  category: "quality" },
+];
 
 export const MODELS = ["All Models", "claude-3.5-sonnet", "gpt-4o", "gemini-2.5-pro"] as const;
-export const LANGUAGES = ["All Languages", "typescript", "rust", "go", "python", "css"] as const;
+export const LANGUAGES = ["All Languages", "/commit", "/review", "/fix-issue", "/tdd", "/test", "/deploy"] as const;
