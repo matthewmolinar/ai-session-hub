@@ -31,7 +31,7 @@ function AppContent() {
     <div className="min-h-screen flex flex-col bg-background">
       <AppHeader />
       <Breadcrumbs />
-      <div className="flex-1 flex flex-col overflow-hidden">
+      <div className="flex-1 min-h-0 flex flex-col overflow-hidden">
         <Routes>
           <Route path="/" element={<MySessions />} />
           <Route path="/explore" element={<Index />} />

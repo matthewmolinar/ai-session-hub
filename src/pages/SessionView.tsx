@@ -1,6 +1,6 @@
-import { useState, useCallback, useMemo } from "react";
-import { useParams, Link } from "react-router-dom";
-import { Coins, FileCode, GitFork, MessageSquare, Share2, Terminal, Zap } from "lucide-react";
+import { useState, useCallback, useMemo, useRef } from "react";
+import { useParams } from "react-router-dom";
+import { Coins, FileCode, MessageSquare, Share2, Terminal, Zap } from "lucide-react";
 import { TranscriptTurn } from "@/components/TranscriptTurn";
 import { ModelBadge } from "@/components/ModelBadge";
 import { SESSION_DETAIL, SESSIONS } from "@/lib/mock-data";
@@ -8,6 +8,8 @@ import type { Comment } from "@/components/TurnComment";
 
 export default function SessionView() {
   const { id } = useParams();
+  const transcriptRef = useRef<HTMLElement | null>(null);
+
   const session = useMemo(() => {
     if (id === SESSION_DETAIL.id) return SESSION_DETAIL;
     return SESSIONS.find((s) => s.id === id) ?? SESSION_DETAIL;
@@ -49,6 +51,19 @@ export default function SessionView() {
     }));
   }, []);
 
+  const scrollToTurn = useCallback((turnId: number) => {
+    const container = transcriptRef.current;
+    const target = document.getElementById(`turn-${turnId}`);
+
+    if (!container || !target) return;
+
+    const containerRect = container.getBoundingClientRect();
+    const targetRect = target.getBoundingClientRect();
+    const nextTop = container.scrollTop + (targetRect.top - containerRect.top) - 8;
+
+    container.scrollTo({ top: nextTop, behavior: "smooth" });
+  }, []);
+
   const totalComments = Object.values(commentsByTurn).reduce((sum, arr) => sum + arr.length, 0);
 
   // Token & cost aggregation
@@ -76,19 +91,17 @@ export default function SessionView() {
   const skills = session.tags;
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-[200px_1fr_200px] gap-0 h-full flex-1 overflow-hidden">
+    <div className="grid grid-cols-1 lg:grid-cols-[200px_1fr_200px] gap-0 h-full flex-1 min-h-0 overflow-hidden">
       {/* Left sidebar: Turn Navigator */}
-      <aside className="hidden lg:flex lg:flex-col border-r border-border p-3 overflow-y-auto min-h-0">
+      <aside className="hidden lg:flex lg:flex-col border-r border-border p-3 overflow-y-auto min-h-0 lg:sticky lg:top-0">
         <h4 className="text-label mb-2">Turns</h4>
         <div className="flex flex-col gap-0.5">
-          {session.transcript?.filter(t => t.role !== "tool").map((turn) => {
+          {session.transcript?.filter((t) => t.role !== "tool").map((turn) => {
             const turnCommentCount = (commentsByTurn[turn.id] || []).length;
             return (
               <button
                 key={turn.id}
-                onClick={() => {
-                  document.getElementById(`turn-${turn.id}`)?.scrollIntoView({ behavior: "smooth", block: "start" });
-                }}
+                onClick={() => scrollToTurn(turn.id)}
                 className="flex items-start gap-2 px-2 py-1.5 rounded-sm text-xs text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors w-full text-left"
               >
                 <span className="text-2xs font-mono shrink-0 mt-0.5">{turn.timestamp}</span>
@@ -106,7 +119,7 @@ export default function SessionView() {
       </aside>
 
       {/* Main transcript */}
-      <main className="overflow-y-auto min-h-0">
+      <main ref={transcriptRef} className="overflow-y-auto min-h-0">
         {/* Session header */}
         <div className="border-b border-border px-6 py-4">
           <div className="flex items-start justify-between gap-4 mb-2">
@@ -173,10 +186,10 @@ export default function SessionView() {
             <span className="text-2xs text-muted-foreground">Most expensive turns</span>
             <div className="flex flex-col gap-1 mt-1">
               {costData.mostExpensive.map((t) => (
-                <a
+                <button
                   key={t.id}
-                  href={`#turn-${t.id}`}
-                  className="flex items-center justify-between gap-1 px-2 py-1 rounded-sm text-2xs hover:bg-secondary transition-colors"
+                  onClick={() => scrollToTurn(t.id)}
+                  className="flex items-center justify-between gap-1 px-2 py-1 rounded-sm text-2xs hover:bg-secondary transition-colors w-full text-left"
                 >
                   <span className="text-muted-foreground truncate">
                     {t.intentSummary || t.content.slice(0, 25)}
@@ -184,7 +197,7 @@ export default function SessionView() {
                   <span className="font-mono text-foreground shrink-0">
                     ${t.usage!.cost.toFixed(4)}
                   </span>
-                </a>
+                </button>
               ))}
             </div>
           </div>
