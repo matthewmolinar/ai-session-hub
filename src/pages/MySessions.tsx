@@ -1,5 +1,5 @@
 import { useState, useMemo, useCallback } from "react";
-import { ChevronRight, ChevronDown, Folder, FileText, GitFork, X, FileCode, MessageSquare, Coins } from "lucide-react";
+import { ChevronRight, ChevronDown, Folder, FileText, X, MessageSquare, Clock, User } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 import { useMySessionsState } from "@/contexts/MySessionsContext";
@@ -9,6 +9,7 @@ import { LandingSessionView } from "@/components/LandingSessionView";
 import { SESSION_DETAIL, SESSIONS } from "@/lib/mock-data";
 import type { Session } from "@/lib/mock-data";
 import type { Comment } from "@/components/TurnComment";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 interface FileSession {
   sessionId: string;
@@ -16,6 +17,8 @@ interface FileSession {
   model: string;
   turns: number;
   createdAt: string;
+  author?: string;
+  openingPrompt?: string;
 }
 
 interface FileNode {
@@ -26,7 +29,6 @@ interface FileNode {
   sessions?: FileSession[];
 }
 
-// Mock file tree with sessions that touched each file
 const FILE_TREE: FileNode[] = [
   {
     name: "src",
@@ -43,8 +45,8 @@ const FILE_TREE: FileNode[] = [
             path: "src/editor/document.ts",
             type: "file",
             sessions: [
-              { sessionId: "s1", sessionTitle: "Building a real-time collaborative editor with CRDTs", model: "claude-3.5-sonnet", turns: 42, createdAt: "2026-03-17T14:30:00Z" },
-              { sessionId: "s4", sessionTitle: "Zero-dependency state machine for form validation", model: "gemini-2.5-pro", turns: 35, createdAt: "2026-03-14T11:20:00Z" },
+              { sessionId: "s1", sessionTitle: "Building a real-time collaborative editor with CRDTs", model: "claude-3.5-sonnet", turns: 42, createdAt: "2026-03-17T14:30:00Z", author: "alexcodes", openingPrompt: "I want to build a collaborative text editor using CRDTs for conflict resolution..." },
+              { sessionId: "s4", sessionTitle: "Zero-dependency state machine for form validation", model: "gemini-2.5-pro", turns: 35, createdAt: "2026-03-14T11:20:00Z", author: "formwizard", openingPrompt: "Let's create a finite state machine that handles complex form validation flows..." },
             ],
           },
           {
@@ -52,7 +54,7 @@ const FILE_TREE: FileNode[] = [
             path: "src/editor/Editor.tsx",
             type: "file",
             sessions: [
-              { sessionId: "s1", sessionTitle: "Building a real-time collaborative editor with CRDTs", model: "claude-3.5-sonnet", turns: 42, createdAt: "2026-03-17T14:30:00Z" },
+              { sessionId: "s1", sessionTitle: "Building a real-time collaborative editor with CRDTs", model: "claude-3.5-sonnet", turns: 42, createdAt: "2026-03-17T14:30:00Z", author: "alexcodes", openingPrompt: "I want to build a collaborative text editor using CRDTs for conflict resolution..." },
             ],
           },
           {
@@ -60,7 +62,7 @@ const FILE_TREE: FileNode[] = [
             path: "src/editor/cursors.tsx",
             type: "file",
             sessions: [
-              { sessionId: "s1", sessionTitle: "Building a real-time collaborative editor with CRDTs", model: "claude-3.5-sonnet", turns: 42, createdAt: "2026-03-17T14:30:00Z" },
+              { sessionId: "s1", sessionTitle: "Building a real-time collaborative editor with CRDTs", model: "claude-3.5-sonnet", turns: 42, createdAt: "2026-03-17T14:30:00Z", author: "alexcodes", openingPrompt: "I want to build a collaborative text editor using CRDTs for conflict resolution..." },
             ],
           },
         ],
@@ -75,8 +77,8 @@ const FILE_TREE: FileNode[] = [
             path: "src/sync/ws-provider.ts",
             type: "file",
             sessions: [
-              { sessionId: "s1", sessionTitle: "Building a real-time collaborative editor with CRDTs", model: "claude-3.5-sonnet", turns: 42, createdAt: "2026-03-17T14:30:00Z" },
-              { sessionId: "s2", sessionTitle: "Rust async runtime from scratch", model: "gpt-4o", turns: 67, createdAt: "2026-03-16T09:15:00Z" },
+              { sessionId: "s1", sessionTitle: "Building a real-time collaborative editor with CRDTs", model: "claude-3.5-sonnet", turns: 42, createdAt: "2026-03-17T14:30:00Z", author: "alexcodes", openingPrompt: "I want to build a collaborative text editor using CRDTs for conflict resolution..." },
+              { sessionId: "s2", sessionTitle: "Rust async runtime from scratch", model: "gpt-4o", turns: 67, createdAt: "2026-03-16T09:15:00Z", author: "rustacean42", openingPrompt: "I'd like to implement a minimal async runtime in Rust, similar to a simplified tokio..." },
             ],
           },
           {
@@ -84,7 +86,7 @@ const FILE_TREE: FileNode[] = [
             path: "src/sync/awareness.ts",
             type: "file",
             sessions: [
-              { sessionId: "s1", sessionTitle: "Building a real-time collaborative editor with CRDTs", model: "claude-3.5-sonnet", turns: 42, createdAt: "2026-03-17T14:30:00Z" },
+              { sessionId: "s1", sessionTitle: "Building a real-time collaborative editor with CRDTs", model: "claude-3.5-sonnet", turns: 42, createdAt: "2026-03-17T14:30:00Z", author: "alexcodes", openingPrompt: "I want to build a collaborative text editor using CRDTs for conflict resolution..." },
             ],
           },
         ],
@@ -99,8 +101,8 @@ const FILE_TREE: FileNode[] = [
             path: "src/components/Toolbar.tsx",
             type: "file",
             sessions: [
-              { sessionId: "s3", sessionTitle: "Migrating a Next.js app to Astro with view transitions", model: "claude-3.5-sonnet", turns: 28, createdAt: "2026-03-15T18:45:00Z" },
-              { sessionId: "s6", sessionTitle: "CSS-only animation library with @property", model: "claude-3.5-sonnet", turns: 19, createdAt: "2026-03-12T16:30:00Z" },
+              { sessionId: "s3", sessionTitle: "Migrating a Next.js app to Astro with view transitions", model: "claude-3.5-sonnet", turns: 28, createdAt: "2026-03-15T18:45:00Z", author: "astrofan", openingPrompt: "I need to migrate my Next.js app to Astro while preserving view transitions..." },
+              { sessionId: "s6", sessionTitle: "CSS-only animation library with @property", model: "claude-3.5-sonnet", turns: 19, createdAt: "2026-03-12T16:30:00Z", author: "cssmagic", openingPrompt: "Can we build a pure CSS animation library using @property for spring physics?" },
             ],
           },
           {
@@ -108,7 +110,7 @@ const FILE_TREE: FileNode[] = [
             path: "src/components/AnimatedLayout.tsx",
             type: "file",
             sessions: [
-              { sessionId: "s3", sessionTitle: "Migrating a Next.js app to Astro with view transitions", model: "claude-3.5-sonnet", turns: 28, createdAt: "2026-03-15T18:45:00Z" },
+              { sessionId: "s3", sessionTitle: "Migrating a Next.js app to Astro with view transitions", model: "claude-3.5-sonnet", turns: 28, createdAt: "2026-03-15T18:45:00Z", author: "astrofan", openingPrompt: "I need to migrate my Next.js app to Astro while preserving view transitions..." },
             ],
           },
         ],
@@ -123,7 +125,7 @@ const FILE_TREE: FileNode[] = [
             path: "src/lib/state-machine.ts",
             type: "file",
             sessions: [
-              { sessionId: "s4", sessionTitle: "Zero-dependency state machine for form validation", model: "gemini-2.5-pro", turns: 35, createdAt: "2026-03-14T11:20:00Z" },
+              { sessionId: "s4", sessionTitle: "Zero-dependency state machine for form validation", model: "gemini-2.5-pro", turns: 35, createdAt: "2026-03-14T11:20:00Z", author: "formwizard", openingPrompt: "Let's create a finite state machine that handles complex form validation flows..." },
             ],
           },
           {
@@ -131,7 +133,7 @@ const FILE_TREE: FileNode[] = [
             path: "src/lib/btree.go",
             type: "file",
             sessions: [
-              { sessionId: "s5", sessionTitle: "Implementing a B-tree index in Go", model: "gpt-4o", turns: 51, createdAt: "2026-03-13T08:00:00Z" },
+              { sessionId: "s5", sessionTitle: "Implementing a B-tree index in Go", model: "gpt-4o", turns: 51, createdAt: "2026-03-13T08:00:00Z", author: "gopherdev", openingPrompt: "I want to implement a B-tree index from scratch in Go for a toy database..." },
             ],
           },
         ],
@@ -148,8 +150,8 @@ const FILE_TREE: FileNode[] = [
         path: "styles/animations.css",
         type: "file",
         sessions: [
-          { sessionId: "s6", sessionTitle: "CSS-only animation library with @property", model: "claude-3.5-sonnet", turns: 19, createdAt: "2026-03-12T16:30:00Z" },
-          { sessionId: "s3", sessionTitle: "Migrating a Next.js app to Astro with view transitions", model: "claude-3.5-sonnet", turns: 28, createdAt: "2026-03-15T18:45:00Z" },
+          { sessionId: "s6", sessionTitle: "CSS-only animation library with @property", model: "claude-3.5-sonnet", turns: 19, createdAt: "2026-03-12T16:30:00Z", author: "cssmagic", openingPrompt: "Can we build a pure CSS animation library using @property for spring physics?" },
+          { sessionId: "s3", sessionTitle: "Migrating a Next.js app to Astro with view transitions", model: "claude-3.5-sonnet", turns: 28, createdAt: "2026-03-15T18:45:00Z", author: "astrofan", openingPrompt: "I need to migrate my Next.js app to Astro while preserving view transitions..." },
         ],
       },
       {
@@ -157,7 +159,7 @@ const FILE_TREE: FileNode[] = [
         path: "styles/spring.css",
         type: "file",
         sessions: [
-          { sessionId: "s6", sessionTitle: "CSS-only animation library with @property", model: "claude-3.5-sonnet", turns: 19, createdAt: "2026-03-12T16:30:00Z" },
+          { sessionId: "s6", sessionTitle: "CSS-only animation library with @property", model: "claude-3.5-sonnet", turns: 19, createdAt: "2026-03-12T16:30:00Z", author: "cssmagic", openingPrompt: "Can we build a pure CSS animation library using @property for spring physics?" },
         ],
       },
     ],
@@ -167,11 +169,6 @@ const FILE_TREE: FileNode[] = [
 function countFiles(node: FileNode): number {
   if (node.type === "file") return 1;
   return node.children?.reduce((sum, c) => sum + countFiles(c), 0) ?? 0;
-}
-
-function countSessions(node: FileNode): number {
-  if (node.type === "file") return node.sessions?.length ?? 0;
-  return node.children?.reduce((sum, c) => sum + countSessions(c), 0) ?? 0;
 }
 
 function findFileNode(nodes: FileNode[], path: string): FileNode | null {
@@ -195,31 +192,27 @@ function getTimeAgo(dateStr: string): string {
   return `${Math.floor(days / 7)}w ago`;
 }
 
-/* ─── Column 1: File Tree ─── */
+/* ─── Column 1: Simplified File Tree ─── */
 function FileTreeNode({ node, depth = 0 }: { node: FileNode; depth?: number }) {
   const { expandedPaths, toggleExpanded, selectedFilePath, setSelectedFilePath, setActiveSessionId } = useMySessionsState();
   const expanded = node.type === "folder" && expandedPaths.has(node.path);
   const isSelected = node.type === "file" && selectedFilePath === node.path;
 
   if (node.type === "folder") {
-    const sessionCount = countSessions(node);
     return (
       <div>
         <button
           onClick={() => toggleExpanded(node.path)}
-          className="w-full flex items-center gap-1.5 py-1.5 px-2 text-sm hover:bg-secondary/60 rounded-md transition-colors group cursor-pointer"
-          style={{ paddingLeft: `${depth * 16 + 8}px` }}
+          className="w-full flex items-center gap-1.5 py-1 px-2 text-[13px] hover:bg-secondary/50 rounded transition-colors cursor-pointer"
+          style={{ paddingLeft: `${depth * 14 + 8}px` }}
         >
           {expanded ? (
-            <ChevronDown className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
+            <ChevronDown className="h-3 w-3 text-muted-foreground/60 shrink-0" />
           ) : (
-            <ChevronRight className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
+            <ChevronRight className="h-3 w-3 text-muted-foreground/60 shrink-0" />
           )}
-          <Folder className="h-3.5 w-3.5 text-primary shrink-0" />
-          <span className="font-medium text-foreground">{node.name}</span>
-          <span className="ml-auto text-2xs text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity">
-            {sessionCount}
-          </span>
+          <Folder className="h-3 w-3 text-muted-foreground shrink-0" />
+          <span className="text-muted-foreground">{node.name}</span>
         </button>
         {expanded && node.children?.map((child) => (
           <FileTreeNode key={child.path} node={child} depth={depth + 1} />
@@ -228,32 +221,26 @@ function FileTreeNode({ node, depth = 0 }: { node: FileNode; depth?: number }) {
     );
   }
 
-  const sessionCount = node.sessions?.length ?? 0;
-
   return (
     <button
       onClick={() => {
         setSelectedFilePath(isSelected ? null : node.path);
         if (isSelected) setActiveSessionId(null);
       }}
-      className={`w-full flex items-center gap-1.5 py-1.5 px-2 text-sm rounded-md transition-colors group cursor-pointer ${
-        isSelected ? "bg-primary/10 text-primary" : "hover:bg-secondary/60 text-foreground"
+      className={`w-full flex items-center gap-1.5 py-1 px-2 text-[13px] rounded transition-colors cursor-pointer ${
+        isSelected ? "bg-primary/10 text-primary" : "hover:bg-secondary/50 text-foreground/80"
       }`}
-      style={{ paddingLeft: `${depth * 16 + 8}px` }}
+      style={{ paddingLeft: `${depth * 14 + 8}px` }}
     >
-      <span className="w-3.5" />
-      <FileText className={`h-3.5 w-3.5 shrink-0 ${isSelected ? "text-primary" : "text-muted-foreground"}`} />
+      <span className="w-3" />
+      <FileText className={`h-3 w-3 shrink-0 ${isSelected ? "text-primary" : "text-muted-foreground/50"}`} />
       <span className="font-mono text-xs truncate">{node.name}</span>
-      <span className="ml-auto flex items-center gap-1 text-2xs text-muted-foreground shrink-0">
-        <GitFork className="h-3 w-3" />
-        {sessionCount}
-      </span>
     </button>
   );
 }
 
-/* ─── Column 2: Sessions List ─── */
-function SessionsList({ filePath }: { filePath: string }) {
+/* ─── Column 2: Social Feed Sessions ─── */
+function SessionFeed({ filePath }: { filePath: string }) {
   const { activeSessionId, setActiveSessionId } = useMySessionsState();
   const fileNode = findFileNode(FILE_TREE, filePath);
   const sessions = fileNode?.sessions ?? [];
@@ -262,34 +249,55 @@ function SessionsList({ filePath }: { filePath: string }) {
   return (
     <div className="flex flex-col h-full">
       <div className="px-4 py-3 border-b border-border shrink-0">
-        <div className="flex items-center gap-2 text-xs text-muted-foreground mb-1">
-          <FileCode className="h-3.5 w-3.5" />
-          <span className="font-mono">{fileName}</span>
-        </div>
-        <p className="text-2xs text-muted-foreground">
-          {sessions.length} session{sessions.length !== 1 ? "s" : ""} touched this file
-        </p>
+        <span className="font-mono text-xs text-muted-foreground">{fileName}</span>
       </div>
-      <div className="flex-1 overflow-y-auto py-2">
-        {sessions.map((s) => (
-          <button
-            key={s.sessionId}
-            onClick={() => setActiveSessionId(activeSessionId === s.sessionId ? null : s.sessionId)}
-            className={`w-full text-left px-4 py-3 transition-colors cursor-pointer ${
-              activeSessionId === s.sessionId
-                ? "bg-primary/10 border-l-2 border-primary"
-                : "hover:bg-secondary/40 border-l-2 border-transparent"
-            }`}
-          >
-            <div className="text-sm font-medium text-foreground line-clamp-2 mb-1.5">{s.sessionTitle}</div>
-            <div className="flex items-center gap-2 text-2xs text-muted-foreground flex-wrap">
-              <ModelBadge model={s.model} />
-              <span>{s.turns} turns</span>
-              <span>·</span>
-              <span>{getTimeAgo(s.createdAt)}</span>
-            </div>
-          </button>
-        ))}
+      <div className="flex-1 overflow-y-auto p-3 space-y-3">
+        {sessions.map((s) => {
+          const isActive = activeSessionId === s.sessionId;
+          return (
+            <button
+              key={s.sessionId}
+              onClick={() => setActiveSessionId(isActive ? null : s.sessionId)}
+              className={`w-full text-left rounded-lg border transition-all cursor-pointer ${
+                isActive
+                  ? "border-primary/30 bg-primary/5 shadow-sm"
+                  : "border-border bg-card hover:border-muted-foreground/20 hover:shadow-sm"
+              }`}
+            >
+              {/* Author row */}
+              <div className="flex items-center gap-2.5 px-3.5 pt-3">
+                <Avatar className="h-6 w-6">
+                  <AvatarFallback className="text-2xs bg-secondary text-muted-foreground">
+                    {(s.author ?? "U")[0].toUpperCase()}
+                  </AvatarFallback>
+                </Avatar>
+                <span className="text-xs font-medium text-foreground">{s.author ?? "user"}</span>
+                <span className="text-2xs text-muted-foreground ml-auto">{getTimeAgo(s.createdAt)}</span>
+              </div>
+
+              {/* Title */}
+              <div className="px-3.5 pt-2">
+                <p className="text-sm font-medium text-foreground leading-snug line-clamp-2">{s.sessionTitle}</p>
+              </div>
+
+              {/* Opening prompt preview */}
+              {s.openingPrompt && (
+                <div className="px-3.5 pt-1.5">
+                  <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed">{s.openingPrompt}</p>
+                </div>
+              )}
+
+              {/* Footer meta */}
+              <div className="flex items-center gap-3 px-3.5 py-2.5 mt-1">
+                <ModelBadge model={s.model} />
+                <span className="flex items-center gap-1 text-2xs text-muted-foreground">
+                  <MessageSquare className="h-3 w-3" />
+                  {s.turns}
+                </span>
+              </div>
+            </button>
+          );
+        })}
       </div>
     </div>
   );
@@ -316,60 +324,38 @@ function SessionPreview({ session, onClose }: { session: Session; onClose: () =>
     }));
   }, []);
 
-  const costData = useMemo(() => {
-    const turns = session.transcript ?? [];
-    const totalInput = turns.reduce((s, t) => s + (t.usage?.inputTokens ?? 0), 0);
-    const totalOutput = turns.reduce((s, t) => s + (t.usage?.outputTokens ?? 0), 0);
-    const totalCost = turns.reduce((s, t) => s + (t.usage?.cost ?? 0), 0);
-    return { totalInput, totalOutput, totalCost };
-  }, [session.transcript]);
-
-  const filesInSession = session.transcript
-    ?.flatMap((t) => t.diff?.map((d) => d.filename) ?? [])
-    .filter((v, i, a) => a.indexOf(v) === i) ?? [];
-
   return (
     <div className="flex flex-col h-full">
+      {/* Minimal header */}
       <div className="border-b border-border px-4 py-3 shrink-0">
-        <div className="flex items-start justify-between gap-3 mb-1.5">
-          <h2 className="text-sm font-semibold text-foreground line-clamp-2">{session.title}</h2>
+        <div className="flex items-center justify-between gap-3">
+          <div className="flex items-center gap-2.5 min-w-0">
+            <Avatar className="h-6 w-6 shrink-0">
+              <AvatarFallback className="text-2xs bg-secondary text-muted-foreground">
+                {session.author.username[0].toUpperCase()}
+              </AvatarFallback>
+            </Avatar>
+            <div className="min-w-0">
+              <p className="text-sm font-medium text-foreground truncate">{session.title}</p>
+              <div className="flex items-center gap-2 text-2xs text-muted-foreground mt-0.5">
+                <span>@{session.author.username}</span>
+                <span>·</span>
+                <ModelBadge model={session.model} />
+                <span>·</span>
+                <span>{session.turns} turns</span>
+              </div>
+            </div>
+          </div>
           <button
             onClick={onClose}
-            className="h-6 w-6 rounded-md flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors shrink-0 cursor-pointer"
+            className="h-6 w-6 rounded flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors shrink-0 cursor-pointer"
           >
             <X className="h-3.5 w-3.5" />
           </button>
         </div>
-        <div className="flex items-center gap-2 text-xs text-muted-foreground flex-wrap">
-          <span className="font-medium text-foreground">@{session.author.username}</span>
-          <ModelBadge model={session.model} />
-          <span className="flex items-center gap-1">
-            <MessageSquare className="h-3 w-3" />
-            {session.turns} turns
-          </span>
-          <span className="flex items-center gap-1">
-            <FileCode className="h-3 w-3" />
-            {session.filesChanged} files
-          </span>
-          {costData.totalCost > 0 && (
-            <span className="flex items-center gap-1">
-              <Coins className="h-3 w-3" />
-              ${costData.totalCost.toFixed(4)}
-            </span>
-          )}
-        </div>
-        {filesInSession.length > 0 && (
-          <div className="flex flex-wrap gap-1 mt-2">
-            {filesInSession.map((f) => (
-              <span key={f} className="inline-flex items-center gap-1 rounded-md bg-secondary px-1.5 py-0.5 text-2xs font-mono text-muted-foreground">
-                <FileCode className="h-2.5 w-2.5" />
-                {f}
-              </span>
-            ))}
-          </div>
-        )}
       </div>
 
+      {/* Transcript */}
       <div className="flex-1 overflow-y-auto">
         <div className="px-4 py-3 divide-y divide-border">
           {session.transcript?.map((turn) => (
@@ -383,7 +369,7 @@ function SessionPreview({ session, onClose }: { session: Session; onClose: () =>
           ))}
           {!session.transcript && (
             <div className="py-12 text-center text-sm text-muted-foreground">
-              No transcript available for this session.
+              No transcript available.
             </div>
           )}
         </div>
@@ -398,15 +384,6 @@ export default function MySessions() {
   const { activeSessionId, setActiveSessionId, selectedFilePath, demoMode } = useMySessionsState();
 
   const totalFiles = useMemo(() => FILE_TREE.reduce((sum, n) => sum + countFiles(n), 0), []);
-  const totalSessions = useMemo(() => {
-    const ids = new Set<string>();
-    function collect(node: FileNode) {
-      if (node.type === "file") node.sessions?.forEach((s) => ids.add(s.sessionId));
-      else node.children?.forEach(collect);
-    }
-    FILE_TREE.forEach(collect);
-    return ids.size;
-  }, []);
 
   const activeSession = useMemo(() => {
     if (!activeSessionId) return null;
@@ -421,42 +398,30 @@ export default function MySessions() {
 
   return (
     <div className="h-[calc(100vh-44px)] flex overflow-hidden">
-      {/* Column 1: File tree */}
-      <div className="w-[260px] shrink-0 overflow-y-auto border-r border-border bg-background">
-        <div className="px-4 py-4">
-          <div className="mb-3">
-            <h1 className="text-sm font-semibold text-foreground">Files</h1>
-            <p className="text-2xs text-muted-foreground mt-0.5">
-              {totalFiles} files · {totalSessions} sessions
-            </p>
-          </div>
-
-          <div className="border border-border rounded-lg bg-card overflow-hidden">
-            <div className="px-3 py-2 border-b border-border bg-secondary/30 flex items-center gap-2 text-xs text-muted-foreground">
-              <Folder className="h-3.5 w-3.5" />
-              <span className="font-medium text-foreground">Project root</span>
-            </div>
-            <div className="py-1">
-              {FILE_TREE.map((node) => (
-                <FileTreeNode key={node.path} node={node} />
-              ))}
-            </div>
+      {/* Column 1: File tree — minimal */}
+      <div className="w-[220px] shrink-0 overflow-y-auto border-r border-border bg-background">
+        <div className="px-3 py-3">
+          <p className="text-xs font-medium text-muted-foreground mb-2 px-2">Files</p>
+          <div className="py-0.5">
+            {FILE_TREE.map((node) => (
+              <FileTreeNode key={node.path} node={node} />
+            ))}
           </div>
         </div>
       </div>
 
-      {/* Column 2: Sessions for selected file */}
+      {/* Column 2: Session feed cards */}
       <AnimatePresence mode="wait">
         {selectedFilePath && (
           <motion.div
             key={selectedFilePath}
-            className="w-[300px] shrink-0 border-r border-border bg-card overflow-hidden"
-            initial={{ opacity: 0, x: -20 }}
+            className="w-[320px] shrink-0 border-r border-border bg-background overflow-hidden"
+            initial={{ opacity: 0, x: -12 }}
             animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -20 }}
-            transition={{ type: "spring", stiffness: 400, damping: 30 }}
+            exit={{ opacity: 0, x: -12 }}
+            transition={{ type: "spring", stiffness: 500, damping: 35 }}
           >
-            <SessionsList filePath={selectedFilePath} />
+            <SessionFeed filePath={selectedFilePath} />
           </motion.div>
         )}
       </AnimatePresence>
@@ -467,10 +432,10 @@ export default function MySessions() {
           <motion.div
             key={activeSession.id}
             className="flex-1 min-w-0 bg-background overflow-hidden"
-            initial={{ opacity: 0, x: 40 }}
+            initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: 40 }}
-            transition={{ type: "spring", stiffness: 400, damping: 30 }}
+            exit={{ opacity: 0, x: 20 }}
+            transition={{ type: "spring", stiffness: 500, damping: 35 }}
           >
             <SessionPreview
               session={activeSession}
@@ -486,7 +451,7 @@ export default function MySessions() {
           >
             <div className="text-center">
               <p className="text-sm text-muted-foreground">
-                {selectedFilePath ? "Select a session to view" : "Select a file to see its sessions"}
+                {selectedFilePath ? "Pick a session" : "Select a file to start"}
               </p>
             </div>
           </motion.div>
