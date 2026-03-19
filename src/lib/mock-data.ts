@@ -1,18 +1,32 @@
+export type SourceTool = "claude-code" | "cursor" | "codex" | "amp" | "windsurf";
+
+export interface SessionComment {
+  id: string;
+  author: string;
+  content: string;
+  timeAgo: string;
+}
+
 export interface Session {
   id: string;
   title: string;
   openingPrompt: string;
   model: string;
+  source: SourceTool;
   author: {
     username: string;
     avatar?: string;
+    role?: string;
+    team?: string;
   };
   turns: number;
   filesChanged: number;
   forks: number;
+  likes: number;
   createdAt: string;
   tags: string[];
   sparkline: number[]; // activity density per segment
+  comments: SessionComment[];
   transcript?: Turn[];
 }
 
