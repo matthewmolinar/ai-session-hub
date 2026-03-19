@@ -122,6 +122,7 @@ function SkillCard({ group, rank }: { group: SkillGroup; rank: number }) {
                     key={session.id}
                     to={`/session/${session.id}`}
                     state={{ from: "/skills" }}
+                    className="flex items-center gap-3 px-4 py-3 hover:bg-secondary/30 transition-colors"
                   >
                     <div className="flex-1 min-w-0">
                       <div className="text-sm font-medium text-foreground line-clamp-1">{session.title}</div>
