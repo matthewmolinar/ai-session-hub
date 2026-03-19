@@ -4,7 +4,29 @@ import { ArrowLeft, Coins, FileCode, GitFork, MessageSquare, Share2, Terminal, Z
 import { TranscriptTurn } from "@/components/TranscriptTurn";
 import { ModelBadge } from "@/components/ModelBadge";
 import { SESSION_DETAIL, SESSIONS } from "@/lib/mock-data";
+import type { Session, Turn } from "@/lib/mock-data";
 import type { Comment } from "@/components/TurnComment";
+
+interface TurnGroup {
+  userTurn: Turn;
+  responseTurns: Turn[];
+}
+
+function groupTurns(transcript: Session["transcript"]): TurnGroup[] {
+  if (!transcript) return [];
+  const groups: TurnGroup[] = [];
+  let current: TurnGroup | null = null;
+  for (const turn of transcript) {
+    if (turn.role === "user") {
+      if (current) groups.push(current);
+      current = { userTurn: turn, responseTurns: [] };
+    } else if (current) {
+      current.responseTurns.push(turn);
+    }
+  }
+  if (current) groups.push(current);
+  return groups;
+}
 
 export default function SessionView() {
   const { id } = useParams();
@@ -64,6 +86,7 @@ export default function SessionView() {
     .filter((v, i, a) => a.indexOf(v) === i) ?? [];
 
   const skills = session.tags;
+  const groups = useMemo(() => groupTurns(session.transcript), [session.transcript]);
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-[200px_1fr_200px] gap-0 h-full flex-1">
@@ -179,13 +202,14 @@ export default function SessionView() {
           )}
         </div>
 
-        {/* Transcript */}
+        {/* Transcript — grouped like Explorer */}
         <div className="px-4 sm:px-6 py-4 divide-y divide-border">
-          {session.transcript?.map((turn) => (
-            <div key={turn.id} id={`turn-${turn.id}`}>
+          {groups.map((group) => (
+            <div key={group.userTurn.id} id={`turn-${group.userTurn.id}`}>
               <TranscriptTurn
-                turn={turn}
-                comments={commentsByTurn[turn.id] || []}
+                turn={group.userTurn}
+                responseTurns={group.responseTurns}
+                comments={commentsByTurn[group.userTurn.id] || []}
                 onAddComment={handleAddComment}
               />
             </div>
