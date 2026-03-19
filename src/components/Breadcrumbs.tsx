@@ -7,31 +7,43 @@ interface Crumb {
   to?: string;
 }
 
+const ROUTE_LABELS: Record<string, string> = {
+  "/my-sessions": "My Sessions",
+  "/": "My Sessions",
+  "/explore": "Team",
+  "/skills": "Skills",
+};
+
 function useBreadcrumbs(): Crumb[] {
   const location = useLocation();
   const params = useParams();
   const path = location.pathname;
+  const from = (location.state as any)?.from as string | undefined;
 
   if (path === "/" || path === "/my-sessions") {
     return [{ label: "My Sessions" }];
   }
 
   if (path === "/explore") {
-    return [{ label: "My Sessions", to: "/my-sessions" }, { label: "Team" }];
+    return [{ label: "Team" }];
   }
 
   if (path === "/skills") {
-    return [{ label: "My Sessions", to: "/my-sessions" }, { label: "Skills" }];
+    return [{ label: "Skills" }];
   }
+
+  // Determine parent crumb from navigation origin
+  const parentPath = from && ROUTE_LABELS[from] ? from : "/my-sessions";
+  const parentLabel = ROUTE_LABELS[parentPath] ?? "My Sessions";
 
   if (path.startsWith("/session/")) {
     const sessionId = params.id;
-    const session = sessionId === "s1"
+    const session = sessionId === SESSION_DETAIL.id
       ? SESSION_DETAIL
       : SESSIONS.find((s) => s.id === sessionId);
-    const title = session?.title ?? `Session ${sessionId}`;
+    const title = session?.title ?? `Session`;
     return [
-      { label: "My Sessions", to: "/my-sessions" },
+      { label: parentLabel, to: parentPath },
       { label: title },
     ];
   }
@@ -39,7 +51,7 @@ function useBreadcrumbs(): Crumb[] {
   if (path.startsWith("/profile/")) {
     const username = params.username;
     return [
-      { label: "My Sessions", to: "/my-sessions" },
+      { label: parentLabel, to: parentPath },
       { label: `@${username}` },
     ];
   }
