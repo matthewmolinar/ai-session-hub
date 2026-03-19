@@ -527,7 +527,7 @@ export default function MySessions() {
             Files
           </button>
           <button
-            onClick={() => setSidebarTab("skills")}
+            onClick={() => { setSidebarTab("skills"); setSelectedFilePath(null); }}
             className={`flex-1 px-3 py-2 text-xs font-medium transition-colors cursor-pointer ${
               sidebarTab === "skills"
                 ? "text-foreground border-b-2 border-primary"
