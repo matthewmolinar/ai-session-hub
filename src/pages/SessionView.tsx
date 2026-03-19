@@ -78,7 +78,7 @@ export default function SessionView() {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-[200px_1fr_200px] gap-0 h-full flex-1 overflow-hidden">
       {/* Left sidebar: Turn Navigator */}
-      <aside className="hidden lg:block border-r border-border p-3 overflow-y-auto sticky top-0 h-full">
+      <aside className="hidden lg:flex lg:flex-col border-r border-border p-3 overflow-y-auto min-h-0">
         <h4 className="text-label mb-2">Turns</h4>
         <div className="flex flex-col gap-0.5">
           {session.transcript?.filter(t => t.role !== "tool").map((turn) => {
