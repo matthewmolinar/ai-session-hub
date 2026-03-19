@@ -89,7 +89,7 @@ function SacredGeometry() {
 
         {/* Innermost ring — close to card */}
         <circle cx={cx} cy={cy} r={140} fill="none"
-          stroke={`${pink} / 0.1)`} strokeWidth="0.75" />
+          stroke={`${pink} / 0.07)`} strokeWidth="0.75" />
 
         {/* Axis lines — full cross */}
         {[0, 45, 90, 135].map((deg) => {
