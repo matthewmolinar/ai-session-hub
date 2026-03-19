@@ -86,6 +86,7 @@ export default function SessionView() {
     .filter((v, i, a) => a.indexOf(v) === i) ?? [];
 
   const skills = session.tags;
+  const groups = useMemo(() => groupTurns(session.transcript), [session.transcript]);
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-[200px_1fr_200px] gap-0 h-full flex-1">
