@@ -84,9 +84,14 @@ export function AppHeader() {
           </Link>
           <Link
             to="/explore"
-            className={`px-3 py-1.5 rounded-md transition-colors ${location.pathname === "/explore" ? "bg-secondary text-foreground font-medium" : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"}`}
+            className={`relative px-3 py-1.5 rounded-md transition-colors ${location.pathname === "/explore" ? "bg-secondary text-foreground font-medium" : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"}`}
           >
             Feed
+            {location.pathname !== "/explore" && (
+              <span className="absolute -top-0.5 -right-0.5 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-destructive text-destructive-foreground text-[10px] font-semibold px-1">
+                3
+              </span>
+            )}
           </Link>
         </nav>
 
