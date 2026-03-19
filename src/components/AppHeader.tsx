@@ -92,7 +92,7 @@ export function AppHeader() {
             to="/my-sessions"
             className={`transition-colors ${location.pathname === "/my-sessions" || location.pathname === "/" ? "text-foreground font-medium" : "text-muted-foreground hover:text-foreground"}`}
           >
-            My Sessions
+            Explorer
           </Link>
           <Link
             to="/skills"
