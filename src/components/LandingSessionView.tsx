@@ -68,7 +68,7 @@ function SacredGeometry() {
       >
         {/* Outermost ring — dashed */}
         <circle cx={cx} cy={cy} r={300} fill="none"
-          stroke={`${purple} / 0.12)`} strokeWidth="0.75"
+          stroke={`${purple} / 0.08)`} strokeWidth="0.75"
           strokeDasharray="2 8" />
 
         {/* Outer ring with tick marks */}
