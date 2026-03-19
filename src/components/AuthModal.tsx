@@ -75,8 +75,8 @@ export function AuthModal({ open, onOpenChange }: AuthModalProps) {
 
         <div className="flex flex-col items-center mb-5">
           <div className="flex items-center gap-2 mb-1">
-            <img src={tanagramLogo} alt="Tanagram" className="h-5 w-5" />
-            <span className="text-lg font-semibold text-foreground">Tanagram</span>
+            <img src={tanagramLogo} alt="Tanagram" className="h-5 w-5 translate-y-[1px]" style={{ filter: "brightness(0) saturate(100%) invert(32%) sepia(93%) saturate(1752%) hue-rotate(207deg) brightness(97%) contrast(101%)" }} />
+            <span className="text-lg font-semibold text-primary">Tanagram</span>
           </div>
           <p className="text-xs text-muted-foreground">
             {isSignUp ? "Create your account to join" : "Sign in to see what's happening"}
