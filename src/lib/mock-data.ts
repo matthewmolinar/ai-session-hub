@@ -698,5 +698,37 @@ export const SESSION_DETAIL: Session = {
   ],
 };
 
+// Mock: teammates who explored similar sessions (by shared tags)
+export const TEAMMATE_ACTIVITY: Record<string, { username: string; avatar?: string }[]> = {
+  s1: [{ username: "sarah_edo" }, { username: "tkdodo" }],
+  s2: [{ username: "danabramov" }, { username: "phil_eaton" }, { username: "jh3yy" }],
+  s3: [{ username: "fasterthanlime" }],
+  s4: [{ username: "danabramov" }, { username: "sarah_edo" }, { username: "jh3yy" }],
+  s5: [{ username: "tkdodo" }, { username: "fasterthanlime" }],
+  s6: [{ username: "sarah_edo" }, { username: "danabramov" }, { username: "tkdodo" }, { username: "phil_eaton" }],
+};
+
+// Teammate usage counts per skill tag
+export const SKILL_TEAMMATE_COUNTS: Record<string, number> = {
+  typescript: 5,
+  collaboration: 2,
+  crdt: 1,
+  rust: 3,
+  async: 2,
+  systems: 2,
+  astro: 1,
+  migration: 2,
+  nextjs: 3,
+  "state-machine": 2,
+  forms: 4,
+  go: 2,
+  database: 3,
+  "data-structures": 2,
+  css: 4,
+  animation: 3,
+  library: 2,
+  python: 3,
+};
+
 export const MODELS = ["All Models", "claude-3.5-sonnet", "gpt-4o", "gemini-2.5-pro"] as const;
 export const LANGUAGES = ["All Languages", "typescript", "rust", "go", "python", "css"] as const;
