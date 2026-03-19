@@ -407,36 +407,112 @@ export default function MySessions() {
 
   if (!user) {
     return (
-      <div className="h-[calc(100vh-44px)] flex items-center justify-center">
-        <div className="max-w-md w-full px-6">
+      <div className="h-[calc(100vh-44px)] overflow-y-auto">
+        <div className="max-w-3xl mx-auto px-6 py-12">
+          {/* Blurred teaser of what their dashboard would look like */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.6 }}
+            className="relative mb-8"
+          >
+            {/* Fake dashboard preview — blurred */}
+            <div className="rounded-lg border border-border bg-card overflow-hidden select-none pointer-events-none blur-[2px] opacity-70">
+              {/* Fake header bar */}
+              <div className="px-4 py-2.5 border-b border-border bg-secondary/30 flex items-center gap-3">
+                <Folder className="h-3.5 w-3.5 text-primary" />
+                <span className="text-xs font-medium text-foreground">my-saas-app</span>
+                <span className="ml-auto text-2xs text-muted-foreground">12 files · 8 sessions</span>
+              </div>
+              <div className="flex divide-x divide-border">
+                {/* Fake file tree */}
+                <div className="w-[280px] shrink-0 p-2 text-xs space-y-0.5">
+                  {[
+                    { indent: 0, icon: "folder", name: "src", meta: "6 sessions" },
+                    { indent: 1, icon: "folder", name: "api", meta: "3 sessions" },
+                    { indent: 2, icon: "file", name: "auth.ts", meta: "2" },
+                    { indent: 2, icon: "file", name: "billing.ts", meta: "1" },
+                    { indent: 1, icon: "folder", name: "components", meta: "2 sessions" },
+                    { indent: 2, icon: "file", name: "Dashboard.tsx", meta: "2" },
+                    { indent: 1, icon: "file", name: "index.ts", meta: "1" },
+                  ].map((item, i) => (
+                    <div key={i} className="flex items-center gap-1.5 py-1 rounded" style={{ paddingLeft: `${item.indent * 14 + 6}px` }}>
+                      {item.icon === "folder" ? <Folder className="h-3 w-3 text-primary" /> : <FileText className="h-3 w-3 text-muted-foreground" />}
+                      <span className={`font-mono ${item.icon === "folder" ? "font-medium text-foreground" : "text-muted-foreground"}`}>{item.name}</span>
+                      <span className="ml-auto text-2xs text-muted-foreground">{item.meta}</span>
+                    </div>
+                  ))}
+                </div>
+                {/* Fake session preview */}
+                <div className="flex-1 p-3 space-y-3">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-semibold text-foreground">Add Stripe billing integration</span>
+                    <span className="text-2xs px-1.5 py-0.5 rounded bg-secondary text-muted-foreground">claude-3.5-sonnet</span>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="rounded bg-secondary/50 p-2">
+                      <div className="text-2xs text-primary font-medium mb-1">You</div>
+                      <div className="text-2xs text-muted-foreground">I need to add Stripe subscription billing. The user should be able to…</div>
+                    </div>
+                    <div className="rounded bg-secondary/30 p-2">
+                      <div className="text-2xs text-foreground/70 font-medium mb-1">Assistant</div>
+                      <div className="text-2xs text-muted-foreground">I'll implement the billing flow in three steps. First, let me set up the…</div>
+                    </div>
+                    <div className="rounded border border-border p-2">
+                      <div className="flex items-center gap-1.5 text-2xs text-muted-foreground mb-1">
+                        <FileCode className="h-2.5 w-2.5" />
+                        <span className="font-mono">src/api/billing.ts</span>
+                        <span className="text-green-500 ml-auto">+47</span>
+                        <span className="text-red-500">-3</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3 text-2xs text-muted-foreground pt-1">
+                    <span className="flex items-center gap-1"><Coins className="h-3 w-3" /> $0.42</span>
+                    <span className="flex items-center gap-1"><MessageSquare className="h-3 w-3" /> 23 turns</span>
+                    <span className="flex items-center gap-1"><Zap className="h-3 w-3" /> 3 tool calls</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Overlay CTA on top of the blurred preview */}
+            <div className="absolute inset-0 flex items-center justify-center bg-background/40 rounded-lg">
+              <div className="text-center px-6">
+                <p className="text-xs font-medium text-primary tracking-wide uppercase">Your dashboard</p>
+                <p className="text-sm text-muted-foreground mt-1">This is what your sessions look like once connected.</p>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Main copy */}
           <motion.div
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4 }}
-            className="text-center"
+            transition={{ delay: 0.15, duration: 0.4 }}
+            className="text-center mb-8"
           >
-            <h1 className="text-2xl font-bold text-foreground tracking-tight leading-snug mb-1">
-              See your AI coding sessions.
+            <h1 className="text-2xl font-bold text-foreground tracking-tight leading-snug">
+              Your AI coding process is invisible.<br />
+              <span className="text-primary">It shouldn't be.</span>
             </h1>
-            <p className="text-lg text-muted-foreground font-medium">
-              Searchable. Organized. <span className="text-foreground">Yours.</span>
+            <p className="text-sm text-muted-foreground mt-3 max-w-md mx-auto leading-relaxed">
+              Every Claude Code session you run disappears into a JSONL file nobody reads.
+              See the prompts behind the code — not just what changed, but <span className="text-foreground font-medium">how and why</span> it was built.
             </p>
           </motion.div>
 
+          {/* Terminal card */}
           <motion.div
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1, duration: 0.4 }}
-            className="mt-8"
+            transition={{ delay: 0.25, duration: 0.4 }}
+            className="max-w-sm mx-auto"
           >
             <div className="rounded-lg border border-border bg-card overflow-hidden">
-              <div className="px-4 py-3 bg-secondary/30 border-b border-border flex items-center gap-2">
-                <div className="flex gap-1.5">
-                  <div className="h-2.5 w-2.5 rounded-full bg-border" />
-                  <div className="h-2.5 w-2.5 rounded-full bg-border" />
-                  <div className="h-2.5 w-2.5 rounded-full bg-border" />
-                </div>
-                <span className="text-2xs text-muted-foreground font-mono ml-1">Terminal</span>
+              <div className="px-4 py-2.5 bg-secondary/30 border-b border-border flex items-center gap-2">
+                <Terminal className="h-3 w-3 text-muted-foreground" />
+                <span className="text-2xs text-muted-foreground font-mono">Terminal</span>
               </div>
               <div className="px-4 py-4">
                 <div className="flex items-center gap-2">
@@ -444,17 +520,20 @@ export default function MySessions() {
                   <code className="text-sm font-mono text-foreground font-medium">npx tanagram</code>
                 </div>
                 <p className="text-xs text-muted-foreground mt-3 leading-relaxed">
-                  Reads your local Claude Code sessions from <code className="font-mono bg-secondary rounded px-1 py-0.5">~/.claude/</code> — nothing leaves your machine.
+                  Your sessions are already on your machine. This just lets you see them.
+                  <br />
+                  <span className="text-foreground/50">Nothing leaves your machine.</span>
                 </p>
               </div>
             </div>
           </motion.div>
 
+          {/* Team path */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 0.25, duration: 0.4 }}
-            className="mt-6"
+            transition={{ delay: 0.35, duration: 0.4 }}
+            className="mt-6 max-w-sm mx-auto"
           >
             <div className="flex items-center gap-3 text-xs text-muted-foreground">
               <div className="flex-1 h-px bg-border" />
@@ -473,15 +552,6 @@ export default function MySessions() {
               </div>
             </button>
           </motion.div>
-
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.35, duration: 0.4 }}
-            className="text-center text-2xs text-muted-foreground/60 mt-6"
-          >
-            Local-first. Your code stays on your machine.
-          </motion.p>
         </div>
       </div>
     );
