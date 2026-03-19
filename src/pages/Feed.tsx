@@ -34,9 +34,9 @@ export default function Feed() {
   const onlineCount = TEAM_MEMBERS.filter((m) => m.online).length;
 
   return (
-    <div className="max-w-[1100px] mx-auto px-4 py-6 flex gap-6">
+    <div className="max-w-[1100px] mx-auto px-3 sm:px-4 py-4 sm:py-6 flex gap-6">
       {/* Feed column */}
-      <div className="flex-1 max-w-2xl min-w-0">
+      <div className="flex-1 min-w-0 max-w-2xl">
         <FilterBar
           model={model}
           skill={skill}
@@ -57,7 +57,7 @@ export default function Feed() {
         </div>
       </div>
 
-      {/* Right sidebar — sticky */}
+      {/* Right sidebar — sticky, hidden on mobile/tablet */}
       <aside className="hidden lg:block w-[280px] shrink-0">
         <div className="sticky top-[60px] space-y-4 overflow-y-auto max-h-[calc(100vh-72px)] pr-1">
           {/* Your Team */}
