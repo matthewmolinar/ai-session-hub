@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { FileCode, MessageSquare, Lock, Heart, Bookmark, Share2, Terminal } from "lucide-react";
+import { MessageSquare, Lock, Heart, Share2, Terminal } from "lucide-react";
 import { ModelBadge } from "./ModelBadge";
 import { Sparkline } from "./Sparkline";
 import type { Session, SourceTool } from "@/lib/mock-data";
@@ -32,7 +32,6 @@ export function SessionCard({ session, onSignInClick, landing }: SessionCardProp
   const location = useLocation();
   const blurred = false;
   const [liked, setLiked] = useState(false);
-  const [bookmarked, setBookmarked] = useState(false);
   const [likeCount, setLikeCount] = useState(session.likes);
 
   const handleLike = (e: React.MouseEvent) => {
@@ -40,12 +39,6 @@ export function SessionCard({ session, onSignInClick, landing }: SessionCardProp
     e.stopPropagation();
     setLiked(!liked);
     setLikeCount(liked ? likeCount - 1 : likeCount + 1);
-  };
-
-  const handleBookmark = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setBookmarked(!bookmarked);
   };
 
   const handleShare = (e: React.MouseEvent) => {
@@ -123,87 +116,104 @@ export function SessionCard({ session, onSignInClick, landing }: SessionCardProp
         )}
       </div>
 
-      {/* Engagement bar */}
-      <div className="flex items-center px-4 py-1.5 border-t border-border">
+      {/* Engagement summary — Facebook style: counts left, counts right */}
+      <div className="flex items-center justify-between px-4 py-2 text-xs text-muted-foreground">
+        <div className="flex items-center gap-1">
+          {likeCount > 0 && (
+            <>
+              <span className="inline-flex items-center justify-center h-[18px] w-[18px] rounded-full bg-primary text-primary-foreground">
+                <Heart className="h-2.5 w-2.5 fill-current" />
+              </span>
+              <span>{likeCount}</span>
+            </>
+          )}
+        </div>
+        <div className="flex items-center gap-3">
+          {session.comments.length > 0 && (
+            <span>{session.comments.length} comment{session.comments.length !== 1 ? "s" : ""}</span>
+          )}
+          {session.forks > 0 && (
+            <span>{session.forks} share{session.forks !== 1 ? "s" : ""}</span>
+          )}
+        </div>
+      </div>
+
+      {/* Action buttons — Facebook style: equal width, full span */}
+      <div className="flex items-center border-t border-border mx-4">
         <button
           onClick={handleLike}
-          className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-xs transition-colors cursor-pointer ${
-            liked ? "text-red-500" : "text-muted-foreground hover:text-foreground hover:bg-secondary"
+          className={`flex-1 flex items-center justify-center gap-2 py-2 text-sm font-medium transition-colors cursor-pointer rounded-md my-0.5 ${
+            liked ? "text-red-500" : "text-muted-foreground hover:bg-secondary"
           }`}
         >
-          <Heart className={`h-3.5 w-3.5 ${liked ? "fill-red-500" : ""}`} />
-          <span>{likeCount}</span>
+          <Heart className={`h-4 w-4 ${liked ? "fill-red-500" : ""}`} />
+          Like
         </button>
         <button
           onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
-          className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-xs text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors cursor-pointer"
+          className="flex-1 flex items-center justify-center gap-2 py-2 text-sm font-medium text-muted-foreground hover:bg-secondary transition-colors cursor-pointer rounded-md my-0.5"
         >
-          <MessageSquare className="h-3.5 w-3.5" />
-          <span>{session.comments.length}</span>
-        </button>
-        <button
-          onClick={handleBookmark}
-          className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-xs transition-colors cursor-pointer ${
-            bookmarked ? "text-primary" : "text-muted-foreground hover:text-foreground hover:bg-secondary"
-          }`}
-        >
-          <Bookmark className={`h-3.5 w-3.5 ${bookmarked ? "fill-primary" : ""}`} />
+          <MessageSquare className="h-4 w-4" />
+          Comment
         </button>
         <button
           onClick={handleShare}
-          className="ml-auto flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium text-primary hover:bg-primary/5 transition-colors cursor-pointer"
+          className="flex-1 flex items-center justify-center gap-2 py-2 text-sm font-medium text-muted-foreground hover:bg-secondary transition-colors cursor-pointer rounded-md my-0.5"
         >
-          <Share2 className="h-3.5 w-3.5" />
+          <Share2 className="h-4 w-4" />
           Share
         </button>
       </div>
 
       {/* Comments section */}
-      <div className="border-t border-border">
-        {session.comments.length > 0 && (
-          <div className="px-4 pt-2.5 pb-1 space-y-2">
-            {session.comments.slice(0, 2).map((comment) => (
-              <div key={comment.id} className="flex gap-2">
-                <div className="h-6 w-6 rounded-full bg-secondary flex items-center justify-center text-2xs font-semibold text-muted-foreground shrink-0 mt-0.5">
-                  {comment.author[0].toUpperCase()}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-xs">
-                    <span className="font-semibold text-foreground">@{comment.author}</span>
-                    <span className="text-foreground ml-1.5">{comment.content}</span>
-                  </p>
-                  <div className="flex items-center gap-3 mt-0.5">
-                    <span className="text-2xs text-muted-foreground">{comment.timeAgo}</span>
-                    <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); }} className="text-2xs text-muted-foreground hover:text-foreground font-medium cursor-pointer">Like</button>
-                    <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); }} className="text-2xs text-muted-foreground hover:text-foreground font-medium cursor-pointer">Reply</button>
+      {(session.comments.length > 0 || true) && (
+        <div className="border-t border-border">
+          {session.comments.length > 2 && (
+            <button
+              onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
+              className="text-xs font-medium text-muted-foreground hover:text-foreground cursor-pointer px-4 pt-2"
+            >
+              View all {session.comments.length} comments
+            </button>
+          )}
+
+          {session.comments.length > 0 && (
+            <div className="px-4 pt-2 pb-0.5 space-y-2.5">
+              {session.comments.slice(0, 2).map((comment) => (
+                <div key={comment.id} className="flex gap-2">
+                  <div className="h-7 w-7 rounded-full bg-secondary flex items-center justify-center text-2xs font-semibold text-muted-foreground shrink-0">
+                    {comment.author[0].toUpperCase()}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm leading-snug">
+                      <span className="font-semibold text-foreground">@{comment.author}</span>
+                      <span className="text-foreground ml-1">{comment.content}</span>
+                    </p>
+                    <div className="flex items-center gap-3 mt-0.5">
+                      <span className="text-xs text-muted-foreground">{comment.timeAgo}</span>
+                      <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); }} className="text-xs text-muted-foreground hover:text-foreground font-semibold cursor-pointer">Like</button>
+                      <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); }} className="text-xs text-muted-foreground hover:text-foreground font-semibold cursor-pointer">Reply</button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
-            {session.comments.length > 2 && (
-              <button
-                onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
-                className="text-xs font-medium text-muted-foreground hover:text-foreground cursor-pointer pl-8"
-              >
-                View {session.comments.length - 2} more comment{session.comments.length - 2 !== 1 ? "s" : ""}
-              </button>
-            )}
-          </div>
-        )}
+              ))}
+            </div>
+          )}
 
-        {/* Compose comment */}
-        <div className="flex items-center gap-2 px-4 py-2.5">
-          <div className="h-6 w-6 rounded-full bg-primary/10 flex items-center justify-center text-2xs font-semibold text-primary shrink-0">
-            Y
+          {/* Compose comment */}
+          <div className="flex items-center gap-2 px-4 py-3">
+            <div className="h-7 w-7 rounded-full bg-primary/10 flex items-center justify-center text-2xs font-semibold text-primary shrink-0">
+              Y
+            </div>
+            <input
+              type="text"
+              placeholder="Write a comment..."
+              onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
+              className="flex-1 text-sm bg-secondary/40 rounded-full px-3.5 py-2 placeholder:text-muted-foreground text-foreground outline-none focus:bg-card focus:ring-1 focus:ring-border transition-all"
+            />
           </div>
-          <input
-            type="text"
-            placeholder="Write a comment..."
-            onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
-            className="flex-1 text-xs bg-secondary/50 rounded-full px-3 py-1.5 border border-border placeholder:text-muted-foreground text-foreground outline-none focus:border-primary/30 focus:bg-card transition-colors"
-          />
         </div>
-      </div>
+      )}
     </div>
   );
 
