@@ -19,11 +19,10 @@ export function TranscriptTurn({ turn, comments, onAddComment }: TranscriptTurnP
 
   return (
     <div className="relative group">
-
       <div className={`py-3 ${isUser ? "border-l-2 border-primary pl-4" : "pl-4"}`}>
         {/* Role label */}
         <div className="flex items-center gap-2 mb-1.5">
-          <span className={`text-2xs font-semibold uppercase tracking-wider ${isUser ? "text-primary" : "text-muted-foreground"}`}>
+          <span className={`text-2xs font-semibold uppercase tracking-wider ${isUser ? "text-primary" : "text-muted-foreground/50"}`}>
             {turn.role}
           </span>
           <span className="text-2xs text-muted-foreground">{turn.timestamp}</span>
@@ -39,15 +38,27 @@ export function TranscriptTurn({ turn, comments, onAddComment }: TranscriptTurnP
         </div>
 
         {/* Content */}
-        <div className={`text-sm leading-relaxed ${isUser ? "font-mono" : ""}`}>
-          {turn.content.split("\n").map((line, i) => (
-            <p key={i} className={line === "" ? "h-3" : ""}>
-              {line}
-            </p>
-          ))}
-        </div>
+        {isUser ? (
+          <div className="text-sm leading-relaxed font-mono text-foreground">
+            {turn.content.split("\n").map((line, i) => (
+              <p key={i} className={line === "" ? "h-3" : ""}>{line}</p>
+            ))}
+          </div>
+        ) : (
+          <details className="group/details">
+            <summary className="text-sm text-muted-foreground/70 leading-relaxed cursor-pointer select-none list-none flex items-start gap-2">
+              <span className="text-2xs text-muted-foreground/40 mt-0.5 shrink-0">▸</span>
+              <span className="line-clamp-2">{turn.content.split("\n")[0]}</span>
+            </summary>
+            <div className="text-sm text-muted-foreground/70 leading-relaxed mt-1 pl-4">
+              {turn.content.split("\n").slice(1).map((line, i) => (
+                <p key={i} className={line === "" ? "h-3" : ""}>{line}</p>
+              ))}
+            </div>
+          </details>
+        )}
 
-        {/* Inline diffs */}
+        {/* Inline diffs — always visible, these are the artifacts */}
         {turn.diff?.map((d, i) => (
           <DiffBlock key={i} diff={d} />
         ))}
