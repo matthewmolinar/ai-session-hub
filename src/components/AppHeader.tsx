@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Search, LogOut, User } from "lucide-react";
+import { Search, LogOut, User, Menu, X } from "lucide-react";
 import tanagramLogo from "@/assets/tanagram-logo.svg";
 import { SESSIONS } from "@/lib/mock-data";
 import { useAuth } from "@/contexts/AuthContext";
@@ -20,6 +20,7 @@ export function AppHeader() {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -41,6 +42,11 @@ export function AppHeader() {
     if (open) inputRef.current?.focus();
   }, [open]);
 
+  // Close mobile menu on route change
+  useEffect(() => {
+    setMobileMenuOpen(false);
+  }, [location.pathname]);
+
   const results = query.length > 0
     ? SESSIONS.filter((s) => {
         const q = query.toLowerCase();
@@ -61,10 +67,10 @@ export function AppHeader() {
 
   return (
     <>
-      <header className="h-12 border-b border-border flex items-center px-4 gap-6 bg-card shrink-0 relative z-50 shadow-card">
+      <header className="h-12 border-b border-border flex items-center px-3 sm:px-4 gap-2 sm:gap-6 bg-card shrink-0 relative z-50 shadow-card">
         <Link
           to="/my-sessions"
-          className="flex items-center gap-2 font-semibold text-sm text-primary"
+          className="flex items-center gap-2 font-semibold text-sm text-primary shrink-0"
           onClick={() => {
             setDemoMode(false);
             setActiveSessionId(null);
@@ -72,10 +78,11 @@ export function AppHeader() {
           }}
         >
           <img src={tanagramLogo} alt="Tanagram" className="h-5 w-5 translate-y-[1px]" style={{ filter: "brightness(0) saturate(100%) invert(32%) sepia(93%) saturate(1752%) hue-rotate(207deg) brightness(97%) contrast(101%)" }} />
-          <span>Tanagram</span>
+          <span className="hidden sm:inline">Tanagram</span>
         </Link>
 
-        <nav className="flex items-center gap-1 text-sm">
+        {/* Desktop nav */}
+        <nav className="hidden sm:flex items-center gap-1 text-sm">
           <Link
             to="/my-sessions"
             className={`px-3 py-1.5 rounded-md transition-colors ${location.pathname === "/my-sessions" || location.pathname === "/" ? "bg-secondary text-foreground font-medium" : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"}`}
@@ -95,8 +102,8 @@ export function AppHeader() {
           </Link>
         </nav>
 
-        {/* Centered search */}
-        <div className="flex-1 max-w-md mx-4">
+        {/* Search — desktop: centered bar, mobile: icon */}
+        <div className="flex-1 hidden sm:block max-w-md mx-4">
           <button
             onClick={() => setOpen(true)}
             className="w-full flex items-center gap-2 bg-background rounded-lg px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors cursor-pointer border border-border"
@@ -107,11 +114,20 @@ export function AppHeader() {
           </button>
         </div>
 
-        <div className="flex items-center gap-3">
+        {/* Mobile: search icon */}
+        <div className="flex-1 sm:hidden" />
+        <button
+          onClick={() => setOpen(true)}
+          className="sm:hidden h-8 w-8 flex items-center justify-center rounded-md text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
+        >
+          <Search className="h-4 w-4" />
+        </button>
+
+        <div className="flex items-center gap-2">
           {user && (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <button className="h-8 w-8 rounded-full bg-primary flex items-center justify-center text-xs font-semibold text-primary-foreground hover:opacity-90 transition-all cursor-pointer">
+                <button className="hidden sm:flex h-8 w-8 rounded-full bg-primary items-center justify-center text-xs font-semibold text-primary-foreground hover:opacity-90 transition-all cursor-pointer">
                   {username[0].toUpperCase()}
                 </button>
               </DropdownMenuTrigger>
@@ -129,12 +145,54 @@ export function AppHeader() {
               </DropdownMenuContent>
             </DropdownMenu>
           )}
+
+          {/* Mobile hamburger */}
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="sm:hidden h-8 w-8 flex items-center justify-center rounded-md text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
+          >
+            {mobileMenuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+          </button>
         </div>
       </header>
 
+      {/* Mobile menu */}
+      {mobileMenuOpen && (
+        <div className="sm:hidden border-b border-border bg-card px-4 py-3 space-y-1 z-40 relative">
+          <Link
+            to="/my-sessions"
+            className={`block px-3 py-2 rounded-md text-sm transition-colors ${location.pathname === "/my-sessions" || location.pathname === "/" ? "bg-secondary text-foreground font-medium" : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"}`}
+          >
+            Explorer
+          </Link>
+          <Link
+            to="/explore"
+            className={`block px-3 py-2 rounded-md text-sm transition-colors ${location.pathname === "/explore" ? "bg-secondary text-foreground font-medium" : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"}`}
+          >
+            Feed
+          </Link>
+          {user && (
+            <>
+              <Link
+                to={`/profile/${username}`}
+                className="block px-3 py-2 rounded-md text-sm text-muted-foreground hover:text-foreground hover:bg-secondary/50 transition-colors"
+              >
+                Profile
+              </Link>
+              <button
+                onClick={signOut}
+                className="w-full text-left px-3 py-2 rounded-md text-sm text-muted-foreground hover:text-foreground hover:bg-secondary/50 transition-colors"
+              >
+                Sign out
+              </button>
+            </>
+          )}
+        </div>
+      )}
+
       {/* Search overlay */}
       {open && (
-        <div className="fixed inset-0 z-50 flex items-start justify-center pt-[15vh]" onClick={() => { setOpen(false); setQuery(""); }}>
+        <div className="fixed inset-0 z-50 flex items-start justify-center pt-[10vh] sm:pt-[15vh] px-4" onClick={() => { setOpen(false); setQuery(""); }}>
           <div className="absolute inset-0 bg-foreground/20 backdrop-blur-sm" />
           <div
             className="relative w-full max-w-lg bg-card border border-border rounded-xl shadow-elevated overflow-hidden"
@@ -149,7 +207,7 @@ export function AppHeader() {
                 placeholder="Search... try skill:/commit or model:gpt-4o"
                 className="flex-1 bg-transparent text-sm text-foreground placeholder:text-muted-foreground outline-none"
               />
-              <kbd className="text-2xs bg-secondary text-muted-foreground rounded px-1.5 py-0.5 border border-border">esc</kbd>
+              <kbd className="text-2xs bg-secondary text-muted-foreground rounded px-1.5 py-0.5 border border-border hidden sm:inline">esc</kbd>
             </div>
 
             <div className="max-h-80 overflow-y-auto">
