@@ -133,8 +133,8 @@ export function SessionCard({ session, onSignInClick, landing }: SessionCardProp
           )}
         </div>
         <div className="flex items-center gap-3">
-          {session.comments.length > 0 && (
-            <span>{session.comments.length} comment{session.comments.length !== 1 ? "s" : ""}</span>
+          {comments.length > 0 && (
+            <span>{comments.length} comment{comments.length !== 1 ? "s" : ""}</span>
           )}
           {session.forks > 0 && (
             <span>{session.forks} share{session.forks !== 1 ? "s" : ""}</span>
