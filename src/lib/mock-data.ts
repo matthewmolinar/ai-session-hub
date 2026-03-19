@@ -66,7 +66,7 @@ export const SESSIONS: Session[] = [
     filesChanged: 8,
     forks: 23,
     createdAt: "2026-03-16T09:15:00Z",
-    tags: ["rust", "async", "systems"],
+    tags: ["/commit", "/tdd", "/deploy"],
     sparkline: [2, 4, 6, 8, 9, 9, 7, 8, 9, 6, 5, 7, 8, 9, 8, 6, 4, 3, 5, 7],
     transcript: [
       {
