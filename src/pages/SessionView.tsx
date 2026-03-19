@@ -84,10 +84,12 @@ export default function SessionView() {
           {session.transcript?.filter(t => t.role !== "tool").map((turn) => {
             const turnCommentCount = (commentsByTurn[turn.id] || []).length;
             return (
-              <a
+              <button
                 key={turn.id}
-                href={`#turn-${turn.id}`}
-                className="flex items-start gap-2 px-2 py-1.5 rounded-sm text-xs text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
+                onClick={() => {
+                  document.getElementById(`turn-${turn.id}`)?.scrollIntoView({ behavior: "smooth", block: "start" });
+                }}
+                className="flex items-start gap-2 px-2 py-1.5 rounded-sm text-xs text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors w-full text-left"
               >
                 <span className="text-2xs font-mono shrink-0 mt-0.5">{turn.timestamp}</span>
                 <span className="line-clamp-1 flex-1">{turn.intentSummary || turn.content.slice(0, 40)}</span>
@@ -97,7 +99,7 @@ export default function SessionView() {
                     {turnCommentCount}
                   </span>
                 )}
-              </a>
+              </button>
             );
           })}
         </div>
