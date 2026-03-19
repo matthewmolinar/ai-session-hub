@@ -1,4 +1,5 @@
-import { Terminal } from "lucide-react";
+import { useState } from "react";
+import { Terminal, Check, Copy } from "lucide-react";
 import { motion } from "framer-motion";
 import { SessionCard } from "@/components/SessionCard";
 import { SESSION_DETAIL } from "@/lib/mock-data";
