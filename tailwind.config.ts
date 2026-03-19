@@ -31,6 +31,8 @@ export default {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         subtle: "hsl(var(--subtle))",
+        supportive: "hsl(var(--supportive))",
+        "supportive-deep": "hsl(var(--supportive-deep))",
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
