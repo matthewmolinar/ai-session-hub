@@ -1,6 +1,6 @@
 import { useState, useCallback, useMemo } from "react";
-import { useParams, Link } from "react-router-dom";
-import { Coins, FileCode, GitFork, MessageSquare, Share2, Terminal, Zap } from "lucide-react";
+import { useParams } from "react-router-dom";
+import { Coins, FileCode, GitFork, MessageSquare, Share2, Terminal, Zap, ChevronDown } from "lucide-react";
 import { TranscriptTurn } from "@/components/TranscriptTurn";
 import { ModelBadge } from "@/components/ModelBadge";
 import { SESSION_DETAIL, SESSIONS } from "@/lib/mock-data";
@@ -13,28 +13,16 @@ export default function SessionView() {
     return SESSIONS.find((s) => s.id === id) ?? SESSION_DETAIL;
   }, [id]);
 
-  // Comments state: keyed by turn ID
-  const [commentsByTurn, setCommentsByTurn] = useState<Record<number, Comment[]>>(() => {
-    // Seed with a couple demo comments
-    return {
-      1: [
-        {
-          id: "demo-1",
-          author: "techleadmaria",
-          content: "This prompt could've been more specific — mention the target framework version and whether you want offline support.",
-          timestamp: "15:02",
-        },
-      ],
-      5: [
-        {
-          id: "demo-2",
-          author: "techleadmaria",
-          content: "Nice approach here. Using the awareness protocol from the start saves a refactor later.",
-          timestamp: "15:10",
-        },
-      ],
-    };
-  });
+  const [commentsByTurn, setCommentsByTurn] = useState<Record<number, Comment[]>>(() => ({
+    1: [
+      { id: "demo-1", author: "techleadmaria", content: "This prompt could've been more specific — mention the target framework version and whether you want offline support.", timestamp: "15:02" },
+    ],
+    5: [
+      { id: "demo-2", author: "techleadmaria", content: "Nice approach here. Using the awareness protocol from the start saves a refactor later.", timestamp: "15:10" },
+    ],
+  }));
+
+  const [showMobileInfo, setShowMobileInfo] = useState(false);
 
   const handleAddComment = useCallback((turnId: number, content: string) => {
     const newComment: Comment = {
@@ -51,7 +39,6 @@ export default function SessionView() {
 
   const totalComments = Object.values(commentsByTurn).reduce((sum, arr) => sum + arr.length, 0);
 
-  // Token & cost aggregation
   const costData = useMemo(() => {
     const turns = session.transcript ?? [];
     const totalInput = turns.reduce((s, t) => s + (t.usage?.inputTokens ?? 0), 0);
@@ -77,7 +64,7 @@ export default function SessionView() {
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-[200px_1fr_200px] gap-0 h-full flex-1">
-      {/* Left sidebar: Turn Navigator */}
+      {/* Left sidebar: Turn Navigator — hidden on mobile */}
       <aside className="hidden lg:block border-r border-border p-3 overflow-y-auto">
         <h4 className="text-label mb-2">Turns</h4>
         <div className="flex flex-col gap-0.5">
@@ -106,17 +93,17 @@ export default function SessionView() {
       {/* Main transcript */}
       <main className="overflow-y-auto">
         {/* Session header */}
-        <div className="border-b border-border px-6 py-4">
-          <div className="flex items-start justify-between gap-4 mb-2">
-            <h1 className="text-lg font-semibold text-foreground">{session.title}</h1>
+        <div className="border-b border-border px-4 sm:px-6 py-4">
+          <div className="flex items-start justify-between gap-3 mb-2">
+            <h1 className="text-base sm:text-lg font-semibold text-foreground">{session.title}</h1>
             <div className="flex items-center gap-2 shrink-0">
-              <button className="relative flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium bg-primary text-primary-foreground hover:bg-primary/90 transition-all shadow-[0_0_12px_hsl(var(--primary)/0.4)] hover:shadow-[0_0_20px_hsl(var(--primary)/0.6)]">
+              <button className="relative flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-md text-xs font-medium bg-primary text-primary-foreground hover:bg-primary/90 transition-all shadow-[0_0_12px_hsl(var(--primary)/0.4)] hover:shadow-[0_0_20px_hsl(var(--primary)/0.6)]">
                 <Share2 className="h-3.5 w-3.5" />
-                Share
+                <span className="hidden sm:inline">Share</span>
               </button>
             </div>
           </div>
-          <div className="flex items-center gap-3 text-xs text-muted-foreground">
+          <div className="flex items-center gap-2 sm:gap-3 text-xs text-muted-foreground flex-wrap">
             <span className="font-medium text-foreground">@{session.author.username}</span>
             <ModelBadge model={session.model} />
             <span className="flex items-center gap-1">
@@ -134,10 +121,54 @@ export default function SessionView() {
               </span>
             )}
           </div>
+
+          {/* Mobile-only: collapsible session info */}
+          <button
+            onClick={() => setShowMobileInfo(!showMobileInfo)}
+            className="lg:hidden flex items-center gap-1 text-xs text-muted-foreground mt-3 hover:text-foreground transition-colors"
+          >
+            <ChevronDown className={`h-3 w-3 transition-transform ${showMobileInfo ? "rotate-180" : ""}`} />
+            Session details
+          </button>
+          {showMobileInfo && (
+            <div className="lg:hidden mt-3 rounded-lg border border-border bg-secondary/30 p-3 space-y-3">
+              <div>
+                <span className="text-2xs text-muted-foreground uppercase tracking-wider">Cost</span>
+                <div className="text-sm font-semibold text-foreground font-mono">${costData.totalCost.toFixed(4)}</div>
+                <div className="flex gap-3 text-2xs text-muted-foreground">
+                  <span>{costData.totalInput.toLocaleString()} in</span>
+                  <span>{costData.totalOutput.toLocaleString()} out</span>
+                </div>
+              </div>
+              {filesInSession.length > 0 && (
+                <div>
+                  <span className="text-2xs text-muted-foreground uppercase tracking-wider">Files</span>
+                  <div className="flex flex-wrap gap-1 mt-1">
+                    {filesInSession.map((f) => (
+                      <span key={f} className="text-2xs font-mono text-muted-foreground bg-secondary rounded px-1.5 py-0.5">{f.split("/").pop()}</span>
+                    ))}
+                  </div>
+                </div>
+              )}
+              {skills.length > 0 && (
+                <div>
+                  <span className="text-2xs text-muted-foreground uppercase tracking-wider">Skills</span>
+                  <div className="flex flex-wrap gap-1 mt-1">
+                    {skills.map((skill) => (
+                      <span key={skill} className="inline-flex items-center gap-1 rounded-md bg-secondary px-1.5 py-0.5 text-2xs font-mono text-muted-foreground">
+                        <Zap className="h-2.5 w-2.5 text-primary" />
+                        {skill}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Transcript */}
-        <div className="px-6 py-4 divide-y divide-border">
+        <div className="px-4 sm:px-6 py-4 divide-y divide-border">
           {session.transcript?.map((turn) => (
             <div key={turn.id} id={`turn-${turn.id}`}>
               <TranscriptTurn
@@ -150,9 +181,8 @@ export default function SessionView() {
         </div>
       </main>
 
-      {/* Right sidebar: Environment State */}
+      {/* Right sidebar: Environment State — hidden on mobile */}
       <aside className="hidden lg:block border-l border-border p-3 overflow-y-auto">
-        {/* Cost & Tokens */}
         <h4 className="text-label mb-2 flex items-center gap-1.5">
           <Coins className="h-3 w-3 text-primary" />
           Session Cost
