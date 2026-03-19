@@ -47,7 +47,7 @@ export function TranscriptTurn({ turn, comments, onAddComment }: TranscriptTurnP
         ) : (
           <details className="group/details">
             <summary className="text-sm text-muted-foreground/70 leading-relaxed cursor-pointer select-none list-none flex items-start gap-2">
-              <span className="text-2xs text-muted-foreground/40 mt-0.5 shrink-0">▸</span>
+              <span className="text-2xs text-muted-foreground/40 mt-0.5 shrink-0 group-open/details:rotate-90 transition-transform">▸</span>
               <span className="line-clamp-2">{turn.content.split("\n")[0]}</span>
             </summary>
             <div className="text-sm text-muted-foreground/70 leading-relaxed mt-1 pl-4">
@@ -55,13 +55,13 @@ export function TranscriptTurn({ turn, comments, onAddComment }: TranscriptTurnP
                 <p key={i} className={line === "" ? "h-3" : ""}>{line}</p>
               ))}
             </div>
+
+            {/* Inline diffs — inside collapsible */}
+            {turn.diff?.map((d, i) => (
+              <DiffBlock key={i} diff={d} />
+            ))}
           </details>
         )}
-
-        {/* Inline diffs — always visible, these are the artifacts */}
-        {turn.diff?.map((d, i) => (
-          <DiffBlock key={i} diff={d} />
-        ))}
 
         {/* Inline comments */}
         <TurnComment
