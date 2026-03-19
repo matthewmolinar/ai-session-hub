@@ -41,8 +41,8 @@ export default function Profile() {
     <div className="max-w-2xl mx-auto px-3 sm:px-4 py-4 sm:py-6">
       {/* Profile header */}
       <div className="border-b border-border pb-4 mb-6">
-        <div className="flex items-start gap-4">
-          <div className="h-12 w-12 rounded-lg bg-secondary flex items-center justify-center text-lg font-semibold text-foreground">
+        <div className="flex items-start gap-3 sm:gap-4">
+          <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-lg bg-secondary flex items-center justify-center text-base sm:text-lg font-semibold text-foreground">
             {displayName[0].toUpperCase()}
           </div>
           <div className="flex-1">
