@@ -483,7 +483,7 @@ export const SESSIONS: Session[] = [
     filesChanged: 3,
     forks: 8,
     createdAt: "2026-03-12T16:30:00Z",
-    tags: ["css", "animation", "library"],
+    tags: ["/pr-review", "/refactor", "/docs"],
     sparkline: [6, 8, 9, 7, 5, 8, 9, 6, 4],
     transcript: [
       {
