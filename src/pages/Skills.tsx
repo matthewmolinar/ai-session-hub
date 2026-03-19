@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { Zap, ChevronRight, FileCode, MessageSquare, Users, Clock, BarChart3 } from "lucide-react";
-import { SESSIONS } from "@/lib/mock-data";
+import { SESSIONS, SKILL_TEAMMATE_COUNTS } from "@/lib/mock-data";
 import { ModelBadge } from "@/components/ModelBadge";
 import { motion, AnimatePresence } from "framer-motion";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from "recharts";
@@ -61,6 +61,12 @@ function SkillCard({ group, rank }: { group: SkillGroup; rank: number }) {
               <Users className="h-3 w-3" />
               {group.authors.length} author{group.authors.length !== 1 ? "s" : ""}
             </span>
+            {SKILL_TEAMMATE_COUNTS[group.skill] && (
+              <span className="flex items-center gap-1 text-primary font-medium">
+                <Users className="h-3 w-3" />
+                {SKILL_TEAMMATE_COUNTS[group.skill]} teammates
+              </span>
+            )}
             <span className="flex items-center gap-1">
               <Clock className="h-3 w-3" />
               {getTimeAgo(group.lastUsed)}

@@ -1,14 +1,44 @@
 import { Link, useLocation } from "react-router-dom";
-import { FileCode, MessageSquare, Lock } from "lucide-react";
+import { FileCode, MessageSquare, Lock, Users } from "lucide-react";
 import { ModelBadge } from "./ModelBadge";
 import { Sparkline } from "./Sparkline";
 import { useAuth } from "@/contexts/AuthContext";
+import { TEAMMATE_ACTIVITY } from "@/lib/mock-data";
 import type { Session } from "@/lib/mock-data";
 
 interface SessionCardProps {
   session: Session;
   onSignInClick?: () => void;
   landing?: boolean;
+}
+
+function TeammateIndicator({ sessionId }: { sessionId: string }) {
+  const teammates = TEAMMATE_ACTIVITY[sessionId];
+  if (!teammates || teammates.length === 0) return null;
+
+  const shown = teammates.slice(0, 3);
+  const extra = teammates.length - shown.length;
+
+  return (
+    <div className="flex items-center gap-1.5">
+      <div className="flex -space-x-1.5">
+        {shown.map((t) => (
+          <div
+            key={t.username}
+            className="h-5 w-5 rounded-full bg-primary/15 border-2 border-card flex items-center justify-center text-2xs font-semibold text-primary"
+            title={`@${t.username}`}
+          >
+            {t.username[0].toUpperCase()}
+          </div>
+        ))}
+      </div>
+      <span className="text-2xs text-muted-foreground">
+        {teammates.length === 1
+          ? `@${teammates[0].username} also explored`
+          : `${teammates.length} teammates also explored`}
+      </span>
+    </div>
+  );
 }
 
 export function SessionCard({ session, onSignInClick, landing }: SessionCardProps) {
@@ -53,8 +83,11 @@ export function SessionCard({ session, onSignInClick, landing }: SessionCardProp
       {/* Sparkline */}
       <Sparkline data={session.sparkline} className="mb-3" />
 
+      {/* Teammate indicator */}
+      <TeammateIndicator sessionId={session.id} />
+
       {/* L3: Metadata */}
-      <div className="flex items-center gap-4 text-xs text-muted-foreground">
+      <div className="flex items-center gap-4 text-xs text-muted-foreground mt-2">
         <span className="font-medium text-foreground">@{session.author.username}</span>
         <span className="flex items-center gap-1">
           <MessageSquare className="h-3 w-3" />
