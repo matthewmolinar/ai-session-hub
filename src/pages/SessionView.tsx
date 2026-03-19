@@ -110,8 +110,8 @@ export default function SessionView() {
           <div className="flex items-start justify-between gap-4 mb-2">
             <h1 className="text-lg font-semibold text-foreground">{session.title}</h1>
             <div className="flex items-center gap-2 shrink-0">
-              <button className="flex items-center gap-1 px-2.5 py-1 rounded-md text-xs bg-secondary text-foreground hover:bg-border transition-colors">
-                <Share2 className="h-3 w-3" />
+              <button className="relative flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium bg-primary text-primary-foreground hover:bg-primary/90 transition-all shadow-[0_0_12px_hsl(var(--primary)/0.4)] hover:shadow-[0_0_20px_hsl(var(--primary)/0.6)]">
+                <Share2 className="h-3.5 w-3.5" />
                 Share
               </button>
             </div>
