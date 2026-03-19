@@ -15,6 +15,7 @@ import {
 
 export function AppHeader() {
   const { signOut, user } = useAuth();
+  const { setDemoMode, setActiveSessionId, setSelectedFilePath } = useMySessionsState();
   const username = user?.user_metadata?.username || user?.email?.split("@")[0] || "user";
   const location = useLocation();
   const navigate = useNavigate();
