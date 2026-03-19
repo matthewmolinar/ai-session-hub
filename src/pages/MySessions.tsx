@@ -497,8 +497,9 @@ function SkillFeed({ skillId }: { skillId: string }) {
 /* ─── Main Page ─── */
 export default function MySessions() {
   const { user } = useAuth();
-  const { activeSessionId, setActiveSessionId, selectedFilePath, demoMode } = useMySessionsState();
+  const { activeSessionId, setActiveSessionId, selectedFilePath, setSelectedFilePath, demoMode } = useMySessionsState();
   const [sidebarTab, setSidebarTab] = useState<"files" | "skills">("files");
+  const [selectedSkillId, setSelectedSkillId] = useState<string | null>(null);
 
   const totalFiles = useMemo(() => FILE_TREE.reduce((sum, n) => sum + countFiles(n), 0), []);
 
