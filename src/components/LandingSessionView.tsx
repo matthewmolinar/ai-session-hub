@@ -46,11 +46,12 @@ export function LandingSessionView() {
               <Terminal className="h-3 w-3 text-muted-foreground" />
               <span className="text-2xs text-muted-foreground font-mono">Terminal</span>
             </div>
-            <div className="px-4 py-3">
+            <div className="px-4 py-3 flex items-center justify-between gap-2">
               <div className="flex items-center gap-2">
                 <span className="text-primary font-mono text-sm">$</span>
                 <code className="text-sm font-mono text-foreground font-medium">npx tanagram</code>
               </div>
+              <CopyButton text="npx tanagram" />
               <p className="text-2xs text-muted-foreground mt-2">
                 Your sessions are already on your machine.
               </p>
