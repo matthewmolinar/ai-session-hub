@@ -409,6 +409,7 @@ function SessionPreview({ session, onClose }: { session: Session; onClose: () =>
 export default function MySessions() {
   const { user } = useAuth();
   const { activeSessionId, setActiveSessionId, selectedFilePath, demoMode } = useMySessionsState();
+  const [sidebarTab, setSidebarTab] = useState<"files" | "skills">("files");
 
   const totalFiles = useMemo(() => FILE_TREE.reduce((sum, n) => sum + countFiles(n), 0), []);
 
