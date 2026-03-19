@@ -57,11 +57,20 @@ function useBreadcrumbs(): Crumb[] {
 
 export function Breadcrumbs() {
   const crumbs = useBreadcrumbs();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = (location.state as any)?.from as string | undefined;
 
   if (crumbs.length <= 1) return null;
 
   return (
-    <nav className="flex items-center gap-1 text-xs text-muted-foreground px-3 sm:px-4 py-2 border-b border-border bg-background overflow-x-auto scrollbar-none">
+    <nav className="flex items-center gap-1.5 text-xs text-muted-foreground px-3 sm:px-4 py-2 border-b border-border bg-background overflow-x-auto scrollbar-none">
+      <button
+        onClick={() => from ? navigate(from) : navigate(-1)}
+        className="shrink-0 h-6 w-6 rounded-md flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors cursor-pointer"
+      >
+        <ArrowLeft className="h-3.5 w-3.5" />
+      </button>
       {crumbs.map((crumb, i) => (
         <span key={i} className="flex items-center gap-1">
           {i > 0 && <ChevronRight className="h-3 w-3 text-border" />}
