@@ -75,7 +75,7 @@ export function AuthModal({ open, onOpenChange }: AuthModalProps) {
 
         <div className="flex flex-col items-center mb-5">
           <div className="flex items-center gap-2 mb-1">
-            <GitFork className="h-5 w-5 text-primary" />
+            <img src={tanagramLogo} alt="Tanagram" className="h-5 w-5" />
             <span className="text-lg font-semibold text-foreground">Tanagram</span>
           </div>
           <p className="text-xs text-muted-foreground">
