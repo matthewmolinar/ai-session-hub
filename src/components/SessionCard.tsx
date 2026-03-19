@@ -72,7 +72,7 @@ export function SessionCard({ session, onSignInClick, landing }: SessionCardProp
   if (blurred || landing) return content;
 
   return (
-    <Link to={`/session/${session.id}`} className="block">
+    <Link to={`/session/${session.id}`} state={{ from: location.pathname }} className="block">
       {content}
     </Link>
   );
