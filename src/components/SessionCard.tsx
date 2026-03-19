@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { MessageSquare, Lock, Heart, Share2, Terminal } from "lucide-react";
 import { ModelBadge } from "./ModelBadge";
 import { Sparkline } from "./Sparkline";
-import type { Session, SourceTool } from "@/lib/mock-data";
+import type { Session, SessionComment, SourceTool } from "@/lib/mock-data";
 
 interface SessionCardProps {
   session: Session;
@@ -33,6 +33,10 @@ export function SessionCard({ session, onSignInClick, landing }: SessionCardProp
   const blurred = false;
   const [liked, setLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(session.likes);
+  const [comments, setComments] = useState<SessionComment[]>(session.comments);
+  const [commentText, setCommentText] = useState("");
+  const [showAllComments, setShowAllComments] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const handleLike = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -129,8 +133,8 @@ export function SessionCard({ session, onSignInClick, landing }: SessionCardProp
           )}
         </div>
         <div className="flex items-center gap-3">
-          {session.comments.length > 0 && (
-            <span>{session.comments.length} comment{session.comments.length !== 1 ? "s" : ""}</span>
+          {comments.length > 0 && (
+            <span>{comments.length} comment{comments.length !== 1 ? "s" : ""}</span>
           )}
           {session.forks > 0 && (
             <span>{session.forks} share{session.forks !== 1 ? "s" : ""}</span>
@@ -150,7 +154,7 @@ export function SessionCard({ session, onSignInClick, landing }: SessionCardProp
           Like
         </button>
         <button
-          onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
+          onClick={(e) => { e.preventDefault(); e.stopPropagation(); inputRef.current?.focus(); }}
           className="flex-1 flex items-center justify-center gap-2 py-2 text-sm font-medium text-muted-foreground hover:bg-secondary transition-colors cursor-pointer rounded-md my-0.5"
         >
           <MessageSquare className="h-4 w-4" />
@@ -166,20 +170,20 @@ export function SessionCard({ session, onSignInClick, landing }: SessionCardProp
       </div>
 
       {/* Comments section */}
-      {(session.comments.length > 0 || true) && (
+      {(comments.length > 0 || true) && (
         <div className="border-t border-border">
-          {session.comments.length > 2 && (
+          {comments.length > 2 && !showAllComments && (
             <button
-              onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
+              onClick={(e) => { e.preventDefault(); e.stopPropagation(); setShowAllComments(true); }}
               className="text-xs font-medium text-muted-foreground hover:text-foreground cursor-pointer px-4 pt-2"
             >
-              View all {session.comments.length} comments
+              View all {comments.length} comments
             </button>
           )}
 
-          {session.comments.length > 0 && (
+          {comments.length > 0 && (
             <div className="px-4 pt-2 pb-0.5 space-y-2.5">
-              {session.comments.slice(0, 2).map((comment) => (
+              {(showAllComments ? comments : comments.slice(-2)).map((comment) => (
                 <div key={comment.id} className="flex gap-2">
                   <div className="h-7 w-7 rounded-full bg-secondary flex items-center justify-center text-2xs font-semibold text-muted-foreground shrink-0">
                     {comment.author[0].toUpperCase()}
@@ -206,7 +210,23 @@ export function SessionCard({ session, onSignInClick, landing }: SessionCardProp
               Y
             </div>
             <input
+              ref={inputRef}
               type="text"
+              value={commentText}
+              onChange={(e) => setCommentText(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && commentText.trim()) {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setComments(prev => [...prev, {
+                    id: `new-${Date.now()}`,
+                    author: "you",
+                    content: commentText.trim(),
+                    timeAgo: "just now",
+                  }]);
+                  setCommentText("");
+                }
+              }}
               placeholder="Write a comment..."
               onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
               className="flex-1 text-sm bg-secondary/40 rounded-full px-3.5 py-2 placeholder:text-muted-foreground text-foreground outline-none focus:bg-card focus:ring-1 focus:ring-border transition-all"
