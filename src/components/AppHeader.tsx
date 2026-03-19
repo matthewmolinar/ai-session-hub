@@ -72,7 +72,7 @@ export function AppHeader() {
 
   return (
     <>
-      <header className="h-11 border-b border-border flex items-center px-4 gap-6 bg-card shrink-0">
+      <header className="h-11 border-b border-border flex items-center px-4 gap-6 bg-background shrink-0 relative z-50">
         <Link to="/my-sessions" className="flex items-center gap-1.5 font-semibold text-sm text-foreground">
           <img src={tanagramLogo} alt="Tanagram" className="h-5 w-5 rounded" />
           <span>Tanagram</span>

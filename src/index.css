@@ -6,94 +6,57 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 258 44% 11%;
+    --background: 258 44% 4%;
+    --foreground: 270 10% 90%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 258 44% 11%;
+    --card: 258 35% 7%;
+    --card-foreground: 270 10% 90%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 258 44% 11%;
+    --popover: 258 35% 7%;
+    --popover-foreground: 270 10% 90%;
 
-    --primary: 289 100% 41%;
+    --primary: 289 100% 50%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 289 20% 95%;
-    --secondary-foreground: 258 44% 11%;
+    --secondary: 258 30% 12%;
+    --secondary-foreground: 270 10% 85%;
 
-    --muted: 289 15% 95%;
-    --muted-foreground: 258 20% 46%;
+    --muted: 258 25% 12%;
+    --muted-foreground: 270 8% 50%;
 
     --accent: 313 74% 54%;
     --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 84% 60%;
+    --destructive: 0 62% 40%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 289 10% 90%;
-    --input: 289 10% 90%;
-    --ring: 289 100% 41%;
+    --border: 258 20% 14%;
+    --input: 258 20% 14%;
+    --ring: 289 100% 50%;
 
     --radius: 0.375rem;
 
     /* Custom tokens */
-    --subtle: 289 10% 96%;
-    --supportive: 283 99% 26%;
-    --supportive-deep: 258 44% 11%;
-    --gradient-brand: linear-gradient(135deg, hsl(313 74% 54%), hsl(283 99% 26%));
-    --diff-add-bg: 142 70% 45% / 0.1;
-    --diff-add-text: 142 76% 36%;
-    --diff-remove-bg: 0 84% 60% / 0.1;
-    --diff-remove-text: 0 72% 51%;
-    --shadow-card: 0 0 0 1px rgba(0,0,0,.04), 0 2px 4px rgba(0,0,0,.02), 0 8px 16px rgba(0,0,0,.02);
-    --ease-smooth: cubic-bezier(0.2, 0, 0, 1);
-
-    --sidebar-background: 0 0% 100%;
-    --sidebar-foreground: 258 44% 11%;
-    --sidebar-primary: 289 100% 41%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 289 15% 95%;
-    --sidebar-accent-foreground: 258 44% 11%;
-    --sidebar-border: 289 10% 90%;
-    --sidebar-ring: 289 100% 41%;
-  }
-
-  .dark {
-    --background: 258 44% 5%;
-    --foreground: 0 0% 95%;
-    --card: 258 35% 8%;
-    --card-foreground: 0 0% 95%;
-    --popover: 258 35% 8%;
-    --popover-foreground: 0 0% 95%;
-    --primary: 289 100% 50%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 258 30% 15%;
-    --secondary-foreground: 0 0% 95%;
-    --muted: 258 25% 15%;
-    --muted-foreground: 280 10% 55%;
-    --accent: 313 74% 54%;
-    --accent-foreground: 0 0% 100%;
-    --destructive: 0 62% 30%;
-    --destructive-foreground: 0 0% 100%;
-    --border: 258 25% 16%;
-    --input: 258 25% 16%;
-    --ring: 289 100% 50%;
-    --subtle: 258 30% 10%;
+    --subtle: 258 30% 8%;
     --supportive: 283 99% 35%;
     --supportive-deep: 258 44% 11%;
-    --gradient-brand: linear-gradient(135deg, hsl(313 74% 54%), hsl(283 99% 26%));
-    --diff-add-bg: 142 70% 45% / 0.15;
-    --diff-add-text: 142 76% 50%;
-    --diff-remove-bg: 0 84% 60% / 0.15;
+    --glow-primary: 289 100% 50%;
+    --glow-accent: 313 74% 54%;
+    --diff-add-bg: 142 70% 45% / 0.12;
+    --diff-add-text: 142 76% 55%;
+    --diff-remove-bg: 0 84% 60% / 0.12;
     --diff-remove-text: 0 72% 65%;
-    --shadow-card: 0 0 0 1px rgba(255,255,255,.04), 0 2px 4px rgba(0,0,0,.1);
-    --sidebar-background: 258 44% 5%;
-    --sidebar-foreground: 0 0% 95%;
+    --shadow-card: 0 0 0 1px hsl(258 20% 14%), 0 4px 24px -4px hsl(289 100% 50% / 0.06);
+    --shadow-glow: 0 0 40px -10px hsl(289 100% 50% / 0.15);
+    --ease-smooth: cubic-bezier(0.2, 0, 0, 1);
+
+    --sidebar-background: 258 44% 4%;
+    --sidebar-foreground: 270 10% 90%;
     --sidebar-primary: 289 100% 50%;
     --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 258 30% 12%;
-    --sidebar-accent-foreground: 0 0% 95%;
-    --sidebar-border: 258 25% 16%;
+    --sidebar-accent-foreground: 270 10% 85%;
+    --sidebar-border: 258 20% 14%;
     --sidebar-ring: 289 100% 50%;
   }
 }
@@ -121,4 +84,63 @@
   .text-label {
     @apply text-xs font-medium uppercase tracking-wider text-muted-foreground;
   }
+}
+
+/* ─── Halftone dot pattern ─── */
+.bg-halftone {
+  position: relative;
+}
+.bg-halftone::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: radial-gradient(circle, hsl(289 100% 50% / 0.04) 1px, transparent 1px);
+  background-size: 16px 16px;
+  mask-image: radial-gradient(ellipse 60% 50% at 50% 40%, black 0%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 60% 50% at 50% 40%, black 0%, transparent 100%);
+  z-index: 0;
+}
+
+/* ─── Glow effects ─── */
+.glow-card {
+  box-shadow: var(--shadow-card);
+  transition: box-shadow 0.3s ease;
+}
+.glow-card:hover {
+  box-shadow: var(--shadow-card), var(--shadow-glow);
+}
+
+.glow-border {
+  position: relative;
+}
+.glow-border::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, hsl(313 74% 54% / 0), hsl(289 100% 50% / 0));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  transition: background 0.3s ease;
+}
+.glow-border:hover::after {
+  background: linear-gradient(135deg, hsl(313 74% 54% / 0.4), hsl(289 100% 50% / 0.2));
+}
+
+/* Radial glow behind elements */
+.glow-radial {
+  position: relative;
+}
+.glow-radial::before {
+  content: '';
+  position: absolute;
+  inset: -40%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at center, hsl(289 100% 50% / 0.08) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: -1;
 }
