@@ -21,73 +21,167 @@ function CopyButton({ text }: { text: string }) {
   );
 }
 
-/* Sacred geometry rings behind the card */
+/* Sacred geometry diagram — SVG schematic behind the card */
 function SacredGeometry() {
+  const cx = 400, cy = 350;
+  const purple = "hsl(289 100% 50%";
+  const pink = "hsl(313 74% 54%";
+
+  // Generate tick marks around a circle
+  const ticks = (r: number, count: number, len: number, opacity: number) => {
+    const lines = [];
+    for (let i = 0; i < count; i++) {
+      const angle = (i / count) * Math.PI * 2 - Math.PI / 2;
+      const x1 = cx + Math.cos(angle) * r;
+      const y1 = cy + Math.sin(angle) * r;
+      const x2 = cx + Math.cos(angle) * (r + len);
+      const y2 = cy + Math.sin(angle) * (r + len);
+      lines.push(
+        <line key={`${r}-${i}`} x1={x1} y1={y1} x2={x2} y2={y2}
+          stroke={`${purple} / ${opacity})`} strokeWidth="0.5" />
+      );
+    }
+    return lines;
+  };
+
+  // Small labels at angles
+  const labels = [
+    { angle: -90, r: 285, text: "0x00" },
+    { angle: -45, r: 270, text: "ctx" },
+    { angle: 0, r: 285, text: "→out" },
+    { angle: 45, r: 270, text: "Δt" },
+    { angle: 90, r: 285, text: "0xFF" },
+    { angle: 135, r: 270, text: "in←" },
+    { angle: 180, r: 285, text: "·src" },
+    { angle: 225, r: 270, text: "ƒ(x)" },
+  ];
+
   return (
-    <div className="absolute inset-0 flex items-center justify-center pointer-events-none" style={{ top: '-10%' }}>
-      {/* Outer ring */}
-      <motion.div
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ delay: 0.3, duration: 1.2, ease: "easeOut" }}
-        className="absolute w-[140%] aspect-square rounded-full"
-        style={{
-          border: '1px solid hsl(289 100% 50% / 0.06)',
-        }}
-      />
-      {/* Middle ring */}
-      <motion.div
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ delay: 0.2, duration: 1, ease: "easeOut" }}
-        className="absolute w-[110%] aspect-square rounded-full"
-        style={{
-          border: '1px solid hsl(313 74% 54% / 0.08)',
-        }}
-      />
-      {/* Inner ring */}
-      <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ delay: 0.1, duration: 0.8, ease: "easeOut" }}
-        className="absolute w-[85%] aspect-square rounded-full"
-        style={{
-          border: '1px solid hsl(289 100% 50% / 0.1)',
-        }}
-      />
-      {/* Cross lines */}
-      <motion.div
+    <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+      <motion.svg
+        viewBox="0 0 800 700"
+        className="absolute w-[160%] max-w-none"
+        style={{ top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 0.5, duration: 1 }}
-        className="absolute inset-0"
+        transition={{ delay: 0.2, duration: 1.5 }}
       >
-        {/* Vertical line */}
-        <div className="absolute left-1/2 top-0 bottom-0 w-px -translate-x-1/2" style={{ background: 'linear-gradient(to bottom, transparent 10%, hsl(289 100% 50% / 0.06) 30%, hsl(289 100% 50% / 0.06) 70%, transparent 90%)' }} />
-        {/* Horizontal line */}
-        <div className="absolute top-1/2 left-0 right-0 h-px -translate-y-1/2" style={{ background: 'linear-gradient(to right, transparent 10%, hsl(313 74% 54% / 0.05) 30%, hsl(313 74% 54% / 0.05) 70%, transparent 90%)' }} />
-        {/* Diagonal lines */}
-        <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, transparent 42%, hsl(289 100% 50% / 0.04) 49.5%, hsl(289 100% 50% / 0.04) 50.5%, transparent 58%)' }} />
-        <div className="absolute inset-0" style={{ background: 'linear-gradient(-135deg, transparent 42%, hsl(313 74% 54% / 0.03) 49.5%, hsl(313 74% 54% / 0.03) 50.5%, transparent 58%)' }} />
-      </motion.div>
-      {/* Small dots at cardinal points */}
-      {[0, 90, 180, 270].map((deg) => (
-        <motion.div
-          key={deg}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.6 + deg / 1000, duration: 0.6 }}
-          className="absolute w-1 h-1 rounded-full bg-primary/20"
-          style={{
-            transform: `rotate(${deg}deg) translateY(-${55}%) rotate(-${deg}deg)`,
-            top: '50%',
-            left: '50%',
-            marginTop: '-2px',
-            marginLeft: '-2px',
-            transformOrigin: '2px 2px',
-          }}
-        />
-      ))}
+        {/* Outermost ring — dashed */}
+        <circle cx={cx} cy={cy} r={300} fill="none"
+          stroke={`${purple} / 0.07)`} strokeWidth="0.5"
+          strokeDasharray="2 8" />
+
+        {/* Outer ring with tick marks */}
+        <circle cx={cx} cy={cy} r={260} fill="none"
+          stroke={`${purple} / 0.1)`} strokeWidth="0.5" />
+        {ticks(254, 72, 12, 0.06)}
+        {ticks(254, 12, 18, 0.12)}
+
+        {/* Middle ring — thinner dashed */}
+        <circle cx={cx} cy={cy} r={220} fill="none"
+          stroke={`${pink} / 0.06)`} strokeWidth="0.5"
+          strokeDasharray="1 6" />
+
+        {/* Inner ring */}
+        <circle cx={cx} cy={cy} r={180} fill="none"
+          stroke={`${purple} / 0.08)`} strokeWidth="0.5" />
+        {ticks(174, 36, 12, 0.05)}
+
+        {/* Innermost ring — close to card */}
+        <circle cx={cx} cy={cy} r={140} fill="none"
+          stroke={`${pink} / 0.06)`} strokeWidth="0.5" />
+
+        {/* Axis lines — full cross */}
+        {[0, 45, 90, 135].map((deg) => {
+          const rad = (deg * Math.PI) / 180;
+          const r = 300;
+          return (
+            <line key={deg}
+              x1={cx + Math.cos(rad) * r} y1={cy + Math.sin(rad) * r}
+              x2={cx - Math.cos(rad) * r} y2={cy - Math.sin(rad) * r}
+              stroke={`${deg % 90 === 0 ? purple : pink} / ${deg % 90 === 0 ? 0.06 : 0.03})`}
+              strokeWidth="0.5"
+              strokeDasharray={deg % 90 === 0 ? "none" : "3 6"}
+            />
+          );
+        })}
+
+        {/* Small diamonds at cardinal intersections on outer ring */}
+        {[0, 90, 180, 270].map((deg) => {
+          const rad = (deg * Math.PI) / 180 - Math.PI / 2;
+          const r = 260;
+          const x = cx + Math.cos(rad) * r;
+          const y = cy + Math.sin(rad) * r;
+          return (
+            <g key={`d-${deg}`}>
+              <rect x={x - 3} y={y - 3} width={6} height={6}
+                transform={`rotate(45 ${x} ${y})`}
+                fill="none" stroke={`${purple} / 0.2)`} strokeWidth="0.5" />
+              <circle cx={x} cy={y} r={1.5} fill={`${purple} / 0.15)`} />
+            </g>
+          );
+        })}
+
+        {/* Small circles at 45° intersections */}
+        {[45, 135, 225, 315].map((deg) => {
+          const rad = (deg * Math.PI) / 180 - Math.PI / 2;
+          const r = 260;
+          const x = cx + Math.cos(rad) * r;
+          const y = cy + Math.sin(rad) * r;
+          return (
+            <circle key={`c-${deg}`} cx={x} cy={y} r={2.5}
+              fill="none" stroke={`${pink} / 0.12)`} strokeWidth="0.5" />
+          );
+        })}
+
+        {/* Labels — tiny mono text */}
+        {labels.map(({ angle, r, text }) => {
+          const rad = (angle * Math.PI) / 180;
+          const x = cx + Math.cos(rad) * r;
+          const y = cy + Math.sin(rad) * r;
+          return (
+            <text key={text} x={x} y={y}
+              textAnchor="middle" dominantBaseline="middle"
+              fill={`${purple} / 0.15)`}
+              fontSize="7" fontFamily="'Geist Mono', monospace"
+            >
+              {text}
+            </text>
+          );
+        })}
+
+        {/* Inner hexagon */}
+        {(() => {
+          const r = 160;
+          const pts = Array.from({ length: 6 }, (_, i) => {
+            const a = (i / 6) * Math.PI * 2 - Math.PI / 2;
+            return `${cx + Math.cos(a) * r},${cy + Math.sin(a) * r}`;
+          }).join(' ');
+          return <polygon points={pts} fill="none" stroke={`${purple} / 0.04)`} strokeWidth="0.5" />;
+        })()}
+
+        {/* Triangle inscribed */}
+        {(() => {
+          const r = 200;
+          const pts = Array.from({ length: 3 }, (_, i) => {
+            const a = (i / 3) * Math.PI * 2 - Math.PI / 2;
+            return `${cx + Math.cos(a) * r},${cy + Math.sin(a) * r}`;
+          }).join(' ');
+          return <polygon points={pts} fill="none" stroke={`${pink} / 0.04)`} strokeWidth="0.5"
+            strokeDasharray="4 8" />;
+        })()}
+
+        {/* Inverted triangle */}
+        {(() => {
+          const r = 200;
+          const pts = Array.from({ length: 3 }, (_, i) => {
+            const a = (i / 3) * Math.PI * 2 + Math.PI / 6;
+            return `${cx + Math.cos(a) * r},${cy + Math.sin(a) * r}`;
+          }).join(' ');
+          return <polygon points={pts} fill="none" stroke={`${purple} / 0.03)`} strokeWidth="0.5"
+            strokeDasharray="4 8" />;
+        })()}
+      </motion.svg>
     </div>
   );
 }
