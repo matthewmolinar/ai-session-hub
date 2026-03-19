@@ -99,7 +99,7 @@ function SacredGeometry() {
             <line key={deg}
               x1={cx + Math.cos(rad) * r} y1={cy + Math.sin(rad) * r}
               x2={cx - Math.cos(rad) * r} y2={cy - Math.sin(rad) * r}
-              stroke={`${deg % 90 === 0 ? purple : pink} / ${deg % 90 === 0 ? 0.15 : 0.08})`}
+              stroke={`${deg % 90 === 0 ? purple : pink} / ${deg % 90 === 0 ? 0.1 : 0.06})`}
               strokeWidth="0.5"
               strokeDasharray={deg % 90 === 0 ? "none" : "3 6"}
             />
