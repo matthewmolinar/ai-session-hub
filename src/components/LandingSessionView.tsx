@@ -130,7 +130,7 @@ function SacredGeometry() {
           const y = cy + Math.sin(rad) * r;
           return (
             <circle key={`c-${deg}`} cx={x} cy={y} r={3}
-              fill="none" stroke={`${pink} / 0.3)`} strokeWidth="0.75" />
+              fill="none" stroke={`${pink} / 0.2)`} strokeWidth="0.75" />
           );
         })}
 
