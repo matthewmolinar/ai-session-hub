@@ -7,7 +7,7 @@ import { useMySessionsState } from "@/contexts/MySessionsContext";
 import { ModelBadge } from "@/components/ModelBadge";
 import { TranscriptTurn } from "@/components/TranscriptTurn";
 import { LandingSessionView } from "@/components/LandingSessionView";
-import { SESSION_DETAIL, SESSIONS, SKILL_TEAMMATE_COUNTS } from "@/lib/mock-data";
+import { SESSION_DETAIL, SESSIONS, SKILLS_CATALOG } from "@/lib/mock-data";
 import type { Session } from "@/lib/mock-data";
 import type { Comment } from "@/components/TurnComment";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
