@@ -95,6 +95,12 @@ export function AppHeader() {
             </Link>
           )}
           <Link
+            to="/threads"
+            className={`px-3 py-1.5 rounded-md transition-colors ${location.pathname === "/threads" ? "bg-secondary text-foreground font-medium" : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"}`}
+          >
+            Threads
+          </Link>
+          <Link
             to="/explore"
             className={`relative px-3 py-1.5 rounded-md transition-colors ${location.pathname === "/explore" ? "bg-secondary text-foreground font-medium" : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"}`}
           >
