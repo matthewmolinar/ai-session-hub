@@ -4,6 +4,7 @@ import { Coins, FileCode, MessageSquare, Share2, Terminal, Zap, ChevronDown } fr
 import { TranscriptTurn } from "@/components/TranscriptTurn";
 import { ModelBadge } from "@/components/ModelBadge";
 import { SESSION_DETAIL, SESSIONS } from "@/lib/mock-data";
+import { THREADS } from "@/lib/mock-threads";
 import type { Session, Turn } from "@/lib/mock-data";
 import type { Comment } from "@/components/TurnComment";
 
@@ -35,7 +36,25 @@ export default function SessionView() {
   const from = (location.state as any)?.from as string | undefined;
   const session = useMemo(() => {
     if (id === SESSION_DETAIL.id) return SESSION_DETAIL;
-    return SESSIONS.find((s) => s.id === id) ?? SESSION_DETAIL;
+    const fromSessions = SESSIONS.find((s) => s.id === id);
+    if (fromSessions) return fromSessions;
+    const thread = THREADS.find((t) => t.id === id);
+    if (thread) {
+      return {
+        ...thread,
+        model: "claude-3.5-sonnet",
+        source: "claude-code" as const,
+        author: { ...thread.author },
+        turns: thread.messageCount,
+        filesChanged: thread.diffStats.added + thread.diffStats.removed + thread.diffStats.modified,
+        forks: 0,
+        likes: thread.stars,
+        tags: [],
+        sparkline: [],
+        comments: [],
+      } satisfies Session;
+    }
+    return SESSION_DETAIL;
   }, [id]);
 
   const [commentsByTurn, setCommentsByTurn] = useState<Record<number, Comment[]>>(() => ({
