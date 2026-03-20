@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Search, Star, GitBranch, MessageSquare, Circle } from "lucide-react";
+import { Search, Star, GitBranch, MessageSquare, Circle, Heart, Share2 } from "lucide-react";
+import type { SessionComment } from "@/lib/mock-data";
 import { THREADS, THREAD_REPOS, THREAD_USERS, THREAD_TYPES, type Thread } from "@/lib/mock-threads";
 
 function getTimeAgo(dateStr: string): string {
@@ -44,52 +45,169 @@ const TEAM_MEMBERS = [
 
 function ThreadRow({ thread }: { thread: Thread }) {
   const location = useLocation();
+  const [liked, setLiked] = useState(false);
+  const [likeCount, setLikeCount] = useState(thread.likes);
+  const [comments, setComments] = useState<SessionComment[]>(thread.comments);
+  const [commentText, setCommentText] = useState("");
+  const [showAllComments, setShowAllComments] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const handleLike = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setLiked(!liked);
+    setLikeCount(liked ? likeCount - 1 : likeCount + 1);
+  };
 
   return (
-    <Link
-      to={`/session/${thread.id}`}
-      state={{ from: location.pathname }}
-      className="block border-b border-border last:border-b-0 px-4 sm:px-6 py-4 hover:bg-secondary/30 transition-colors"
-    >
-      <div className="flex items-start gap-3">
-        {/* Avatar */}
-        <div className="h-9 w-9 rounded-full bg-primary/10 flex items-center justify-center text-sm font-semibold text-primary shrink-0 mt-0.5">
-          {thread.author.username[0].toUpperCase()}
+    <div className="border-b border-border last:border-b-0">
+      <Link
+        to={`/session/${thread.id}`}
+        state={{ from: location.pathname }}
+        className="block px-4 sm:px-6 py-4 hover:bg-secondary/30 transition-colors"
+      >
+        <div className="flex items-start gap-3">
+          <div className="h-9 w-9 rounded-full bg-primary/10 flex items-center justify-center text-sm font-semibold text-primary shrink-0 mt-0.5">
+            {thread.author.username[0].toUpperCase()}
+          </div>
+          <div className="flex-1 min-w-0">
+            <h3 className="text-sm font-semibold text-foreground leading-snug mb-1">
+              {thread.title}
+            </h3>
+            <div className="flex items-center gap-2 flex-wrap text-xs text-muted-foreground mb-2">
+              <span className="font-medium text-foreground/80">{thread.author.username.replace("_", " ")}</span>
+              <span>{getTimeAgo(thread.createdAt)}</span>
+              <span className="text-muted-foreground/40">—</span>
+              <DiffStats stats={thread.diffStats} />
+              {(thread.diffStats.added > 0 || thread.diffStats.removed > 0 || thread.diffStats.modified > 0) && (
+                <span className="text-muted-foreground/30">·</span>
+              )}
+              <span className="flex items-center gap-0.5">
+                <MessageSquare className="h-3 w-3" />
+                {thread.messageCount} message{thread.messageCount !== 1 ? "s" : ""}
+              </span>
+              <ThreadTypeBadge type={thread.threadType} />
+              <span className="flex items-center gap-0.5">
+                <Star className="h-3 w-3" />
+                {thread.stars}
+              </span>
+            </div>
+            <div className="rounded-lg bg-secondary/50 border-l-2 border-border px-3 py-2">
+              <p className="text-xs text-muted-foreground line-clamp-1">
+                {thread.openingPrompt}
+              </p>
+            </div>
+          </div>
         </div>
+      </Link>
 
-        {/* Content */}
-        <div className="flex-1 min-w-0">
-          <h3 className="text-sm font-semibold text-foreground leading-snug mb-1">
-            {thread.title}
-          </h3>
-
-          <div className="flex items-center gap-2 flex-wrap text-xs text-muted-foreground mb-2">
-            <span className="font-medium text-foreground/80">{thread.author.username.replace("_", " ")}</span>
-            <span>{getTimeAgo(thread.createdAt)}</span>
-            <span className="text-muted-foreground/40">—</span>
-            <DiffStats stats={thread.diffStats} />
-            {(thread.diffStats.added > 0 || thread.diffStats.removed > 0 || thread.diffStats.modified > 0) && (
-              <span className="text-muted-foreground/30">·</span>
-            )}
-            <span className="flex items-center gap-0.5">
-              <MessageSquare className="h-3 w-3" />
-              {thread.messageCount} message{thread.messageCount !== 1 ? "s" : ""}
-            </span>
-            <ThreadTypeBadge type={thread.threadType} />
-            <span className="flex items-center gap-0.5">
-              <Star className="h-3 w-3" />
-              {thread.stars}
-            </span>
-          </div>
-
-          <div className="rounded-lg bg-secondary/50 border-l-2 border-border px-3 py-2">
-            <p className="text-xs text-muted-foreground line-clamp-1">
-              {thread.openingPrompt}
-            </p>
-          </div>
+      {/* Engagement summary */}
+      <div className="flex items-center justify-between px-4 sm:px-6 py-1.5 text-xs text-muted-foreground">
+        <div className="flex items-center gap-1">
+          {likeCount > 0 && (
+            <>
+              <span className="inline-flex items-center justify-center h-[18px] w-[18px] rounded-full bg-primary text-primary-foreground">
+                <Heart className="h-2.5 w-2.5 fill-current" />
+              </span>
+              <span>{likeCount}</span>
+            </>
+          )}
+        </div>
+        <div className="flex items-center gap-3">
+          {comments.length > 0 && (
+            <span>{comments.length} comment{comments.length !== 1 ? "s" : ""}</span>
+          )}
         </div>
       </div>
-    </Link>
+
+      {/* Action buttons */}
+      <div className="flex items-center border-t border-border mx-4 sm:mx-6">
+        <button
+          onClick={handleLike}
+          className={`flex-1 flex items-center justify-center gap-2 py-2 text-sm font-medium transition-colors cursor-pointer rounded-md my-0.5 ${
+            liked ? "text-red-500" : "text-muted-foreground hover:bg-secondary"
+          }`}
+        >
+          <Heart className={`h-4 w-4 ${liked ? "fill-red-500" : ""}`} />
+          Like
+        </button>
+        <button
+          onClick={(e) => { e.preventDefault(); e.stopPropagation(); inputRef.current?.focus(); }}
+          className="flex-1 flex items-center justify-center gap-2 py-2 text-sm font-medium text-muted-foreground hover:bg-secondary transition-colors cursor-pointer rounded-md my-0.5"
+        >
+          <MessageSquare className="h-4 w-4" />
+          Comment
+        </button>
+        <button
+          onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
+          className="flex-1 flex items-center justify-center gap-2 py-2 text-sm font-medium text-muted-foreground hover:bg-secondary transition-colors cursor-pointer rounded-md my-0.5"
+        >
+          <Share2 className="h-4 w-4" />
+          Share
+        </button>
+      </div>
+
+      {/* Comments section */}
+      <div className="border-t border-border">
+        {comments.length > 2 && !showAllComments && (
+          <button
+            onClick={() => setShowAllComments(true)}
+            className="text-xs font-medium text-muted-foreground hover:text-foreground cursor-pointer px-4 sm:px-6 pt-2"
+          >
+            View all {comments.length} comments
+          </button>
+        )}
+        {comments.length > 0 && (
+          <div className="px-4 sm:px-6 pt-2 pb-0.5 space-y-2.5">
+            {(showAllComments ? comments : comments.slice(-2)).map((comment) => (
+              <div key={comment.id} className="flex gap-2">
+                <div className="h-7 w-7 rounded-full bg-secondary flex items-center justify-center text-2xs font-semibold text-muted-foreground shrink-0">
+                  {comment.author[0].toUpperCase()}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm leading-snug">
+                    <span className="font-semibold text-foreground">@{comment.author}</span>
+                    <span className="text-foreground ml-1">{comment.content}</span>
+                  </p>
+                  <div className="flex items-center gap-3 mt-0.5">
+                    <span className="text-xs text-muted-foreground">{comment.timeAgo}</span>
+                    <button className="text-xs text-muted-foreground hover:text-foreground font-semibold cursor-pointer">Like</button>
+                    <button className="text-xs text-muted-foreground hover:text-foreground font-semibold cursor-pointer">Reply</button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+        <div className="flex items-center gap-2 px-4 sm:px-6 py-3">
+          <div className="h-7 w-7 rounded-full bg-primary/10 flex items-center justify-center text-2xs font-semibold text-primary shrink-0">
+            Y
+          </div>
+          <input
+            ref={inputRef}
+            type="text"
+            value={commentText}
+            onChange={(e) => setCommentText(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && commentText.trim()) {
+                e.preventDefault();
+                e.stopPropagation();
+                setComments(prev => [...prev, {
+                  id: `new-${Date.now()}`,
+                  author: "you",
+                  content: commentText.trim(),
+                  timeAgo: "just now",
+                }]);
+                setCommentText("");
+              }
+            }}
+            placeholder="Write a comment..."
+            onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
+            className="flex-1 text-sm bg-secondary/40 rounded-full px-3.5 py-2 placeholder:text-muted-foreground text-foreground outline-none focus:bg-card focus:ring-1 focus:ring-border transition-all"
+          />
+        </div>
+      </div>
+    </div>
   );
 }
 

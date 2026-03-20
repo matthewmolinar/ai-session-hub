@@ -48,10 +48,10 @@ export default function SessionView() {
         turns: thread.messageCount,
         filesChanged: thread.diffStats.added + thread.diffStats.removed + thread.diffStats.modified,
         forks: 0,
-        likes: thread.stars,
+        likes: thread.likes,
         tags: [],
         sparkline: [],
-        comments: [],
+        comments: thread.comments,
       } satisfies Session;
     }
     return SESSION_DETAIL;
