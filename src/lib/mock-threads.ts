@@ -233,8 +233,9 @@ export const THREADS: Thread[] = [
     repository: "tanagram/monorepo:feat/suggested-policy-has-TQL",
     threadType: "github-app",
     stars: 0,
+    likes: 0,
+    comments: [],
     openingPrompt:
-      "We will be fixing some issues in this branch If the issue i give you is false just tell me why or esle fix it github-app/src/database/models/su...",
   },
   {
     id: "t6",
