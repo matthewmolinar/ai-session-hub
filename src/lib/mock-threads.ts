@@ -240,6 +240,7 @@ export const THREADS: Thread[] = [
     likes: 0,
     comments: [],
     openingPrompt:
+      "We will be fixing some issues in this branch If the issue i give you is false just tell me why or esle fix it github-app/src/database/models/su...",
   },
   {
     id: "t6",
