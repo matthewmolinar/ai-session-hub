@@ -4,6 +4,7 @@ import { Coins, FileCode, MessageSquare, Share2, Terminal, Zap, ChevronDown } fr
 import { TranscriptTurn } from "@/components/TranscriptTurn";
 import { ModelBadge } from "@/components/ModelBadge";
 import { SESSION_DETAIL, SESSIONS } from "@/lib/mock-data";
+import { THREADS } from "@/lib/mock-threads";
 import type { Session, Turn } from "@/lib/mock-data";
 import type { Comment } from "@/components/TurnComment";
 
