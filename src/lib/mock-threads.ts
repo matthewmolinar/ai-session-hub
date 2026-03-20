@@ -1,4 +1,4 @@
-import type { Turn, SessionComment } from "./mock-data";
+import type { Turn } from "./mock-data";
 
 export interface Thread {
   id: string;
@@ -13,8 +13,6 @@ export interface Thread {
   repository: string;
   threadType: "github-app" | "slack" | "manual" | "cli";
   stars: number;
-  likes: number;
-  comments: SessionComment[];
   openingPrompt: string;
   transcript?: Turn[];
 }
@@ -55,10 +53,6 @@ export const THREADS: Thread[] = [
     repository: "tanagram/monorepo:main",
     threadType: "github-app",
     stars: 0,
-    likes: 3,
-    comments: [
-      { id: "tc1", author: "jondesr", content: "Great summary — the CLI status change is exactly what I was looking for.", timeAgo: "1h" },
-    ],
     openingPrompt:
       'can yout tell me about webui/ changes related to repos page and dynamic webui bar (with the new "cli"), and things related to changes in onboarding within webui/ ever since sunday',
     transcript: [
@@ -92,11 +86,6 @@ export const THREADS: Thread[] = [
     repository: "tanagram/monorepo:main",
     threadType: "github-app",
     stars: 0,
-    likes: 5,
-    comments: [
-      { id: "tc2", author: "shlok_mundhra", content: "Good catch on the return_exceptions=True pattern. We should audit other orchestrators for the same issue.", timeAgo: "30m" },
-      { id: "tc3", author: "shivansh_jagga", content: "The PR looks clean. +1 on merging.", timeAgo: "20m" },
-    ],
     openingPrompt:
       "Review PR#2293 that fixes Sentry issue 7330976344. Why was the exception that was created by this issue not failing the entire Inngest function for check run orchestrator?",
     transcript: [
@@ -205,8 +194,6 @@ export const THREADS: Thread[] = [
     repository: "tanagram/monorepo:main",
     threadType: "github-app",
     stars: 0,
-    likes: 2,
-    comments: [],
     openingPrompt:
       "Your task is to identify why the github owner and github repository tags are not appearing for traces of inngest process-check-run-orche...",
   },
@@ -220,10 +207,6 @@ export const THREADS: Thread[] = [
     repository: "tanagram/monorepo:feat/suggested-policy-has-TQL",
     threadType: "github-app",
     stars: 0,
-    likes: 1,
-    comments: [
-      { id: "tc4", author: "jondesr", content: "The regex fix from \".\" to \".*\" should also be applied in test_policy_builder.", timeAgo: "2h" },
-    ],
     openingPrompt:
       'check what changes were done in commit f28763e96 There was a change from [".*"] to ["."] in normal evaluations which needs to be resolved',
   },
@@ -237,8 +220,6 @@ export const THREADS: Thread[] = [
     repository: "tanagram/monorepo:feat/suggested-policy-has-TQL",
     threadType: "github-app",
     stars: 0,
-    likes: 0,
-    comments: [],
     openingPrompt:
       "We will be fixing some issues in this branch If the issue i give you is false just tell me why or esle fix it github-app/src/database/models/su...",
   },
@@ -252,10 +233,6 @@ export const THREADS: Thread[] = [
     repository: "tanagram/monorepo:main",
     threadType: "github-app",
     stars: 0,
-    likes: 4,
-    comments: [
-      { id: "tc5", author: "feifanz", content: "Is this related to the health check timeout we saw yesterday?", timeAgo: "3h" },
-    ],
     openingPrompt:
       "We have a problem in which FastAPI in dev mode notices code changes and reloads - but the new server fails to register with Inngest",
   },
@@ -269,8 +246,6 @@ export const THREADS: Thread[] = [
     repository: "tanagram/monorepo:suggestions/observability",
     threadType: "github-app",
     stars: 0,
-    likes: 0,
-    comments: [],
     openingPrompt:
       "do a git diff main to understand exactly what has been done VErify that complete observality has been added to the suggestions block fo...",
   },
@@ -284,8 +259,6 @@ export const THREADS: Thread[] = [
     repository: "tanagram/monorepo:main",
     threadType: "github-app",
     stars: 0,
-    likes: 1,
-    comments: [],
     openingPrompt:
       "Update the VSCode launch config for FastAPI to use FastAPI dev mode instead of current uvicorn with reload",
   },
