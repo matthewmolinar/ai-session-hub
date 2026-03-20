@@ -176,12 +176,14 @@ export function AppHeader() {
       {/* Mobile menu */}
       {mobileMenuOpen && (
         <div className="sm:hidden border-b border-border bg-card px-4 py-3 space-y-1 z-40 relative">
-          <Link
-            to="/my-sessions"
-            className={`block px-3 py-2 rounded-md text-sm transition-colors ${location.pathname === "/my-sessions" || location.pathname === "/" ? "bg-secondary text-foreground font-medium" : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"}`}
-          >
-            Explorer
-          </Link>
+          {FEATURE_FLAGS.EXPLORER_ENABLED && (
+            <Link
+              to="/my-sessions"
+              className={`block px-3 py-2 rounded-md text-sm transition-colors ${location.pathname === "/my-sessions" || location.pathname === "/" ? "bg-secondary text-foreground font-medium" : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"}`}
+            >
+              Explorer
+            </Link>
+          )}
           <Link
             to="/explore"
             className={`block px-3 py-2 rounded-md text-sm transition-colors ${location.pathname === "/explore" ? "bg-secondary text-foreground font-medium" : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"}`}

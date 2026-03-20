@@ -33,9 +33,18 @@ function AppContent() {
       <Breadcrumbs />
       <div className="flex-1 flex flex-col overflow-hidden">
         <Routes>
-          <Route path="/" element={<MySessions />} />
+          {FEATURE_FLAGS.EXPLORER_ENABLED ? (
+            <>
+              <Route path="/" element={<MySessions />} />
+              <Route path="/my-sessions" element={<MySessions />} />
+            </>
+          ) : (
+            <>
+              <Route path="/" element={<Navigate to="/explore" replace />} />
+              <Route path="/my-sessions" element={<Navigate to="/explore" replace />} />
+            </>
+          )}
           <Route path="/explore" element={<Index />} />
-          <Route path="/my-sessions" element={<MySessions />} />
           <Route path="/session/:id" element={<SessionView />} />
           <Route path="/profile/:username" element={<Profile />} />
           <Route path="*" element={<NotFound />} />
