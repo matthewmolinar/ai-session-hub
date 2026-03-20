@@ -272,6 +272,7 @@ export const THREADS: Thread[] = [
     likes: 0,
     comments: [],
     openingPrompt:
+      "do a git diff main to understand exactly what has been done VErify that complete observality has been added to the suggestions block fo...",
   },
   {
     id: "t8",
