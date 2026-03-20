@@ -60,6 +60,7 @@ export const THREADS: Thread[] = [
       { id: "tc1", author: "jondesr", content: "Great summary — the CLI status change is exactly what I was looking for.", timeAgo: "1h" },
     ],
     openingPrompt:
+      'can yout tell me about webui/ changes related to repos page and dynamic webui bar (with the new "cli"), and things related to changes in onboarding within webui/ ever since sunday',
     transcript: [
       {
         id: 1,
