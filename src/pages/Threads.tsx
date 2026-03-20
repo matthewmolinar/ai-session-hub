@@ -17,9 +17,9 @@ function DiffStats({ stats }: { stats: Thread["diffStats"] }) {
   if (added === 0 && removed === 0 && modified === 0) return null;
   return (
     <span className="text-xs font-mono">
-      {added > 0 && <span className="text-emerald-600">+{added}</span>}
+      {added > 0 && <span className="text-[hsl(142,60%,30%)]">+{added}</span>}
       {removed > 0 && <span className="text-destructive">{removed > 0 ? `−${removed}` : ""}</span>}
-      {modified > 0 && <span className="text-amber-600">~{modified}</span>}
+      {modified > 0 && <span className="text-[hsl(38,80%,45%)]">~{modified}</span>}
     </span>
   );
 }
