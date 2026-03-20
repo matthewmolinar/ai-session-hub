@@ -110,9 +110,9 @@ function ThreadRow({ thread }: { thread: Thread }) {
 
 export default function Threads() {
   const [search, setSearch] = useState("");
-  const [user, setUser] = useState(THREAD_USERS[0]);
-  const [repo, setRepo] = useState(THREAD_REPOS[0]);
-  const [threadType, setThreadType] = useState(THREAD_TYPES[0]);
+  const [user, setUser] = useState<string>(THREAD_USERS[0]);
+  const [repo, setRepo] = useState<string>(THREAD_REPOS[0]);
+  const [threadType, setThreadType] = useState<string>(THREAD_TYPES[0]);
 
   const filtered = THREADS.filter((t) => {
     if (search) {
