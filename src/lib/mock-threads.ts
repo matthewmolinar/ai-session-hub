@@ -287,5 +287,6 @@ export const THREADS: Thread[] = [
     likes: 1,
     comments: [],
     openingPrompt:
+      "Update the VSCode launch config for FastAPI to use FastAPI dev mode instead of current uvicorn with reload",
   },
 ];
