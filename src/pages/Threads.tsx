@@ -35,12 +35,9 @@ function ThreadTypeBadge({ type }: { type: Thread["threadType"] }) {
 }
 
 const TEAM_MEMBERS = [
-  { username: "sarah_edo", role: "Staff Engineer", online: true },
-  { username: "danabramov", role: "Frontend Lead", online: true },
-  { username: "tkdodo", role: "Senior Engineer", online: false },
-  { username: "phil_eaton", role: "Backend Engineer", online: true },
-  { username: "jh3yy", role: "Design Engineer", online: false },
-  { username: "fasterthanlime", role: "Systems Engineer", online: false },
+  { username: "jondesr", role: "Backend Engineer", online: true },
+  { username: "shlok_mundhra", role: "Senior Engineer", online: true },
+  { username: "shivansh_jagga", role: "Frontend Engineer", online: true },
 ];
 
 function ThreadRow({ thread }: { thread: Thread }) {
