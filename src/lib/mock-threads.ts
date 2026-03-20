@@ -1,4 +1,4 @@
-import type { Turn } from "./mock-data";
+import type { Turn, SessionComment } from "./mock-data";
 
 export interface Thread {
   id: string;
@@ -13,6 +13,8 @@ export interface Thread {
   repository: string;
   threadType: "github-app" | "slack" | "manual" | "cli";
   stars: number;
+  likes: number;
+  comments: SessionComment[];
   openingPrompt: string;
   transcript?: Turn[];
 }
