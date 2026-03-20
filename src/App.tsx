@@ -45,6 +45,7 @@ function AppContent() {
               <Route path="/my-sessions" element={<Navigate to="/explore" replace />} />
             </>
           )}
+          <Route path="/threads" element={<Threads />} />
           <Route path="/explore" element={<Index />} />
           <Route path="/session/:id" element={<SessionView />} />
           <Route path="/profile/:username" element={<Profile />} />
