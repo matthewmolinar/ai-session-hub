@@ -12,6 +12,7 @@ import Index from "./pages/Index";
 import SessionView from "./pages/SessionView";
 import Profile from "./pages/Profile";
 import MySessions from "./pages/MySessions";
+import Threads from "./pages/Threads";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
