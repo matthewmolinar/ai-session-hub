@@ -247,8 +247,11 @@ export const THREADS: Thread[] = [
     repository: "tanagram/monorepo:main",
     threadType: "github-app",
     stars: 0,
+    likes: 4,
+    comments: [
+      { id: "tc5", author: "feifanz", content: "Is this related to the health check timeout we saw yesterday?", timeAgo: "3h" },
+    ],
     openingPrompt:
-      "We have a problem in which FastAPI in dev mode notices code changes and reloads - but the new server fails to register with Inngest",
   },
   {
     id: "t7",
