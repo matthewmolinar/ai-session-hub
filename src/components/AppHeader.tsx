@@ -5,6 +5,7 @@ import tanagramLogo from "@/assets/tanagram-logo.svg";
 import { SESSIONS } from "@/lib/mock-data";
 import { useAuth } from "@/contexts/AuthContext";
 import { useMySessionsState } from "@/contexts/MySessionsContext";
+import { FEATURE_FLAGS } from "@/lib/feature-flags";
 import { AuthModal } from "@/components/AuthModal";
 import {
   DropdownMenu,
@@ -85,18 +86,20 @@ export function AppHeader() {
 
         {/* Desktop nav */}
         <nav className="hidden sm:flex items-center gap-1 text-sm">
-          <Link
-            to="/my-sessions"
-            className={`px-3 py-1.5 rounded-md transition-colors ${location.pathname === "/my-sessions" || location.pathname === "/" ? "bg-secondary text-foreground font-medium" : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"}`}
-          >
-            Explorer
-          </Link>
+          {FEATURE_FLAGS.EXPLORER_ENABLED && (
+            <Link
+              to="/my-sessions"
+              className={`px-3 py-1.5 rounded-md transition-colors ${location.pathname === "/my-sessions" || location.pathname === "/" ? "bg-secondary text-foreground font-medium" : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"}`}
+            >
+              Explorer
+            </Link>
+          )}
           <Link
             to="/explore"
             className={`relative px-3 py-1.5 rounded-md transition-colors ${location.pathname === "/explore" ? "bg-secondary text-foreground font-medium" : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"}`}
           >
             Feed
-            {location.pathname !== "/explore" && (
+            {FEATURE_FLAGS.EXPLORER_ENABLED && location.pathname !== "/explore" && (
               <span className="absolute -top-0.5 -right-0.5 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-destructive text-destructive-foreground text-[10px] font-semibold px-1">
                 3
               </span>
@@ -173,12 +176,14 @@ export function AppHeader() {
       {/* Mobile menu */}
       {mobileMenuOpen && (
         <div className="sm:hidden border-b border-border bg-card px-4 py-3 space-y-1 z-40 relative">
-          <Link
-            to="/my-sessions"
-            className={`block px-3 py-2 rounded-md text-sm transition-colors ${location.pathname === "/my-sessions" || location.pathname === "/" ? "bg-secondary text-foreground font-medium" : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"}`}
-          >
-            Explorer
-          </Link>
+          {FEATURE_FLAGS.EXPLORER_ENABLED && (
+            <Link
+              to="/my-sessions"
+              className={`block px-3 py-2 rounded-md text-sm transition-colors ${location.pathname === "/my-sessions" || location.pathname === "/" ? "bg-secondary text-foreground font-medium" : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"}`}
+            >
+              Explorer
+            </Link>
+          )}
           <Link
             to="/explore"
             className={`block px-3 py-2 rounded-md text-sm transition-colors ${location.pathname === "/explore" ? "bg-secondary text-foreground font-medium" : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"}`}
