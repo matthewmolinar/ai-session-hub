@@ -87,7 +87,102 @@ export const THREADS: Thread[] = [
     threadType: "github-app",
     stars: 0,
     openingPrompt:
-      "Review PR#2293 that fixes Sentry issue 7330976344. Why was the exception that was created by this issue not failing the entire Ingest ...",
+      "Review PR#2293 that fixes Sentry issue 7330976344. Why was the exception that was created by this issue not failing the entire Inngest function for check run orchestrator?",
+    transcript: [
+      {
+        id: 1,
+        role: "user",
+        content:
+          "Review PR#2293 that fixes Sentry issue 7330976344. Why was the exception that was created by this issue not failing the entire Inngest function for check run orchestrator?",
+        timestamp: "13:07",
+        intentSummary: "Investigate exception handling in check-run orchestrator",
+        usage: { inputTokens: 48, outputTokens: 0, cost: 0.0002 },
+      },
+      {
+        id: 2,
+        role: "assistant",
+        content:
+          "I inspected PR #2293 and traced the check-run orchestrator flow. Here's what I found:\n\n**Why the exception didn't fail the Inngest function:**\n\n`process_check_run_orchestrator` runs PR processing with `asyncio.gather(..., return_exceptions=True)`, then logs exceptions instead of re-raising. After logging, the orchestrator unconditionally completes the check run as success, so Inngest sees the function as successful and does not trigger `on_failure`.\n\nSentry confirms the error was handled (`handled: yes`, mechanism: `logging`), matching the `logger.error(..., exc_info=...)` path.\n\n**Root cause of this specific issue:**\n\n1. Suggested policy violations carried IDs like `sup_...`\n2. Comment upsert called prior-count lookup in `process_pr.py`, which called `PolicyExecution.get_total_violations_count_by_policy_ids`\n3. That method parses every ID as a regular Policy external ID, which failed on `sup_...`, raising `InvalidExternalIDError`\n4. The exception bubbled out of `_process_single_pr`, but was absorbed by `gather(..., return_exceptions=True)`\n\n**PR #2293 fix:** Excludes suggested-policy violations from prior-count lookup via `_should_include_in_prior_count_lookup`, preventing `sup_...` IDs from reaching `Policy.parse_id_to_uuid`. Also fixes regex from `\".\"` to `\".*\"` for matching all changed lines.",
+        timestamp: "13:09",
+        intentSummary: "Exception swallowed by gather(return_exceptions=True)",
+        usage: { inputTokens: 8200, outputTokens: 5400, cost: 0.082 },
+        diff: [
+          {
+            filename: "github-app/src/inngest/functions/check_run/process_pr.py",
+            lines: [
+              { type: "add", content: "SUGGESTED_POLICY_SOURCE_TYPE = \"suggested_policy\"" },
+              { type: "add", content: "" },
+              { type: "context", content: "def _policy_ids_for_prior_count_lookup(" },
+              { type: "context", content: "  violations_with_policy_ids: list[ViolationWithPolicyId]," },
+              { type: "context", content: ") -> list[str]:" },
+              { type: "remove", content: "  return sorted({result.policy_id for result in violations_with_policy_ids if result.policy_id})" },
+              { type: "add", content: "  policy_ids: set[str] = set()" },
+              { type: "add", content: "  for violation_with_policy_id in violations_with_policy_ids:" },
+              { type: "add", content: "    if _should_include_in_prior_count_lookup(violation_with_policy_id):" },
+              { type: "add", content: "      policy_ids.add(violation_with_policy_id.policy_id)" },
+              { type: "add", content: "  return sorted(policy_ids)" },
+            ],
+          },
+        ],
+      },
+      {
+        id: 3,
+        role: "user",
+        content: "I changed the code. Will exceptions bubble up now?",
+        timestamp: "13:15",
+        intentSummary: "Verify exception propagation after edit",
+        usage: { inputTokens: 22, outputTokens: 0, cost: 0.0001 },
+      },
+      {
+        id: 4,
+        role: "assistant",
+        content:
+          "Yes. With your current change, exceptions from `_process_single_pr` will now bubble up to `process_check_run_orchestrator`.\n\nYou removed `return_exceptions=True` from `gather`, so `asyncio.gather` uses default behavior: the first raised exception propagates to the caller. You also removed the post-processing block that logged and swallowed per-PR exceptions, so there is no longer a catch-and-continue path.\n\n**Net effect:** a PR-processing exception should fail the orchestrator run and allow Inngest failure handling (`on_failure`) to run.",
+        timestamp: "13:16",
+        intentSummary: "Confirmed exceptions now propagate",
+        usage: { inputTokens: 4800, outputTokens: 2200, cost: 0.042 },
+        diff: [
+          {
+            filename: "github-app/src/inngest/functions/check_run/orchestrator.py",
+            lines: [
+              { type: "context", content: "    pr_results_list = await gather(*[" },
+              { type: "context", content: "      _process_single_pr(" },
+              { type: "context", content: "        pull_request=pr," },
+              { type: "remove", content: "      ]," },
+              { type: "remove", content: "      return_exceptions=True," },
+              { type: "add", content: "      ]" },
+              { type: "context", content: "    )" },
+              { type: "remove", content: "    # Filter out exceptions and flatten results from all PRs" },
+              { type: "remove", content: "    # Log exceptions but don't fail the entire batch if one PR fails" },
+              { type: "remove", content: "    results = []" },
+              { type: "remove", content: "    for i, pr_result in enumerate(pr_results_list):" },
+              { type: "remove", content: "      if isinstance(pr_result, Exception):" },
+              { type: "remove", content: "        pr_number = webhook.check_run.pull_requests[i].number" },
+              { type: "remove", content: "        logger.error(f\"Failed to process PR #{pr_number}: {pr_result}\", exc_info=pr_result)" },
+              { type: "remove", content: "      elif isinstance(pr_result, list):" },
+              { type: "remove", content: "        results.extend(pr_result)" },
+            ],
+          },
+        ],
+      },
+      {
+        id: 5,
+        role: "user",
+        content: "Create a PR",
+        timestamp: "13:20",
+        intentSummary: "Create GitHub PR",
+        usage: { inputTokens: 8, outputTokens: 0, cost: 0.0001 },
+      },
+      {
+        id: 6,
+        role: "assistant",
+        content:
+          "PR created: [#2295 — Bubble check-run PR processing exceptions](https://github.com/tanagram/monorepo/pull/2295)\n\nIncluded in the PR:\n\n`src/inngest/functions/check_run/orchestrator.py` now lets `_process_single_pr` exceptions propagate by removing `return_exceptions=True` handling and the swallow/log-only block.\n\nValidation:\n- `ruff format` ✓\n- `ruff check` ✓\n- `pytest tests/inngest/test_parallel_pr_processing.py` — 5 passed",
+        timestamp: "13:22",
+        intentSummary: "PR #2295 created",
+        usage: { inputTokens: 3200, outputTokens: 1800, cost: 0.032 },
+      },
+    ],
   },
   {
     id: "t3",
