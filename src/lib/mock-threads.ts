@@ -277,7 +277,8 @@ export const THREADS: Thread[] = [
     repository: "tanagram/monorepo:main",
     threadType: "github-app",
     stars: 0,
+    likes: 1,
+    comments: [],
     openingPrompt:
-      "Update the VSCode launch config for FastAPI to use FastAPI dev mode instead of current uvicorn with reload",
   },
 ];
