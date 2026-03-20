@@ -1,3 +1,5 @@
+import type { Turn } from "./mock-data";
+
 export interface Thread {
   id: string;
   title: string;
@@ -12,6 +14,7 @@ export interface Thread {
   threadType: "github-app" | "slack" | "manual" | "cli";
   stars: number;
   openingPrompt: string;
+  transcript?: Turn[];
 }
 
 export const THREAD_TYPES = ["All thread types", "github-app", "slack", "manual", "cli"] as const;
