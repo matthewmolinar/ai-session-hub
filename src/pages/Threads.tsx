@@ -1,0 +1,189 @@
+import { useState } from "react";
+import { Search, ChevronDown, Star, GitBranch, MessageSquare } from "lucide-react";
+import { THREADS, THREAD_REPOS, THREAD_USERS, THREAD_TYPES, type Thread } from "@/lib/mock-threads";
+
+function getTimeAgo(dateStr: string): string {
+  const diff = Date.now() - new Date(dateStr).getTime();
+  const mins = Math.floor(diff / 60000);
+  if (mins < 60) return `${mins}m ago`;
+  const hours = Math.floor(mins / 60);
+  if (hours < 24) return `${hours}h ago`;
+  const days = Math.floor(hours / 24);
+  return `${days}d ago`;
+}
+
+function DiffStats({ stats }: { stats: Thread["diffStats"] }) {
+  const { added, removed, modified } = stats;
+  if (added === 0 && removed === 0 && modified === 0) return null;
+  return (
+    <span className="text-xs font-mono">
+      {added > 0 && <span className="text-[hsl(142,60%,30%)]">+{added}</span>}
+      {removed > 0 && <span className="text-destructive">{removed > 0 ? `−${removed}` : ""}</span>}
+      {modified > 0 && <span className="text-[hsl(38,80%,45%)]">~{modified}</span>}
+    </span>
+  );
+}
+
+function ThreadTypeBadge({ type }: { type: Thread["threadType"] }) {
+  const styles: Record<Thread["threadType"], string> = {
+    "github-app": "bg-secondary text-secondary-foreground",
+    slack: "bg-secondary text-secondary-foreground",
+    manual: "bg-secondary text-secondary-foreground",
+    cli: "bg-secondary text-secondary-foreground",
+  };
+  return (
+    <span className={`inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-2xs font-medium border border-border ${styles[type]}`}>
+      <GitBranch className="h-2.5 w-2.5" />
+      {type}
+    </span>
+  );
+}
+
+function ThreadRow({ thread }: { thread: Thread }) {
+  const [expanded, setExpanded] = useState(false);
+
+  return (
+    <div className="border-b border-border last:border-b-0">
+      <button
+        onClick={() => setExpanded(!expanded)}
+        className="w-full text-left px-4 sm:px-6 py-4 hover:bg-secondary/30 transition-colors cursor-pointer group"
+      >
+        <div className="flex items-start gap-3">
+          {/* Avatar */}
+          <div className="h-9 w-9 rounded-full bg-primary/10 flex items-center justify-center text-sm font-semibold text-primary shrink-0 mt-0.5">
+            {thread.author.username[0].toUpperCase()}
+          </div>
+
+          {/* Content */}
+          <div className="flex-1 min-w-0">
+            {/* Title */}
+            <h3 className="text-sm font-semibold text-foreground leading-snug mb-1">
+              {thread.title}
+            </h3>
+
+            {/* Meta row */}
+            <div className="flex items-center gap-2 flex-wrap text-xs text-muted-foreground mb-2">
+              <span className="font-medium text-foreground/80">{thread.author.username.replace("_", " ")}</span>
+              <span>{getTimeAgo(thread.createdAt)}</span>
+              <span className="text-muted-foreground/40">—</span>
+              <DiffStats stats={thread.diffStats} />
+              {(thread.diffStats.added > 0 || thread.diffStats.removed > 0 || thread.diffStats.modified > 0) && (
+                <span className="text-muted-foreground/30">·</span>
+              )}
+              <span className="flex items-center gap-0.5">
+                <MessageSquare className="h-3 w-3" />
+                {thread.messageCount} message{thread.messageCount !== 1 ? "s" : ""}
+              </span>
+              <ThreadTypeBadge type={thread.threadType} />
+              <span className="flex items-center gap-0.5">
+                <Star className="h-3 w-3" />
+                {thread.stars}
+              </span>
+            </div>
+
+            {/* Opening prompt */}
+            <div className="rounded-lg bg-secondary/50 border-l-2 border-border px-3 py-2">
+              <p className="text-xs text-muted-foreground line-clamp-1">
+                {thread.openingPrompt}
+              </p>
+            </div>
+          </div>
+
+          {/* Expand chevron */}
+          <ChevronDown
+            className={`h-4 w-4 text-muted-foreground shrink-0 mt-1 transition-transform ${expanded ? "rotate-180" : ""}`}
+          />
+        </div>
+      </button>
+
+      {/* Expanded content placeholder */}
+      {expanded && (
+        <div className="px-4 sm:px-6 pb-4 pl-[4.25rem]">
+          <p className="text-sm text-muted-foreground">
+            Thread transcript will appear here...
+          </p>
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default function Threads() {
+  const [search, setSearch] = useState("");
+  const [user, setUser] = useState<string>(THREAD_USERS[0]);
+  const [repo, setRepo] = useState<string>(THREAD_REPOS[0]);
+  const [threadType, setThreadType] = useState<string>(THREAD_TYPES[0]);
+
+  const filtered = THREADS.filter((t) => {
+    if (search) {
+      const q = search.toLowerCase();
+      if (
+        !t.title.toLowerCase().includes(q) &&
+        !t.openingPrompt.toLowerCase().includes(q) &&
+        !t.author.username.toLowerCase().includes(q)
+      )
+        return false;
+    }
+    if (user !== "All users" && t.author.username !== user) return false;
+    if (repo !== "All repositories" && t.repository !== repo) return false;
+    if (threadType !== "All thread types" && t.threadType !== threadType) return false;
+    return true;
+  });
+
+  return (
+    <div className="max-w-[900px] mx-auto px-3 sm:px-4 py-4 sm:py-6">
+      {/* Filter bar */}
+      <div className="flex items-center gap-2 mb-4 flex-wrap">
+        <div className="relative flex-1 min-w-[200px] max-w-sm">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
+          <input
+            type="text"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search threads..."
+            className="w-full bg-card text-sm text-foreground rounded-lg pl-9 pr-3 py-2 border border-border outline-none placeholder:text-muted-foreground focus:ring-1 focus:ring-ring transition-all"
+          />
+        </div>
+
+        <select
+          value={user}
+          onChange={(e) => setUser(e.target.value)}
+          className="bg-card text-foreground text-xs rounded-lg px-3 py-2 border border-border outline-none cursor-pointer hover:border-muted-foreground/40 transition-colors"
+        >
+          {THREAD_USERS.map((u) => (
+            <option key={u} value={u}>{u === "All users" ? "All users" : u.replace("_", " ")}</option>
+          ))}
+        </select>
+
+        <select
+          value={repo}
+          onChange={(e) => setRepo(e.target.value)}
+          className="bg-card text-foreground text-xs rounded-lg px-3 py-2 border border-border outline-none cursor-pointer hover:border-muted-foreground/40 transition-colors hidden sm:block"
+        >
+          {THREAD_REPOS.map((r) => (
+            <option key={r} value={r}>{r}</option>
+          ))}
+        </select>
+
+        <select
+          value={threadType}
+          onChange={(e) => setThreadType(e.target.value)}
+          className="bg-card text-foreground text-xs rounded-lg px-3 py-2 border border-border outline-none cursor-pointer hover:border-muted-foreground/40 transition-colors hidden sm:block"
+        >
+          {THREAD_TYPES.map((t) => (
+            <option key={t} value={t}>{t}</option>
+          ))}
+        </select>
+      </div>
+
+      {/* Thread list */}
+      <div className="rounded-xl border border-border bg-card overflow-hidden">
+        {filtered.length === 0 ? (
+          <p className="text-sm text-muted-foreground text-center py-12">No threads match your filters.</p>
+        ) : (
+          filtered.map((thread) => <ThreadRow key={thread.id} thread={thread} />)
+        )}
+      </div>
+    </div>
+  );
+}

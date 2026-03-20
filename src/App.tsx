@@ -12,6 +12,7 @@ import Index from "./pages/Index";
 import SessionView from "./pages/SessionView";
 import Profile from "./pages/Profile";
 import MySessions from "./pages/MySessions";
+import Threads from "./pages/Threads";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -40,10 +41,11 @@ function AppContent() {
             </>
           ) : (
             <>
-              <Route path="/" element={<Navigate to="/explore" replace />} />
-              <Route path="/my-sessions" element={<Navigate to="/explore" replace />} />
+              <Route path="/" element={<Navigate to="/threads" replace />} />
+              <Route path="/my-sessions" element={<Navigate to="/threads" replace />} />
             </>
           )}
+          <Route path="/threads" element={<Threads />} />
           <Route path="/explore" element={<Index />} />
           <Route path="/session/:id" element={<SessionView />} />
           <Route path="/profile/:username" element={<Profile />} />
