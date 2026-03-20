@@ -217,8 +217,11 @@ export const THREADS: Thread[] = [
     repository: "tanagram/monorepo:feat/suggested-policy-has-TQL",
     threadType: "github-app",
     stars: 0,
+    likes: 1,
+    comments: [
+      { id: "tc4", author: "jondesr", content: "The regex fix from \".\" to \".*\" should also be applied in test_policy_builder.", timeAgo: "2h" },
+    ],
     openingPrompt:
-      'check what changes were done in commit f28763e96 There was a change from [".*"] to ["."] in normal evaluations which needs to be resolved',
   },
   {
     id: "t5",
