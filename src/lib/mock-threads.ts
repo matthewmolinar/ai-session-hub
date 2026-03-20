@@ -54,7 +54,27 @@ export const THREADS: Thread[] = [
     threadType: "github-app",
     stars: 0,
     openingPrompt:
-      'can yout tell me about webui/ changes related to repos page and dynamic webui bar (with the new "cli"), and things related to changes in...',
+      'can yout tell me about webui/ changes related to repos page and dynamic webui bar (with the new "cli"), and things related to changes in onboarding within webui/ ever since sunday',
+    transcript: [
+      {
+        id: 1,
+        role: "user",
+        content:
+          'can yout tell me about webui/ changes related to repos page and dynamic webui bar (with the new "cli"), and things related to changes in onboarding within webui/ ever since sunday',
+        timestamp: "13:30",
+        intentSummary: "Investigate recent webui changes",
+        usage: { inputTokens: 52, outputTokens: 0, cost: 0.0002 },
+      },
+      {
+        id: 2,
+        role: "assistant",
+        content:
+          "I'll look at recent changes in the `webui/` directory since Sunday (March 15, 2026) related to those topics.\n\nHere's what I found across 11 commits:\n\n**CLI Integration Status**\n`Render CLI integration status` (#2263, Mon) — New `CLIIntegrationService` that fetches `/api/integrations/cli/state` with `last_login_at` and `last_eval_at`. IntegrationsBar now shows CLI connection state: green if recently used, yellow (>3 days) or connected but never used, red if not connected. Also removed the old \"Learn from transcripts\" checkbox.\n\n**Onboarding changes**\n`Move \"Reset Onboarding\" button to DebugBar` (#2289, Fri/today) — Removed `StartOnboardingButton` from the integrations/repos page. Added a \"Reset Onboarding\" button to DebugBar (Tanagram-user only) that calls `onboardingService.resetOnboarding()` then re-starts onboarding with all connected repos and reloads.\n\n**Suggestions polling**\n`Implement polling for suggestions` (#2262, Tue) — Overhauled `suggestedPoliciesStore` to support polling; extracted `filterAndMergePolicies` helper; added `stopPolling()` for both policies and suggested-policies stores in the DebugBar toggle.\n\n**WIP commits (yours)**\n- WIP (Mon) — Added `source_file` field to suggested policy model, displayed it in `SuggestedPolicyDetailContent`, and updated `TQLFlowVisualization`.\n- WIP (Thu) — Added `MinePoliciesButton` component on repos page and tweaked `suggestedPoliciesService`.",
+        timestamp: "13:31",
+        intentSummary: "Summary of webui/ changes since Sunday",
+        usage: { inputTokens: 3200, outputTokens: 4800, cost: 0.058 },
+      },
+    ],
   },
   {
     id: "t2",
