@@ -263,8 +263,9 @@ export const THREADS: Thread[] = [
     repository: "tanagram/monorepo:suggestions/observability",
     threadType: "github-app",
     stars: 0,
+    likes: 0,
+    comments: [],
     openingPrompt:
-      "do a git diff main to understand exactly what has been done VErify that complete observality has been added to the suggestions block fo...",
   },
   {
     id: "t8",
