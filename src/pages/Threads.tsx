@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Search, Star, GitBranch, MessageSquare, Circle } from "lucide-react";
+import { Search, Star, GitBranch, MessageSquare, Circle, Heart, Share2 } from "lucide-react";
+import type { SessionComment } from "@/lib/mock-data";
 import { THREADS, THREAD_REPOS, THREAD_USERS, THREAD_TYPES, type Thread } from "@/lib/mock-threads";
 
 function getTimeAgo(dateStr: string): string {
