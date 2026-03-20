@@ -38,6 +38,8 @@ const TEAM_MEMBERS = [
   { username: "jondesr", role: "Backend Engineer", online: true },
   { username: "shlok_mundhra", role: "Senior Engineer", online: true },
   { username: "shivansh_jagga", role: "Frontend Engineer", online: true },
+  { username: "feifanz", role: "Engineer", online: false },
+  { username: "molinar", role: "Engineer", online: false },
 ];
 
 function ThreadRow({ thread }: { thread: Thread }) {
