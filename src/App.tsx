@@ -41,8 +41,8 @@ function AppContent() {
             </>
           ) : (
             <>
-              <Route path="/" element={<Navigate to="/explore" replace />} />
-              <Route path="/my-sessions" element={<Navigate to="/explore" replace />} />
+              <Route path="/" element={<Navigate to="/threads" replace />} />
+              <Route path="/my-sessions" element={<Navigate to="/threads" replace />} />
             </>
           )}
           <Route path="/threads" element={<Threads />} />
