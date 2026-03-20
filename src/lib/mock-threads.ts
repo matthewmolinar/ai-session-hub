@@ -203,8 +203,9 @@ export const THREADS: Thread[] = [
     repository: "tanagram/monorepo:main",
     threadType: "github-app",
     stars: 0,
+    likes: 2,
+    comments: [],
     openingPrompt:
-      "Your task is to identify why the github owner and github repository tags are not appearing for traces of inngest process-check-run-orche...",
   },
   {
     id: "t4",
