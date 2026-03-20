@@ -46,7 +46,9 @@ function AppContent() {
             </>
           )}
           <Route path="/threads" element={<Threads />} />
-          <Route path="/explore" element={<Index />} />
+          {FEATURE_FLAGS.FEED_ENABLED && (
+            <Route path="/explore" element={<Index />} />
+          )}
           <Route path="/session/:id" element={<SessionView />} />
           <Route path="/profile/:username" element={<Profile />} />
           <Route path="*" element={<NotFound />} />
