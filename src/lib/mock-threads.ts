@@ -98,6 +98,7 @@ export const THREADS: Thread[] = [
       { id: "tc3", author: "shivansh_jagga", content: "The PR looks clean. +1 on merging.", timeAgo: "20m" },
     ],
     openingPrompt:
+      "Review PR#2293 that fixes Sentry issue 7330976344. Why was the exception that was created by this issue not failing the entire Inngest function for check run orchestrator?",
     transcript: [
       {
         id: 1,
