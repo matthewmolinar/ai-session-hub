@@ -2,6 +2,7 @@ import { useState, useMemo, useCallback } from "react";
 import { useLocation, useSearchParams } from "react-router-dom";
 import { Star, GitBranch, MessageSquare, FileCode, X, Send } from "lucide-react";
 import { THREADS, THREAD_REPOS, THREAD_USERS, type Thread } from "@/lib/mock-threads";
+import { getAvatarGradient } from "@/lib/avatar";
 import { PanelGroup, Panel, PanelResizeHandle } from "react-resizable-panels";
 import { SESSIONS, SESSION_DETAIL } from "@/lib/mock-data";
 import type { Session, Turn } from "@/lib/mock-data";
