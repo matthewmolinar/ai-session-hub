@@ -117,7 +117,7 @@ export function AppHeader() {
         <div className="flex-1 sm:hidden" />
         <button
           onClick={() => setOpen(true)}
-          className="sm:hidden h-8 w-8 flex items-center justify-center rounded-md text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
+          className="sm:hidden h-8 w-8 flex items-center justify-center rounded-md text-[hsl(var(--header-muted))] hover:text-[hsl(var(--header-foreground))] hover:bg-white/10 transition-colors"
         >
           <Search className="h-4 w-4" />
         </button>
