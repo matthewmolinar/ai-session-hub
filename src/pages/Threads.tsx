@@ -119,7 +119,7 @@ function ThreadRow({
             <ThreadTypeBadge type={thread.threadType} />
           </div>
 
-          <div className="rounded-lg bg-secondary/50 border-l-2 border-primary/30 px-3 py-2">
+          <div className="rounded-lg bg-secondary/50 px-3 py-2">
             <p className="text-xs text-muted-foreground line-clamp-1">
               {thread.openingPrompt}
             </p>
