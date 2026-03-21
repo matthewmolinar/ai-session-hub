@@ -141,53 +141,6 @@ export default function Threads() {
           )}
         </div>
       </div>
-
-      {/* Right sidebar */}
-      <aside className="hidden lg:block w-[280px] shrink-0">
-        <div className="sticky top-[60px] space-y-4 overflow-y-auto max-h-[calc(100vh-72px)] pr-1">
-          {/* Your Team */}
-          <div className="rounded-xl border border-border bg-card p-4">
-            <div className="flex items-center justify-between mb-3">
-              <h3 className="text-sm font-semibold text-foreground">Your Team</h3>
-              <span className="text-xs text-muted-foreground">{onlineCount} online</span>
-            </div>
-            <div className="space-y-1">
-              {TEAM_MEMBERS.map((member) => (
-                <button
-                  key={member.username}
-                  className="w-full flex items-center gap-2.5 px-2 py-2 rounded-lg hover:bg-secondary transition-colors text-left cursor-pointer"
-                >
-                  <div className="relative">
-                    <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center text-xs font-semibold text-primary">
-                      {member.username[0].toUpperCase()}
-                    </div>
-                    {member.online && (
-                      <Circle className="absolute -bottom-0.5 -right-0.5 h-3 w-3 fill-emerald-500 text-card stroke-[3]" />
-                    )}
-                  </div>
-                  <div className="min-w-0">
-                    <p className="text-sm font-medium text-foreground truncate">@{member.username}</p>
-                    <p className="text-xs text-muted-foreground truncate">{member.role}</p>
-                  </div>
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Trending Skills */}
-          <div className="rounded-xl border border-border bg-card p-4">
-            <h3 className="text-sm font-semibold text-foreground mb-3">Trending Skills</h3>
-            <div className="space-y-2">
-              {["/commit", "/review", "/tdd", "/test"].map((skill, i) => (
-                <div key={skill} className="flex items-center justify-between">
-                  <span className="text-sm font-mono text-primary">{skill}</span>
-                  <span className="text-xs text-muted-foreground">{[142, 98, 67, 51][i]} uses today</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </aside>
     </div>
   );
 }
