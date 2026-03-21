@@ -244,7 +244,7 @@ export default function Threads() {
             <select
               value={repo}
               onChange={(e) => setRepo(e.target.value)}
-              className="bg-card text-foreground text-xs rounded-lg pl-3 pr-8 py-2 border border-border outline-none cursor-pointer hover:border-muted-foreground/40 transition-colors min-w-0 truncate"
+              className="bg-secondary text-foreground text-xs font-mono rounded-md pl-3 pr-8 py-2 border border-border outline-none cursor-pointer hover:border-primary/40 transition-colors min-w-0 truncate"
             >
               {THREAD_REPOS.map((r) => (
                 <option key={r} value={r}>{r}</option>
