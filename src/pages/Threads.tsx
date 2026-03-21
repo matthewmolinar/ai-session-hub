@@ -119,9 +119,9 @@ function ThreadRow({
             <ThreadTypeBadge type={thread.threadType} />
           </div>
 
-          <div className="rounded-lg bg-secondary/50 px-3 py-2">
+          <div className="rounded-md bg-secondary/60 px-3 py-2 font-mono">
             <p className="text-xs text-muted-foreground line-clamp-1">
-              {thread.openingPrompt}
+              <span className="text-primary/60 mr-1">$</span>{thread.openingPrompt}
             </p>
           </div>
         </div>
