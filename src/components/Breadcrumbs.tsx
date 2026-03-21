@@ -46,7 +46,7 @@ function useBreadcrumbs(): Crumb[] {
   }
 
   if (path.startsWith("/profile/")) {
-    const username = params.username;
+    const username = path.split("/")[2];
     return [
       { label: parentLabel, to: parentPath },
       { label: `@${username}` },
