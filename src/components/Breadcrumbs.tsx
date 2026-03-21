@@ -30,8 +30,8 @@ function useBreadcrumbs(): Crumb[] {
 
 
   // Determine parent crumb from navigation origin
-  const parentPath = from && ROUTE_LABELS[from] ? from : "/my-sessions";
-  const parentLabel = ROUTE_LABELS[parentPath] ?? "My Sessions";
+  const parentPath = from && ROUTE_LABELS[from] ? from : "/threads";
+  const parentLabel = ROUTE_LABELS[parentPath] ?? "Threads";
 
   if (path.startsWith("/session/")) {
     const sessionId = params.id;
