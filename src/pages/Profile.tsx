@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { MessageSquare, FileCode, Pencil, Star, GitBranch } from "lucide-react";
-import { EditProfileModal } from "@/components/EditProfileModal";
+import { MessageSquare, FileCode, Pencil, Star, GitBranch, Check, X } from "lucide-react";
 import { useProfile } from "@/hooks/useProfile";
 import { THREADS, type Thread } from "@/lib/mock-threads";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/hooks/use-toast";
 
 function getTimeAgo(dateStr: string): string {
   const diff = Date.now() - new Date(dateStr).getTime();
@@ -57,7 +59,12 @@ export default function Profile() {
   const { username } = useParams();
   const navigate = useNavigate();
   const { profile, loading, isOwn, updateProfile } = useProfile(username);
-  const [editOpen, setEditOpen] = useState(false);
+  const [editing, setEditing] = useState(false);
+  const [editUsername, setEditUsername] = useState("");
+  const [editDisplayName, setEditDisplayName] = useState("");
+  const [editBio, setEditBio] = useState("");
+  const [saving, setSaving] = useState(false);
+  const { toast } = useToast();
 
   const allThreads = THREADS.filter((t) => t.author.username === username);
   const threads = allThreads.length > 0 ? allThreads : THREADS.slice(0, 3);
@@ -77,6 +84,34 @@ export default function Profile() {
   const displayUsername = profile?.username || username;
   const bio = profile?.bio || "No bio yet";
 
+  const startEditing = () => {
+    setEditUsername(profile?.username || "");
+    setEditDisplayName(profile?.display_name || "");
+    setEditBio(profile?.bio || "");
+    setEditing(true);
+  };
+
+  const cancelEditing = () => setEditing(false);
+
+  const handleSave = async () => {
+    setSaving(true);
+    const result = await updateProfile({
+      username: editUsername.trim(),
+      display_name: editDisplayName.trim(),
+      bio: editBio.trim(),
+    });
+    setSaving(false);
+    if (result.error) {
+      toast({ title: "Error", description: result.error, variant: "destructive" });
+    } else {
+      toast({ title: "Profile updated" });
+      setEditing(false);
+      if (editUsername.trim() !== profile?.username) {
+        navigate(`/profile/${editUsername.trim()}`, { replace: true });
+      }
+    }
+  };
+
   return (
     <div className="max-w-2xl mx-auto px-3 sm:px-4 py-4 sm:py-6">
       {/* Profile header */}
@@ -86,31 +121,78 @@ export default function Profile() {
             {displayName[0].toUpperCase()}
           </div>
           <div className="flex-1">
-            <div className="flex items-center gap-2">
-              <h1 className="text-lg font-semibold text-foreground">@{displayUsername}</h1>
-              {isOwn && (
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setEditOpen(true)}
-                  className="h-7 px-2 text-xs text-muted-foreground"
-                >
-                  <Pencil className="h-3 w-3 mr-1" />
-                  Edit
-                </Button>
-              )}
-            </div>
-            <p className="text-xs text-muted-foreground mt-0.5">{bio}</p>
-            <div className="flex items-center gap-4 mt-2 text-xs text-muted-foreground">
-              <span className="flex items-center gap-1">
-                <MessageSquare className="h-3 w-3" />
-                {totalMessages} total messages
-              </span>
-              <span className="flex items-center gap-1">
-                <FileCode className="h-3 w-3" />
-                {totalFiles} files changed
-              </span>
-            </div>
+            {editing ? (
+              <div className="flex flex-col gap-2">
+                <div>
+                  <label className="text-2xs font-medium text-muted-foreground mb-0.5 block">Username</label>
+                  <Input
+                    value={editUsername}
+                    onChange={(e) => setEditUsername(e.target.value)}
+                    required
+                    maxLength={30}
+                    className="h-8 text-sm"
+                  />
+                </div>
+                <div>
+                  <label className="text-2xs font-medium text-muted-foreground mb-0.5 block">Display Name</label>
+                  <Input
+                    value={editDisplayName}
+                    onChange={(e) => setEditDisplayName(e.target.value)}
+                    maxLength={50}
+                    className="h-8 text-sm"
+                  />
+                </div>
+                <div>
+                  <label className="text-2xs font-medium text-muted-foreground mb-0.5 block">Bio</label>
+                  <Textarea
+                    value={editBio}
+                    onChange={(e) => setEditBio(e.target.value)}
+                    maxLength={160}
+                    rows={2}
+                    className="text-sm resize-none"
+                    placeholder="Prompt engineer · Open-source contributor"
+                  />
+                </div>
+                <div className="flex items-center gap-2 mt-1">
+                  <Button size="sm" onClick={handleSave} disabled={saving} className="h-7 px-3 text-xs">
+                    <Check className="h-3 w-3 mr-1" />
+                    {saving ? "Saving..." : "Save"}
+                  </Button>
+                  <Button size="sm" variant="ghost" onClick={cancelEditing} className="h-7 px-3 text-xs text-muted-foreground">
+                    <X className="h-3 w-3 mr-1" />
+                    Cancel
+                  </Button>
+                </div>
+              </div>
+            ) : (
+              <>
+                <div className="flex items-center gap-2">
+                  <h1 className="text-lg font-semibold text-foreground">@{displayUsername}</h1>
+                  {isOwn && (
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={startEditing}
+                      className="h-7 px-2 text-xs text-muted-foreground"
+                    >
+                      <Pencil className="h-3 w-3 mr-1" />
+                      Edit
+                    </Button>
+                  )}
+                </div>
+                <p className="text-xs text-muted-foreground mt-0.5">{bio}</p>
+                <div className="flex items-center gap-4 mt-2 text-xs text-muted-foreground">
+                  <span className="flex items-center gap-1">
+                    <MessageSquare className="h-3 w-3" />
+                    {totalMessages} total messages
+                  </span>
+                  <span className="flex items-center gap-1">
+                    <FileCode className="h-3 w-3" />
+                    {totalFiles} files changed
+                  </span>
+                </div>
+              </>
+            )}
           </div>
         </div>
       </div>
@@ -122,22 +204,6 @@ export default function Profile() {
           <ProfileThreadRow key={thread.id} thread={thread} />
         ))}
       </div>
-
-      {/* Edit modal */}
-      {profile && (
-        <EditProfileModal
-          open={editOpen}
-          onOpenChange={setEditOpen}
-          profile={profile}
-          onSave={async (updates) => {
-            const result = await updateProfile(updates);
-            if (!result.error && updates.username !== profile.username) {
-              navigate(`/profile/${updates.username}`, { replace: true });
-            }
-            return { error: result.error || undefined };
-          }}
-        />
-      )}
     </div>
   );
 }
