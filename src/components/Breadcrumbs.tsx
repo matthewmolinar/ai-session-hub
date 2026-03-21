@@ -8,8 +8,9 @@ interface Crumb {
 }
 
 const ROUTE_LABELS: Record<string, string> = {
-  "/my-sessions": "My Sessions",
-  "/": "My Sessions",
+  "/my-sessions": "Threads",
+  "/": "Threads",
+  "/threads": "Threads",
   "/explore": "Shared",
 };
 
