@@ -81,7 +81,7 @@ export function AppHeader() {
           }}
         >
           <img src={tanagramLogo} alt="Tanagram" className="h-5 w-5 translate-y-[1px]" style={{ filter: "brightness(0) saturate(100%) invert(32%) sepia(93%) saturate(1752%) hue-rotate(207deg) brightness(97%) contrast(101%)" }} />
-          <span className="hidden sm:inline">Tanagram</span>
+          <span className="hidden sm:inline">Lore</span>
         </Link>
 
         {/* Desktop nav */}
