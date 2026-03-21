@@ -235,7 +235,7 @@ export default function Threads() {
               <select
                 value={user}
                 onChange={(e) => setUser(e.target.value)}
-                className="bg-card text-foreground text-xs rounded-lg px-3 py-2 border border-border outline-none cursor-pointer hover:border-muted-foreground/40 transition-colors min-w-0"
+                className="bg-card text-foreground text-xs rounded-lg pl-3 pr-8 py-2 border border-border outline-none cursor-pointer hover:border-muted-foreground/40 transition-colors min-w-0"
               >
                 {THREAD_USERS.map((u) => (
                   <option key={u} value={u}>{u === "All users" ? "All users" : u.replace("_", " ")}</option>
@@ -244,7 +244,7 @@ export default function Threads() {
               <select
                 value={repo}
                 onChange={(e) => setRepo(e.target.value)}
-                className="bg-card text-foreground text-xs rounded-lg px-3 py-2 border border-border outline-none cursor-pointer hover:border-muted-foreground/40 transition-colors min-w-0 truncate"
+                className="bg-card text-foreground text-xs rounded-lg pl-3 pr-8 py-2 border border-border outline-none cursor-pointer hover:border-muted-foreground/40 transition-colors min-w-0 truncate"
               >
                 {THREAD_REPOS.map((r) => (
                   <option key={r} value={r}>{r}</option>
@@ -292,7 +292,7 @@ export default function Threads() {
                 <select
                   value={user}
                   onChange={(e) => setUser(e.target.value)}
-                  className="bg-card text-foreground text-xs rounded-lg px-3 py-2 border border-border outline-none cursor-pointer hover:border-muted-foreground/40 transition-colors min-w-0"
+                  className="bg-card text-foreground text-xs rounded-lg pl-3 pr-8 py-2 border border-border outline-none cursor-pointer hover:border-muted-foreground/40 transition-colors min-w-0"
                 >
                   {THREAD_USERS.map((u) => (
                     <option key={u} value={u}>{u === "All users" ? "All users" : u.replace("_", " ")}</option>
@@ -301,7 +301,7 @@ export default function Threads() {
                 <select
                   value={repo}
                   onChange={(e) => setRepo(e.target.value)}
-                  className="bg-card text-foreground text-xs rounded-lg px-3 py-2 border border-border outline-none cursor-pointer hover:border-muted-foreground/40 transition-colors min-w-0 truncate"
+                  className="bg-card text-foreground text-xs rounded-lg pl-3 pr-8 py-2 border border-border outline-none cursor-pointer hover:border-muted-foreground/40 transition-colors min-w-0 truncate"
                 >
                   {THREAD_REPOS.map((r) => (
                     <option key={r} value={r}>{r}</option>
