@@ -34,7 +34,7 @@ function DiffStats({ stats }: { stats: Thread["diffStats"] }) {
 
 function ThreadTypeBadge({ type }: { type: Thread["threadType"] }) {
   return (
-    <span className="inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-2xs font-medium border border-border bg-secondary text-secondary-foreground">
+    <span className="inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-2xs font-mono font-medium border border-border bg-secondary text-primary">
       <GitBranch className="h-2.5 w-2.5" />
       {type}
     </span>
@@ -119,9 +119,9 @@ function ThreadRow({
             <ThreadTypeBadge type={thread.threadType} />
           </div>
 
-          <div className="rounded-lg bg-secondary/50 px-3 py-2">
+          <div className="rounded-md bg-secondary/60 px-3 py-2 font-mono">
             <p className="text-xs text-muted-foreground line-clamp-1">
-              {thread.openingPrompt}
+              <span className="text-primary/60 mr-1">$</span>{thread.openingPrompt}
             </p>
           </div>
         </div>
@@ -235,7 +235,7 @@ export default function Threads() {
             <select
               value={user}
               onChange={(e) => setUser(e.target.value)}
-              className="bg-card text-foreground text-xs rounded-lg pl-3 pr-8 py-2 border border-border outline-none cursor-pointer hover:border-muted-foreground/40 transition-colors min-w-0"
+              className="bg-secondary text-foreground text-xs font-mono rounded-md pl-3 pr-8 py-2 border border-border outline-none cursor-pointer hover:border-primary/40 transition-colors min-w-0"
             >
               {THREAD_USERS.map((u) => (
                 <option key={u} value={u}>{u === "All users" ? "All users" : u.replace("_", " ")}</option>
@@ -244,7 +244,7 @@ export default function Threads() {
             <select
               value={repo}
               onChange={(e) => setRepo(e.target.value)}
-              className="bg-card text-foreground text-xs rounded-lg pl-3 pr-8 py-2 border border-border outline-none cursor-pointer hover:border-muted-foreground/40 transition-colors min-w-0 truncate"
+              className="bg-secondary text-foreground text-xs font-mono rounded-md pl-3 pr-8 py-2 border border-border outline-none cursor-pointer hover:border-primary/40 transition-colors min-w-0 truncate"
             >
               {THREAD_REPOS.map((r) => (
                 <option key={r} value={r}>{r}</option>
@@ -283,10 +283,10 @@ export default function Threads() {
             </div>
           ) : (
             <div className="hidden lg:flex h-full flex-col items-center pt-[35%]">
-              <div className="text-6xl mb-4">💬</div>
-              <h3 className="text-base font-semibold text-foreground mb-1">Your threads</h3>
-              <p className="text-sm text-muted-foreground text-center max-w-[240px]">
-                Pick a thread from the left to read the conversation
+              <div className="text-4xl mb-4 font-mono text-primary/30">_</div>
+              <h3 className="text-sm font-mono font-semibold text-foreground mb-1">select a thread</h3>
+              <p className="text-xs text-muted-foreground text-center max-w-[240px] font-mono">
+                pick a thread from the left to read the conversation
               </p>
             </div>
           )}
