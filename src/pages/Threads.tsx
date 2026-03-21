@@ -34,7 +34,7 @@ function DiffStats({ stats }: { stats: Thread["diffStats"] }) {
 
 function ThreadTypeBadge({ type }: { type: Thread["threadType"] }) {
   return (
-    <span className="inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-2xs font-medium border border-border bg-secondary text-secondary-foreground">
+    <span className="inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-2xs font-mono font-medium border border-border bg-secondary text-primary">
       <GitBranch className="h-2.5 w-2.5" />
       {type}
     </span>
