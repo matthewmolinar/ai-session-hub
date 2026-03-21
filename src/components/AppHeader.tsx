@@ -117,7 +117,7 @@ export function AppHeader() {
             className="w-full flex items-center gap-2 bg-background rounded-lg px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors cursor-pointer border border-border"
           >
             <Search className="h-3.5 w-3.5 shrink-0" />
-            <span className="flex-1 text-left">Search sessions...</span>
+            <span className="flex-1 text-left">Search threads...</span>
             <kbd className="text-2xs bg-card rounded px-1.5 py-0.5 border border-border">/</kbd>
           </button>
         </div>
