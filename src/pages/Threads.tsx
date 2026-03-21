@@ -95,7 +95,7 @@ function ThreadRow({
       }`}
     >
       <div className="flex items-start gap-3">
-        <div className="h-9 w-9 rounded-full bg-primary/10 flex items-center justify-center text-sm font-semibold text-primary shrink-0 mt-0.5">
+        <div className={`h-9 w-9 rounded-full flex items-center justify-center text-sm font-semibold text-white shrink-0 mt-0.5 ${getAvatarGradient(thread.author.username)}`}>
           {thread.author.username[0].toUpperCase()}
         </div>
 
