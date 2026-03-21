@@ -122,7 +122,16 @@ export function AppHeader() {
           <Search className="h-4 w-4" />
         </button>
 
-        <div className="flex items-center gap-2 ml-auto">
+        <div className="flex items-center gap-2">
+          {/* Search button */}
+          <button
+            onClick={() => setOpen(true)}
+            className="hidden sm:flex items-center gap-2 bg-background rounded-lg px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors cursor-pointer border border-border w-48"
+          >
+            <Search className="h-3.5 w-3.5 shrink-0" />
+            <span className="flex-1 text-left">Search...</span>
+            <kbd className="text-2xs bg-card rounded px-1.5 py-0.5 border border-border">/</kbd>
+          </button>
           {user ? (
             <>
               <DropdownMenu>
