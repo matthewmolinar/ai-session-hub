@@ -29,7 +29,7 @@ function AppContent() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-background">
+    <div className="h-screen flex flex-col bg-background overflow-hidden">
       <AppHeader />
       <Breadcrumbs />
       <div className="flex-1 flex flex-col overflow-hidden">
