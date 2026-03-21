@@ -81,7 +81,7 @@ export function AppHeader() {
           }}
         >
           
-          <span className="hidden sm:inline text-xl font-bold tracking-wide font-display">LORE</span>
+          <span className="hidden sm:inline text-xl font-bold tracking-wide font-display text-primary">LORE</span>
         </Link>
 
         {/* Desktop nav */}
