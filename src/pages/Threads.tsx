@@ -263,7 +263,7 @@ export default function Threads() {
                     key={thread.id}
                     thread={thread}
                     isSelected={thread.id === selectedThreadId}
-                    onClick={() => setSelectedThreadId(thread.id)}
+                    onClick={() => selectThread(thread.id)}
                   />
                 ))
               )}
@@ -280,7 +280,7 @@ export default function Threads() {
               <ThreadPreview
                 key={selectedThread.id}
                 thread={selectedThread}
-                onClose={() => setSelectedThreadId(null)}
+                onClose={() => selectThread(null)}
               />
             </div>
           </Panel>
@@ -317,7 +317,7 @@ export default function Threads() {
                   key={thread.id}
                   thread={thread}
                   isSelected={false}
-                  onClick={() => setSelectedThreadId(thread.id)}
+                  onClick={() => selectThread(thread.id)}
                 />
               ))
             )}
