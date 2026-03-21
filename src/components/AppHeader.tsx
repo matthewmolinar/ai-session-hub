@@ -243,7 +243,7 @@ export function AppHeader() {
             <div className="max-h-80 overflow-y-auto">
               {results.length === 0 ? (
                 <div className="px-4 py-8 text-center text-sm text-muted-foreground">
-                  No sessions found
+                  No threads found
                 </div>
               ) : (
                 results.map((session) => (

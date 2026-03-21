@@ -53,7 +53,7 @@ function useBreadcrumbs(): Crumb[] {
     ];
   }
 
-  return [{ label: "My Sessions", to: "/my-sessions" }];
+  return [{ label: "Threads", to: "/threads" }];
 }
 
 export function Breadcrumbs() {
