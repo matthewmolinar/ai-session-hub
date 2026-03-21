@@ -225,11 +225,11 @@ export default function Threads() {
       {/* Thread list pane */}
       <div className={`${selectedThread ? "hidden lg:flex" : "flex"} flex-col w-full lg:w-[420px] lg:shrink-0 border-r border-border overflow-hidden`}>
         {/* Filter bar */}
-        <div className="flex items-center gap-2 px-4 py-3 border-b border-border flex-wrap shrink-0">
+        <div className="flex items-center gap-2 px-4 py-3 border-b border-border shrink-0">
           <select
             value={user}
             onChange={(e) => setUser(e.target.value)}
-            className="bg-card text-foreground text-xs rounded-lg px-3 py-2 border border-border outline-none cursor-pointer hover:border-muted-foreground/40 transition-colors"
+            className="bg-card text-foreground text-xs rounded-lg px-3 py-2 border border-border outline-none cursor-pointer hover:border-muted-foreground/40 transition-colors min-w-0"
           >
             {THREAD_USERS.map((u) => (
               <option key={u} value={u}>{u === "All users" ? "All users" : u.replace("_", " ")}</option>
@@ -239,7 +239,7 @@ export default function Threads() {
           <select
             value={repo}
             onChange={(e) => setRepo(e.target.value)}
-            className="bg-card text-foreground text-xs rounded-lg px-3 py-2 border border-border outline-none cursor-pointer hover:border-muted-foreground/40 transition-colors hidden sm:block"
+            className="bg-card text-foreground text-xs rounded-lg px-3 py-2 border border-border outline-none cursor-pointer hover:border-muted-foreground/40 transition-colors min-w-0 truncate"
           >
             {THREAD_REPOS.map((r) => (
               <option key={r} value={r}>{r}</option>
