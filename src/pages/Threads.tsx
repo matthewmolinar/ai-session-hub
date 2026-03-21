@@ -219,6 +219,7 @@ export default function Threads() {
     setSearchParams(id ? { id } : {}, { replace: true });
   };
 
+
   const filtered = THREADS.filter((t) => {
     if (user !== "All users" && t.author.username !== user) return false;
     if (repo !== "All repositories" && t.repository !== repo) return false;
