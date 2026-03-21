@@ -281,7 +281,7 @@ export default function Threads() {
               />
             </div>
           ) : (
-            <div className="hidden lg:flex h-full flex-col items-center justify-center">
+            <div className="hidden lg:flex h-full flex-col items-center pt-[35%]">
               <div className="text-6xl mb-4">💬</div>
               <h3 className="text-base font-semibold text-foreground mb-1">Your threads</h3>
               <p className="text-sm text-muted-foreground text-center max-w-[240px]">
