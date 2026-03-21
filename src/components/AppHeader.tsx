@@ -89,21 +89,21 @@ export function AppHeader() {
           {FEATURE_FLAGS.EXPLORER_ENABLED && (
             <Link
               to="/my-sessions"
-              className={`px-3 py-1.5 rounded-md transition-colors ${location.pathname === "/my-sessions" || location.pathname === "/" ? "bg-secondary text-foreground font-medium" : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"}`}
+              className={`px-3 py-1.5 rounded-md transition-colors ${location.pathname === "/my-sessions" || location.pathname === "/" ? "bg-white/15 font-medium" : "text-[hsl(var(--header-muted))] hover:text-[hsl(var(--header-foreground))] hover:bg-white/10"}`}
             >
               Explorer
             </Link>
           )}
           <Link
             to="/threads"
-            className={`px-3 py-1.5 rounded-md transition-colors ${location.pathname === "/threads" ? "bg-secondary text-foreground font-medium" : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"}`}
+            className={`px-3 py-1.5 rounded-md transition-colors ${location.pathname === "/threads" ? "bg-white/15 font-medium" : "text-[hsl(var(--header-muted))] hover:text-[hsl(var(--header-foreground))] hover:bg-white/10"}`}
           >
             Threads
           </Link>
           {FEATURE_FLAGS.FEED_ENABLED && (
             <Link
               to="/explore"
-              className={`relative px-3 py-1.5 rounded-md transition-colors ${location.pathname === "/explore" ? "bg-secondary text-foreground font-medium" : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"}`}
+              className={`relative px-3 py-1.5 rounded-md transition-colors ${location.pathname === "/explore" ? "bg-white/15 font-medium" : "text-[hsl(var(--header-muted))] hover:text-[hsl(var(--header-foreground))] hover:bg-white/10"}`}
             >
               Feed
             </Link>
