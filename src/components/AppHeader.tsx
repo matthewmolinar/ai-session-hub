@@ -126,11 +126,11 @@ export function AppHeader() {
           {/* Search button */}
           <button
             onClick={() => setOpen(true)}
-            className="hidden sm:flex items-center gap-2 bg-background rounded-lg px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors cursor-pointer border border-border w-48"
+            className="hidden sm:flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm text-[hsl(var(--header-muted))] hover:text-[hsl(var(--header-foreground))] transition-colors cursor-pointer bg-white/10 border border-white/10 w-48"
           >
             <Search className="h-3.5 w-3.5 shrink-0" />
             <span className="flex-1 text-left">Search...</span>
-            <kbd className="text-2xs bg-card rounded px-1.5 py-0.5 border border-border">/</kbd>
+            <kbd className="text-2xs rounded px-1.5 py-0.5 border border-white/15 bg-white/5">/</kbd>
           </button>
           {user ? (
             <>
