@@ -1,6 +1,6 @@
 import { useState, useMemo, useCallback } from "react";
 import { useLocation } from "react-router-dom";
-import { Star, GitBranch, MessageSquare, FileCode, X } from "lucide-react";
+import { Star, GitBranch, MessageSquare, FileCode, X, Share2 } from "lucide-react";
 import { THREADS, THREAD_REPOS, THREAD_USERS, type Thread } from "@/lib/mock-threads";
 import { SESSIONS, SESSION_DETAIL } from "@/lib/mock-data";
 import type { Session, Turn } from "@/lib/mock-data";
@@ -170,12 +170,18 @@ function ThreadPreview({ thread, onClose }: { thread: Thread; onClose: () => voi
             </span>
           </div>
         </div>
-        <button
-          onClick={onClose}
-          className="shrink-0 h-7 w-7 rounded-md flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
-        >
-          <X className="h-4 w-4" />
-        </button>
+        <div className="flex items-center gap-1.5 shrink-0">
+          <button className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-xs font-medium bg-primary text-primary-foreground hover:bg-primary/90 transition-all shadow-[0_0_12px_hsl(var(--primary)/0.4)] hover:shadow-[0_0_20px_hsl(var(--primary)/0.6)]">
+            <Share2 className="h-3.5 w-3.5" />
+            <span className="hidden sm:inline">Share</span>
+          </button>
+          <button
+            onClick={onClose}
+            className="h-7 w-7 rounded-md flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        </div>
       </div>
 
       {/* Transcript */}
