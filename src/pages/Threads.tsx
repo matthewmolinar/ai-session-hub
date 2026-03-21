@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Search, Star, GitBranch, MessageSquare, Circle } from "lucide-react";
-import { THREADS, THREAD_REPOS, THREAD_USERS, THREAD_TYPES, type Thread } from "@/lib/mock-threads";
+import { Star, GitBranch, MessageSquare } from "lucide-react";
+import { THREADS, THREAD_REPOS, THREAD_USERS, type Thread } from "@/lib/mock-threads";
 
 function getTimeAgo(dateStr: string): string {
   const diff = Date.now() - new Date(dateStr).getTime();
@@ -34,13 +34,6 @@ function ThreadTypeBadge({ type }: { type: Thread["threadType"] }) {
   );
 }
 
-const TEAM_MEMBERS = [
-  { username: "jondesr", role: "Backend Engineer", online: true },
-  { username: "shlok_mundhra", role: "Senior Engineer", online: true },
-  { username: "shivansh_jagga", role: "Frontend Engineer", online: true },
-  { username: "feifanz", role: "Engineer", online: false },
-  { username: "molinar", role: "Engineer", online: false },
-];
 
 function ThreadRow({ thread }: { thread: Thread }) {
   const location = useLocation();
@@ -97,8 +90,6 @@ export default function Threads() {
   const [search, setSearch] = useState("");
   const [user, setUser] = useState<string>(THREAD_USERS[0]);
   const [repo, setRepo] = useState<string>(THREAD_REPOS[0]);
-  const [threadType, setThreadType] = useState<string>(THREAD_TYPES[0]);
-
   const filtered = THREADS.filter((t) => {
     if (search) {
       const q = search.toLowerCase();
@@ -111,11 +102,8 @@ export default function Threads() {
     }
     if (user !== "All users" && t.author.username !== user) return false;
     if (repo !== "All repositories" && t.repository !== repo) return false;
-    if (threadType !== "All thread types" && t.threadType !== threadType) return false;
     return true;
   });
-
-  const onlineCount = TEAM_MEMBERS.filter((m) => m.online).length;
 
   return (
     <div className="max-w-[1100px] mx-auto px-3 sm:px-4 py-4 sm:py-6 flex gap-6">
@@ -123,17 +111,6 @@ export default function Threads() {
       <div className="flex-1 min-w-0">
         {/* Filter bar */}
         <div className="flex items-center gap-2 mb-4 flex-wrap">
-          <div className="relative flex-1 min-w-[200px] max-w-sm">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
-            <input
-              type="text"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search threads..."
-              className="w-full bg-card text-sm text-foreground rounded-lg pl-9 pr-3 py-2 border border-border outline-none placeholder:text-muted-foreground focus:ring-1 focus:ring-ring transition-all"
-            />
-          </div>
-
           <select
             value={user}
             onChange={(e) => setUser(e.target.value)}
@@ -153,16 +130,6 @@ export default function Threads() {
               <option key={r} value={r}>{r}</option>
             ))}
           </select>
-
-          <select
-            value={threadType}
-            onChange={(e) => setThreadType(e.target.value)}
-            className="bg-card text-foreground text-xs rounded-lg px-3 py-2 border border-border outline-none cursor-pointer hover:border-muted-foreground/40 transition-colors hidden sm:block"
-          >
-            {THREAD_TYPES.map((t) => (
-              <option key={t} value={t}>{t}</option>
-            ))}
-          </select>
         </div>
 
         {/* Thread list */}
@@ -174,53 +141,6 @@ export default function Threads() {
           )}
         </div>
       </div>
-
-      {/* Right sidebar */}
-      <aside className="hidden lg:block w-[280px] shrink-0">
-        <div className="sticky top-[60px] space-y-4 overflow-y-auto max-h-[calc(100vh-72px)] pr-1">
-          {/* Your Team */}
-          <div className="rounded-xl border border-border bg-card p-4">
-            <div className="flex items-center justify-between mb-3">
-              <h3 className="text-sm font-semibold text-foreground">Your Team</h3>
-              <span className="text-xs text-muted-foreground">{onlineCount} online</span>
-            </div>
-            <div className="space-y-1">
-              {TEAM_MEMBERS.map((member) => (
-                <button
-                  key={member.username}
-                  className="w-full flex items-center gap-2.5 px-2 py-2 rounded-lg hover:bg-secondary transition-colors text-left cursor-pointer"
-                >
-                  <div className="relative">
-                    <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center text-xs font-semibold text-primary">
-                      {member.username[0].toUpperCase()}
-                    </div>
-                    {member.online && (
-                      <Circle className="absolute -bottom-0.5 -right-0.5 h-3 w-3 fill-emerald-500 text-card stroke-[3]" />
-                    )}
-                  </div>
-                  <div className="min-w-0">
-                    <p className="text-sm font-medium text-foreground truncate">@{member.username}</p>
-                    <p className="text-xs text-muted-foreground truncate">{member.role}</p>
-                  </div>
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Trending Skills */}
-          <div className="rounded-xl border border-border bg-card p-4">
-            <h3 className="text-sm font-semibold text-foreground mb-3">Trending Skills</h3>
-            <div className="space-y-2">
-              {["/commit", "/review", "/tdd", "/test"].map((skill, i) => (
-                <div key={skill} className="flex items-center justify-between">
-                  <span className="text-sm font-mono text-primary">{skill}</span>
-                  <span className="text-xs text-muted-foreground">{[142, 98, 67, 51][i]} uses today</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </aside>
     </div>
   );
 }

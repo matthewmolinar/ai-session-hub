@@ -8,8 +8,9 @@ interface Crumb {
 }
 
 const ROUTE_LABELS: Record<string, string> = {
-  "/my-sessions": "My Sessions",
-  "/": "My Sessions",
+  "/my-sessions": "Threads",
+  "/": "Threads",
+  "/threads": "Threads",
   "/explore": "Shared",
 };
 
@@ -19,8 +20,8 @@ function useBreadcrumbs(): Crumb[] {
   const path = location.pathname;
   const from = (location.state as any)?.from as string | undefined;
 
-  if (path === "/" || path === "/my-sessions") {
-    return [{ label: "My Sessions" }];
+  if (path === "/" || path === "/my-sessions" || path === "/threads") {
+    return [{ label: "Threads" }];
   }
 
   if (path === "/explore") {
@@ -29,8 +30,8 @@ function useBreadcrumbs(): Crumb[] {
 
 
   // Determine parent crumb from navigation origin
-  const parentPath = from && ROUTE_LABELS[from] ? from : "/my-sessions";
-  const parentLabel = ROUTE_LABELS[parentPath] ?? "My Sessions";
+  const parentPath = from && ROUTE_LABELS[from] ? from : "/threads";
+  const parentLabel = ROUTE_LABELS[parentPath] ?? "Threads";
 
   if (path.startsWith("/session/")) {
     const sessionId = params.id;
@@ -52,7 +53,7 @@ function useBreadcrumbs(): Crumb[] {
     ];
   }
 
-  return [{ label: "My Sessions", to: "/my-sessions" }];
+  return [{ label: "Threads", to: "/threads" }];
 }
 
 export function Breadcrumbs() {
