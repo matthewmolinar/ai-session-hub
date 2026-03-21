@@ -129,7 +129,7 @@ export default function Threads() {
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search threads..."
+              placeholder="Search posts..."
               className="w-full bg-card text-sm text-foreground rounded-lg pl-9 pr-3 py-2 border border-border outline-none placeholder:text-muted-foreground focus:ring-1 focus:ring-ring transition-all"
             />
           </div>
