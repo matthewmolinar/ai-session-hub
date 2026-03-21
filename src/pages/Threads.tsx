@@ -209,9 +209,15 @@ function ThreadPreview({ thread, onClose }: { thread: Thread; onClose: () => voi
 }
 
 export default function Threads() {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [user, setUser] = useState<string>(THREAD_USERS[0]);
   const [repo, setRepo] = useState<string>(THREAD_REPOS[0]);
-  const [selectedThreadId, setSelectedThreadId] = useState<string | null>(null);
+
+  const selectedThreadId = searchParams.get("id");
+
+  const selectThread = (id: string | null) => {
+    setSearchParams(id ? { id } : {}, { replace: true });
+  };
 
   const filtered = THREADS.filter((t) => {
     if (user !== "All users" && t.author.username !== user) return false;
