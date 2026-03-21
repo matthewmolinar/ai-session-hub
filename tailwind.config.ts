@@ -16,7 +16,7 @@ export default {
       fontFamily: {
         sans: ["Space Grotesk", "system-ui", "-apple-system", "sans-serif"],
         display: ["Fredoka", "Space Grotesk", "system-ui", "sans-serif"],
-        mono: ["SF Mono", "Cascadia Code", "ui-monospace", "monospace"],
+        mono: ["JetBrains Mono", "ui-monospace", "monospace"],
       },
       fontSize: {
         "2xs": ["11px", "1.4"],
