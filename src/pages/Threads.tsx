@@ -307,15 +307,6 @@ export default function Threads() {
                     <option key={r} value={r}>{r}</option>
                   ))}
                 </select>
-                <select
-                  value={threadType}
-                  onChange={(e) => setThreadType(e.target.value)}
-                  className="bg-card text-foreground text-xs rounded-lg px-2 py-2 border border-border outline-none cursor-pointer hover:border-muted-foreground/40 transition-colors hidden sm:block"
-                >
-                  {THREAD_TYPES.map((t) => (
-                    <option key={t} value={t}>{t}</option>
-                  ))}
-                </select>
               </>
             )}
           </div>
