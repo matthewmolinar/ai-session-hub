@@ -102,11 +102,8 @@ export default function Threads() {
     }
     if (user !== "All users" && t.author.username !== user) return false;
     if (repo !== "All repositories" && t.repository !== repo) return false;
-    if (threadType !== "All thread types" && t.threadType !== threadType) return false;
     return true;
   });
-
-  const onlineCount = TEAM_MEMBERS.filter((m) => m.online).length;
 
   return (
     <div className="max-w-[1100px] mx-auto px-3 sm:px-4 py-4 sm:py-6 flex gap-6">
