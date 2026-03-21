@@ -231,7 +231,7 @@ export default function Threads() {
           {/* Thread list pane */}
           <Panel defaultSize={35} minSize={25} maxSize={50} className="hidden lg:flex flex-col border-r border-border overflow-hidden">
             {/* Filter bar */}
-            <div className="flex items-center gap-2 px-4 py-3 border-b border-border shrink-0">
+            <div className="flex items-center gap-2 px-3 sm:px-4 py-3 border-b border-border shrink-0">
               <select
                 value={user}
                 onChange={(e) => setUser(e.target.value)}
@@ -285,7 +285,7 @@ export default function Threads() {
       ) : (
         /* No thread selected — full-width list */
         <div className="flex flex-col w-full overflow-hidden">
-          <div className="flex items-center gap-2 px-4 py-3 border-b border-border shrink-0">
+          <div className="flex items-center gap-2 px-3 sm:px-4 py-3 border-b border-border shrink-0">
             <select
               value={user}
               onChange={(e) => setUser(e.target.value)}
