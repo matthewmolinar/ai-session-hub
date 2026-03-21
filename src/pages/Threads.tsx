@@ -181,7 +181,7 @@ export default function Threads() {
           {/* Your Team */}
           <div className="rounded-xl border border-border bg-card p-4">
             <div className="flex items-center justify-between mb-3">
-              <h3 className="text-sm font-semibold text-foreground">Your Team</h3>
+              <h3 className="text-sm font-semibold text-foreground">Your Friends</h3>
               <span className="text-xs text-muted-foreground">{onlineCount} online</span>
             </div>
             <div className="space-y-1">
