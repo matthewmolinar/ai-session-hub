@@ -34,7 +34,7 @@ function useBreadcrumbs(): Crumb[] {
   const parentLabel = ROUTE_LABELS[parentPath] ?? "Threads";
 
   if (path.startsWith("/session/")) {
-    const sessionId = params.id;
+    const sessionId = path.split("/")[2];
     const session = sessionId === SESSION_DETAIL.id
       ? SESSION_DETAIL
       : SESSIONS.find((s) => s.id === sessionId);
@@ -46,7 +46,7 @@ function useBreadcrumbs(): Crumb[] {
   }
 
   if (path.startsWith("/profile/")) {
-    const username = params.username;
+    const username = path.split("/")[2];
     return [
       { label: parentLabel, to: parentPath },
       { label: `@${username}` },
