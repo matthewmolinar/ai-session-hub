@@ -37,7 +37,7 @@ function useBreadcrumbs(): Crumb[] {
     const session = sessionId === SESSION_DETAIL.id
       ? SESSION_DETAIL
       : SESSIONS.find((s) => s.id === sessionId);
-    const title = session?.title ?? `Post`;
+    const title = session?.title ?? `Session`;
     return [
       { label: parentLabel, to: parentPath },
       { label: title },

@@ -80,7 +80,7 @@ export function AppHeader() {
             setSelectedFilePath(null);
           }}
         >
-          
+          <img src={tanagramLogo} alt="Tanagram" className="h-5 w-5 translate-y-[1px]" style={{ filter: "brightness(0) saturate(100%) invert(32%) sepia(93%) saturate(1752%) hue-rotate(207deg) brightness(97%) contrast(101%)" }} />
           <span className="hidden sm:inline">Lore</span>
         </Link>
 
@@ -98,7 +98,7 @@ export function AppHeader() {
             to="/threads"
             className={`px-3 py-1.5 rounded-md transition-colors ${location.pathname === "/threads" ? "bg-secondary text-foreground font-medium" : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"}`}
           >
-            Posts
+            Threads
           </Link>
           {FEATURE_FLAGS.FEED_ENABLED && (
             <Link
@@ -191,7 +191,7 @@ export function AppHeader() {
             to="/threads"
             className={`block px-3 py-2 rounded-md text-sm transition-colors ${location.pathname === "/threads" ? "bg-secondary text-foreground font-medium" : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"}`}
           >
-            Posts
+            Threads
           </Link>
           {FEATURE_FLAGS.FEED_ENABLED && (
             <Link
