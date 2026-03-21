@@ -1,5 +1,5 @@
 import { useState, useMemo, useCallback } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useSearchParams } from "react-router-dom";
 import { Star, GitBranch, MessageSquare, FileCode, X, Send } from "lucide-react";
 import { THREADS, THREAD_REPOS, THREAD_USERS, type Thread } from "@/lib/mock-threads";
 import { PanelGroup, Panel, PanelResizeHandle } from "react-resizable-panels";
@@ -209,9 +209,15 @@ function ThreadPreview({ thread, onClose }: { thread: Thread; onClose: () => voi
 }
 
 export default function Threads() {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [user, setUser] = useState<string>(THREAD_USERS[0]);
   const [repo, setRepo] = useState<string>(THREAD_REPOS[0]);
-  const [selectedThreadId, setSelectedThreadId] = useState<string | null>(null);
+
+  const selectedThreadId = searchParams.get("id");
+
+  const selectThread = (id: string | null) => {
+    setSearchParams(id ? { id } : {}, { replace: true });
+  };
 
   const filtered = THREADS.filter((t) => {
     if (user !== "All users" && t.author.username !== user) return false;
@@ -257,7 +263,7 @@ export default function Threads() {
                     key={thread.id}
                     thread={thread}
                     isSelected={thread.id === selectedThreadId}
-                    onClick={() => setSelectedThreadId(thread.id)}
+                    onClick={() => selectThread(thread.id)}
                   />
                 ))
               )}
@@ -274,7 +280,7 @@ export default function Threads() {
               <ThreadPreview
                 key={selectedThread.id}
                 thread={selectedThread}
-                onClose={() => setSelectedThreadId(null)}
+                onClose={() => selectThread(null)}
               />
             </div>
           </Panel>
@@ -311,7 +317,7 @@ export default function Threads() {
                   key={thread.id}
                   thread={thread}
                   isSelected={false}
-                  onClick={() => setSelectedThreadId(thread.id)}
+                  onClick={() => selectThread(thread.id)}
                 />
               ))
             )}
