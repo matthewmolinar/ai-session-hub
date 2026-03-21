@@ -111,17 +111,6 @@ export default function Threads() {
       <div className="flex-1 min-w-0">
         {/* Filter bar */}
         <div className="flex items-center gap-2 mb-4 flex-wrap">
-          <div className="relative flex-1 min-w-[200px] max-w-sm">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
-            <input
-              type="text"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search threads..."
-              className="w-full bg-card text-sm text-foreground rounded-lg pl-9 pr-3 py-2 border border-border outline-none placeholder:text-muted-foreground focus:ring-1 focus:ring-ring transition-all"
-            />
-          </div>
-
           <select
             value={user}
             onChange={(e) => setUser(e.target.value)}
@@ -139,16 +128,6 @@ export default function Threads() {
           >
             {THREAD_REPOS.map((r) => (
               <option key={r} value={r}>{r}</option>
-            ))}
-          </select>
-
-          <select
-            value={threadType}
-            onChange={(e) => setThreadType(e.target.value)}
-            className="bg-card text-foreground text-xs rounded-lg px-3 py-2 border border-border outline-none cursor-pointer hover:border-muted-foreground/40 transition-colors hidden sm:block"
-          >
-            {THREAD_TYPES.map((t) => (
-              <option key={t} value={t}>{t}</option>
             ))}
           </select>
         </div>
