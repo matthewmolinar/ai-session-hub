@@ -70,10 +70,10 @@ export function AppHeader() {
 
   return (
     <>
-      <header className="h-12 border-b border-border flex items-center px-3 sm:px-4 gap-2 sm:gap-6 bg-card shrink-0 sticky top-0 z-50 shadow-card">
+      <header className="h-12 flex items-center px-3 sm:px-4 gap-2 sm:gap-6 shrink-0 sticky top-0 z-50" style={{ background: 'hsl(var(--header-bg))', color: 'hsl(var(--header-foreground))' }}>
         <Link
           to="/my-sessions"
-          className="flex items-center gap-2 font-semibold text-sm text-primary shrink-0"
+          className="flex items-center gap-2 font-semibold text-sm shrink-0"
           onClick={() => {
             setDemoMode(false);
             setActiveSessionId(null);
@@ -81,7 +81,7 @@ export function AppHeader() {
           }}
         >
           
-          <span className="hidden sm:inline text-xl font-bold tracking-wide font-display">LORE</span>
+          <span className="hidden sm:inline text-xl font-bold tracking-wide font-display text-primary">LORE</span>
         </Link>
 
         {/* Desktop nav */}
@@ -89,21 +89,21 @@ export function AppHeader() {
           {FEATURE_FLAGS.EXPLORER_ENABLED && (
             <Link
               to="/my-sessions"
-              className={`px-3 py-1.5 rounded-md transition-colors ${location.pathname === "/my-sessions" || location.pathname === "/" ? "bg-secondary text-foreground font-medium" : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"}`}
+              className={`px-3 py-1.5 rounded-md transition-colors ${location.pathname === "/my-sessions" || location.pathname === "/" ? "bg-white/15 font-medium" : "text-[hsl(var(--header-muted))] hover:text-[hsl(var(--header-foreground))] hover:bg-white/10"}`}
             >
               Explorer
             </Link>
           )}
           <Link
             to="/threads"
-            className={`px-3 py-1.5 rounded-md transition-colors ${location.pathname === "/threads" ? "bg-secondary text-foreground font-medium" : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"}`}
+            className={`px-3 py-1.5 rounded-md transition-colors ${location.pathname === "/threads" ? "bg-white/15 font-medium" : "text-[hsl(var(--header-muted))] hover:text-[hsl(var(--header-foreground))] hover:bg-white/10"}`}
           >
             Threads
           </Link>
           {FEATURE_FLAGS.FEED_ENABLED && (
             <Link
               to="/explore"
-              className={`relative px-3 py-1.5 rounded-md transition-colors ${location.pathname === "/explore" ? "bg-secondary text-foreground font-medium" : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"}`}
+              className={`relative px-3 py-1.5 rounded-md transition-colors ${location.pathname === "/explore" ? "bg-white/15 font-medium" : "text-[hsl(var(--header-muted))] hover:text-[hsl(var(--header-foreground))] hover:bg-white/10"}`}
             >
               Feed
             </Link>
@@ -117,7 +117,7 @@ export function AppHeader() {
         <div className="flex-1 sm:hidden" />
         <button
           onClick={() => setOpen(true)}
-          className="sm:hidden h-8 w-8 flex items-center justify-center rounded-md text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
+          className="sm:hidden h-8 w-8 flex items-center justify-center rounded-md text-[hsl(var(--header-muted))] hover:text-[hsl(var(--header-foreground))] hover:bg-white/10 transition-colors"
         >
           <Search className="h-4 w-4" />
         </button>
@@ -126,11 +126,11 @@ export function AppHeader() {
           {/* Search button */}
           <button
             onClick={() => setOpen(true)}
-            className="hidden sm:flex items-center gap-2 bg-background rounded-lg px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors cursor-pointer border border-border w-48"
+            className="hidden sm:flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm text-[hsl(var(--header-muted))] hover:text-[hsl(var(--header-foreground))] transition-colors cursor-pointer bg-white/10 border border-white/10 w-48"
           >
             <Search className="h-3.5 w-3.5 shrink-0" />
             <span className="flex-1 text-left">Search...</span>
-            <kbd className="text-2xs bg-card rounded px-1.5 py-0.5 border border-border">/</kbd>
+            <kbd className="text-2xs rounded px-1.5 py-0.5 border border-white/15 bg-white/5">/</kbd>
           </button>
           {user ? (
             <>
@@ -157,7 +157,7 @@ export function AppHeader() {
               {/* Mobile hamburger */}
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="sm:hidden h-8 w-8 flex items-center justify-center rounded-md text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
+                className="sm:hidden h-8 w-8 flex items-center justify-center rounded-md text-[hsl(var(--header-muted))] hover:text-[hsl(var(--header-foreground))] hover:bg-white/10 transition-colors"
               >
                 {mobileMenuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
               </button>

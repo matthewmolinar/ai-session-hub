@@ -36,6 +36,11 @@
 
     --radius: 0.625rem;
 
+    /* Brand chrome */
+    --header-bg: 240 8% 12%;
+    --header-foreground: 30 20% 95%;
+    --header-muted: 30 10% 60%;
+
     /* Custom tokens */
     --subtle: 30 15% 97%;
     --supportive: 8 88% 56%;
@@ -57,6 +62,14 @@
     --sidebar-ring: 8 88% 56%;
   }
 }
+
+/* Gradient avatar system — deterministic colors per user initial */
+.avatar-gradient-0 { background: linear-gradient(135deg, hsl(8 88% 56%), hsl(340 80% 55%)); }
+.avatar-gradient-1 { background: linear-gradient(135deg, hsl(262 70% 58%), hsl(290 65% 50%)); }
+.avatar-gradient-2 { background: linear-gradient(135deg, hsl(190 80% 42%), hsl(220 75% 55%)); }
+.avatar-gradient-3 { background: linear-gradient(135deg, hsl(32 90% 55%), hsl(8 88% 56%)); }
+.avatar-gradient-4 { background: linear-gradient(135deg, hsl(150 60% 42%), hsl(190 80% 42%)); }
+.avatar-gradient-5 { background: linear-gradient(135deg, hsl(340 80% 55%), hsl(262 70% 58%)); }
 
 @layer base {
   * {

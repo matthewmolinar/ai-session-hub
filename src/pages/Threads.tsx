@@ -2,6 +2,7 @@ import { useState, useMemo, useCallback } from "react";
 import { useLocation, useSearchParams } from "react-router-dom";
 import { Star, GitBranch, MessageSquare, FileCode, X, Send } from "lucide-react";
 import { THREADS, THREAD_REPOS, THREAD_USERS, type Thread } from "@/lib/mock-threads";
+import { getAvatarGradient } from "@/lib/avatar";
 import { PanelGroup, Panel, PanelResizeHandle } from "react-resizable-panels";
 import { SESSIONS, SESSION_DETAIL } from "@/lib/mock-data";
 import type { Session, Turn } from "@/lib/mock-data";
@@ -94,7 +95,7 @@ function ThreadRow({
       }`}
     >
       <div className="flex items-start gap-3">
-        <div className="h-9 w-9 rounded-full bg-primary/10 flex items-center justify-center text-sm font-semibold text-primary shrink-0 mt-0.5">
+        <div className={`h-9 w-9 rounded-full flex items-center justify-center text-sm font-semibold text-white shrink-0 mt-0.5 ${getAvatarGradient(thread.author.username)}`}>
           {thread.author.username[0].toUpperCase()}
         </div>
 
@@ -118,7 +119,7 @@ function ThreadRow({
             <ThreadTypeBadge type={thread.threadType} />
           </div>
 
-          <div className="rounded-lg bg-secondary/50 border-l-2 border-border px-3 py-2">
+          <div className="rounded-lg bg-secondary/50 border-l-2 border-primary/30 px-3 py-2">
             <p className="text-xs text-muted-foreground line-clamp-1">
               {thread.openingPrompt}
             </p>
