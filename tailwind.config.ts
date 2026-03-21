@@ -14,7 +14,8 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ["Inter", "system-ui", "-apple-system", "sans-serif"],
+        sans: ["Space Grotesk", "system-ui", "-apple-system", "sans-serif"],
+        display: ["Fredoka", "Space Grotesk", "system-ui", "sans-serif"],
         mono: ["SF Mono", "Cascadia Code", "ui-monospace", "monospace"],
       },
       fontSize: {
@@ -23,6 +24,8 @@ export default {
         sm: ["13px", "1.5"],
         base: ["14px", "1.6"],
         lg: ["16px", "1.5"],
+        xl: ["18px", "1.4"],
+        "2xl": ["22px", "1.3"],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -79,9 +82,9 @@ export default {
         },
       },
       borderRadius: {
-        lg: "8px",
-        md: "6px",
-        sm: "4px",
+        lg: "10px",
+        md: "8px",
+        sm: "6px",
       },
       boxShadow: {
         card: "var(--shadow-card)",
