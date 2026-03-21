@@ -172,7 +172,7 @@ function ThreadPreview({ thread, onClose }: { thread: Thread; onClose: () => voi
         </div>
         <div className="flex items-center gap-1.5 shrink-0">
           <button className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-xs font-medium bg-primary text-primary-foreground hover:bg-primary/90 transition-all shadow-[0_0_12px_hsl(var(--primary)/0.4)] hover:shadow-[0_0_20px_hsl(var(--primary)/0.6)]">
-            <Share2 className="h-3.5 w-3.5" />
+            <Send className="h-3.5 w-3.5" />
             <span className="hidden sm:inline">Share</span>
           </button>
           <button
