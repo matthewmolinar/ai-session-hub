@@ -81,7 +81,7 @@ export function AppHeader() {
           }}
         >
           
-          <span className="hidden sm:inline text-base font-extrabold tracking-wide" style={{ fontFamily: "'Fredoka', sans-serif" }}>LORE</span>
+          <span className="hidden sm:inline text-xl font-extrabold tracking-wide" style={{ fontFamily: "'Fredoka', sans-serif" }}>LORE</span>
         </Link>
 
         {/* Desktop nav */}
