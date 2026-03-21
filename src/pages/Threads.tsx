@@ -1,5 +1,5 @@
 import { useState, useMemo, useCallback } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useSearchParams } from "react-router-dom";
 import { Star, GitBranch, MessageSquare, FileCode, X, Send } from "lucide-react";
 import { THREADS, THREAD_REPOS, THREAD_USERS, type Thread } from "@/lib/mock-threads";
 import { PanelGroup, Panel, PanelResizeHandle } from "react-resizable-panels";
