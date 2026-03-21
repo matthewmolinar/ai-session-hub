@@ -34,7 +34,7 @@ function useBreadcrumbs(): Crumb[] {
   const parentLabel = ROUTE_LABELS[parentPath] ?? "Threads";
 
   if (path.startsWith("/session/")) {
-    const sessionId = params.id;
+    const sessionId = path.split("/")[2];
     const session = sessionId === SESSION_DETAIL.id
       ? SESSION_DETAIL
       : SESSIONS.find((s) => s.id === sessionId);
