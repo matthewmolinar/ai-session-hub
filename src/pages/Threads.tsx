@@ -1,7 +1,12 @@
-import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
-import { Star, GitBranch, MessageSquare } from "lucide-react";
+import { useState, useMemo, useCallback } from "react";
+import { useLocation } from "react-router-dom";
+import { Star, GitBranch, MessageSquare, FileCode, X } from "lucide-react";
 import { THREADS, THREAD_REPOS, THREAD_USERS, type Thread } from "@/lib/mock-threads";
+import { SESSIONS, SESSION_DETAIL } from "@/lib/mock-data";
+import type { Session, Turn } from "@/lib/mock-data";
+import type { Comment } from "@/components/TurnComment";
+import { TranscriptTurn } from "@/components/TranscriptTurn";
+import { ModelBadge } from "@/components/ModelBadge";
 
 function getTimeAgo(dateStr: string): string {
   const diff = Date.now() - new Date(dateStr).getTime();
@@ -34,23 +39,64 @@ function ThreadTypeBadge({ type }: { type: Thread["threadType"] }) {
   );
 }
 
+interface TurnGroup {
+  userTurn: Turn;
+  responseTurns: Turn[];
+}
 
-function ThreadRow({ thread }: { thread: Thread }) {
-  const location = useLocation();
+function groupTurns(transcript: Session["transcript"]): TurnGroup[] {
+  if (!transcript) return [];
+  const groups: TurnGroup[] = [];
+  let current: TurnGroup | null = null;
+  for (const turn of transcript) {
+    if (turn.role === "user") {
+      if (current) groups.push(current);
+      current = { userTurn: turn, responseTurns: [] };
+    } else if (current) {
+      current.responseTurns.push(turn);
+    }
+  }
+  if (current) groups.push(current);
+  return groups;
+}
 
+function threadToSession(thread: Thread): Session {
+  return {
+    ...thread,
+    model: "claude-3.5-sonnet",
+    source: "claude-code" as const,
+    author: { ...thread.author },
+    turns: thread.messageCount,
+    filesChanged: thread.diffStats.added + thread.diffStats.removed + thread.diffStats.modified,
+    forks: 0,
+    likes: thread.stars,
+    tags: [],
+    sparkline: [],
+    comments: [],
+  };
+}
+
+function ThreadRow({
+  thread,
+  isSelected,
+  onClick,
+}: {
+  thread: Thread;
+  isSelected: boolean;
+  onClick: () => void;
+}) {
   return (
-    <Link
-      to={`/session/${thread.id}`}
-      state={{ from: location.pathname }}
-      className="block border-b border-border last:border-b-0 px-4 sm:px-6 py-4 hover:bg-secondary/30 transition-colors"
+    <button
+      onClick={onClick}
+      className={`w-full text-left block border-b border-border last:border-b-0 px-4 sm:px-6 py-4 transition-colors cursor-pointer ${
+        isSelected ? "bg-secondary" : "hover:bg-secondary/30"
+      }`}
     >
       <div className="flex items-start gap-3">
-        {/* Avatar */}
         <div className="h-9 w-9 rounded-full bg-primary/10 flex items-center justify-center text-sm font-semibold text-primary shrink-0 mt-0.5">
           {thread.author.username[0].toUpperCase()}
         </div>
 
-        {/* Content */}
         <div className="flex-1 min-w-0">
           <h3 className="text-sm font-semibold text-foreground leading-snug mb-1">
             {thread.title}
@@ -82,35 +128,98 @@ function ThreadRow({ thread }: { thread: Thread }) {
           </div>
         </div>
       </div>
-    </Link>
+    </button>
+  );
+}
+
+function ThreadPreview({ thread, onClose }: { thread: Thread; onClose: () => void }) {
+  const session = useMemo(() => threadToSession(thread), [thread]);
+  const groups = useMemo(() => groupTurns(session.transcript), [session.transcript]);
+
+  const [commentsByTurn, setCommentsByTurn] = useState<Record<number, Comment[]>>({});
+
+  const handleAddComment = useCallback((turnId: number, content: string) => {
+    const newComment: Comment = {
+      id: `c-${Date.now()}`,
+      author: "you",
+      content,
+      timestamp: new Date().toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", hour12: false }),
+    };
+    setCommentsByTurn((prev) => ({
+      ...prev,
+      [turnId]: [...(prev[turnId] || []), newComment],
+    }));
+  }, []);
+
+  return (
+    <div className="flex flex-col h-full">
+      {/* Header */}
+      <div className="border-b border-border px-4 py-3 flex items-start justify-between gap-3 shrink-0">
+        <div className="min-w-0">
+          <h2 className="text-sm font-semibold text-foreground truncate">{session.title}</h2>
+          <div className="flex items-center gap-2 text-xs text-muted-foreground mt-1 flex-wrap">
+            <span className="font-medium text-foreground">@{session.author.username}</span>
+            <ModelBadge model={session.model} />
+            <span className="flex items-center gap-1">
+              <MessageSquare className="h-3 w-3" />
+              {session.turns} turns
+            </span>
+            <span className="flex items-center gap-1">
+              <FileCode className="h-3 w-3" />
+              {session.filesChanged} files
+            </span>
+          </div>
+        </div>
+        <button
+          onClick={onClose}
+          className="shrink-0 h-7 w-7 rounded-md flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
+        >
+          <X className="h-4 w-4" />
+        </button>
+      </div>
+
+      {/* Transcript */}
+      <div className="flex-1 overflow-y-auto px-4 py-4 divide-y divide-border">
+        {groups.length === 0 ? (
+          <div className="text-center text-sm text-muted-foreground py-12">
+            No transcript available for this thread.
+          </div>
+        ) : (
+          groups.map((group) => (
+            <div key={group.userTurn.id} id={`turn-${group.userTurn.id}`}>
+              <TranscriptTurn
+                turn={group.userTurn}
+                responseTurns={group.responseTurns}
+                comments={commentsByTurn[group.userTurn.id] || []}
+                onAddComment={handleAddComment}
+              />
+            </div>
+          ))
+        )}
+      </div>
+    </div>
   );
 }
 
 export default function Threads() {
-  const [search, setSearch] = useState("");
   const [user, setUser] = useState<string>(THREAD_USERS[0]);
   const [repo, setRepo] = useState<string>(THREAD_REPOS[0]);
+  const [selectedThreadId, setSelectedThreadId] = useState<string | null>(null);
+
   const filtered = THREADS.filter((t) => {
-    if (search) {
-      const q = search.toLowerCase();
-      if (
-        !t.title.toLowerCase().includes(q) &&
-        !t.openingPrompt.toLowerCase().includes(q) &&
-        !t.author.username.toLowerCase().includes(q)
-      )
-        return false;
-    }
     if (user !== "All users" && t.author.username !== user) return false;
     if (repo !== "All repositories" && t.repository !== repo) return false;
     return true;
   });
 
+  const selectedThread = selectedThreadId ? THREADS.find((t) => t.id === selectedThreadId) ?? null : null;
+
   return (
-    <div className="max-w-[1100px] mx-auto px-3 sm:px-4 py-4 sm:py-6 flex gap-6">
-      {/* Main column */}
-      <div className="flex-1 min-w-0">
+    <div className="flex-1 flex overflow-hidden">
+      {/* Thread list pane */}
+      <div className={`${selectedThread ? "hidden lg:flex" : "flex"} flex-col w-full lg:w-[420px] lg:shrink-0 border-r border-border overflow-hidden`}>
         {/* Filter bar */}
-        <div className="flex items-center gap-2 mb-4 flex-wrap">
+        <div className="flex items-center gap-2 px-4 py-3 border-b border-border flex-wrap shrink-0">
           <select
             value={user}
             onChange={(e) => setUser(e.target.value)}
@@ -133,14 +242,36 @@ export default function Threads() {
         </div>
 
         {/* Thread list */}
-        <div className="rounded-xl border border-border bg-card overflow-hidden">
+        <div className="flex-1 overflow-y-auto">
           {filtered.length === 0 ? (
             <p className="text-sm text-muted-foreground text-center py-12">No threads match your filters.</p>
           ) : (
-            filtered.map((thread) => <ThreadRow key={thread.id} thread={thread} />)
+            filtered.map((thread) => (
+              <ThreadRow
+                key={thread.id}
+                thread={thread}
+                isSelected={thread.id === selectedThreadId}
+                onClick={() => setSelectedThreadId(thread.id)}
+              />
+            ))
           )}
         </div>
       </div>
+
+      {/* Preview pane */}
+      {selectedThread ? (
+        <div className="flex-1 min-w-0 overflow-hidden">
+          <ThreadPreview
+            key={selectedThread.id}
+            thread={selectedThread}
+            onClose={() => setSelectedThreadId(null)}
+          />
+        </div>
+      ) : (
+        <div className="hidden lg:flex flex-1 items-center justify-center text-sm text-muted-foreground">
+          Select a thread to view
+        </div>
+      )}
     </div>
   );
 }
