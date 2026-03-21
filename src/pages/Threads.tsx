@@ -226,53 +226,53 @@ export default function Threads() {
 
   return (
     <div className="flex-1 flex overflow-hidden">
-      {selectedThread ? (
-        <PanelGroup direction="horizontal" autoSaveId="threads-layout">
-          {/* Thread list pane */}
-          <Panel defaultSize={35} minSize={25} maxSize={50} className="hidden lg:flex flex-col border-r border-border overflow-hidden">
-            {/* Filter bar */}
-            <div className="flex items-center gap-2 px-3 sm:px-4 py-3 border-b border-border shrink-0">
-              <select
-                value={user}
-                onChange={(e) => setUser(e.target.value)}
-                className="bg-card text-foreground text-xs rounded-lg pl-3 pr-8 py-2 border border-border outline-none cursor-pointer hover:border-muted-foreground/40 transition-colors min-w-0"
-              >
-                {THREAD_USERS.map((u) => (
-                  <option key={u} value={u}>{u === "All users" ? "All users" : u.replace("_", " ")}</option>
-                ))}
-              </select>
-              <select
-                value={repo}
-                onChange={(e) => setRepo(e.target.value)}
-                className="bg-card text-foreground text-xs rounded-lg pl-3 pr-8 py-2 border border-border outline-none cursor-pointer hover:border-muted-foreground/40 transition-colors min-w-0 truncate"
-              >
-                {THREAD_REPOS.map((r) => (
-                  <option key={r} value={r}>{r}</option>
-                ))}
-              </select>
-            </div>
-            <div className="flex-1 overflow-y-auto">
-              {filtered.length === 0 ? (
-                <p className="text-sm text-muted-foreground text-center py-12">No threads match your filters.</p>
-              ) : (
-                filtered.map((thread) => (
-                  <ThreadRow
-                    key={thread.id}
-                    thread={thread}
-                    isSelected={thread.id === selectedThreadId}
-                    onClick={() => selectThread(thread.id)}
-                  />
-                ))
-              )}
-            </div>
-          </Panel>
+      <PanelGroup direction="horizontal" autoSaveId="threads-layout">
+        {/* Thread list pane */}
+        <Panel defaultSize={35} minSize={25} maxSize={50} className={`${selectedThread ? "hidden lg:flex" : "flex"} flex-col border-r border-border overflow-hidden`}>
+          {/* Filter bar */}
+          <div className="flex items-center gap-2 px-3 sm:px-4 py-3 border-b border-border shrink-0">
+            <select
+              value={user}
+              onChange={(e) => setUser(e.target.value)}
+              className="bg-card text-foreground text-xs rounded-lg pl-3 pr-8 py-2 border border-border outline-none cursor-pointer hover:border-muted-foreground/40 transition-colors min-w-0"
+            >
+              {THREAD_USERS.map((u) => (
+                <option key={u} value={u}>{u === "All users" ? "All users" : u.replace("_", " ")}</option>
+              ))}
+            </select>
+            <select
+              value={repo}
+              onChange={(e) => setRepo(e.target.value)}
+              className="bg-card text-foreground text-xs rounded-lg pl-3 pr-8 py-2 border border-border outline-none cursor-pointer hover:border-muted-foreground/40 transition-colors min-w-0 truncate"
+            >
+              {THREAD_REPOS.map((r) => (
+                <option key={r} value={r}>{r}</option>
+              ))}
+            </select>
+          </div>
+          <div className="flex-1 overflow-y-auto">
+            {filtered.length === 0 ? (
+              <p className="text-sm text-muted-foreground text-center py-12">No threads match your filters.</p>
+            ) : (
+              filtered.map((thread) => (
+                <ThreadRow
+                  key={thread.id}
+                  thread={thread}
+                  isSelected={thread.id === selectedThreadId}
+                  onClick={() => selectThread(thread.id)}
+                />
+              ))
+            )}
+          </div>
+        </Panel>
 
-          <PanelResizeHandle className="hidden lg:flex w-1.5 items-center justify-center hover:bg-secondary transition-colors group">
-            <div className="w-0.5 h-8 rounded-full bg-border group-hover:bg-muted-foreground/40 transition-colors" />
-          </PanelResizeHandle>
+        <PanelResizeHandle className="hidden lg:flex w-1.5 items-center justify-center hover:bg-secondary transition-colors group">
+          <div className="w-0.5 h-8 rounded-full bg-border group-hover:bg-muted-foreground/40 transition-colors" />
+        </PanelResizeHandle>
 
-          {/* Preview pane */}
-          <Panel defaultSize={65} minSize={40}>
+        {/* Preview pane */}
+        <Panel defaultSize={65} minSize={40}>
+          {selectedThread ? (
             <div className="h-full overflow-hidden">
               <ThreadPreview
                 key={selectedThread.id}
@@ -280,52 +280,13 @@ export default function Threads() {
                 onClose={() => selectThread(null)}
               />
             </div>
-          </Panel>
-        </PanelGroup>
-      ) : (
-        /* No thread selected — centered list with margins */
-        <div className="flex flex-col w-full overflow-hidden">
-          <div className="flex-1 overflow-y-auto">
-            <div className="max-w-4xl mx-auto px-6 sm:px-10 lg:px-16">
-              {/* Filter bar */}
-              <div className="flex items-center gap-3 py-6">
-                <select
-                  value={user}
-                  onChange={(e) => setUser(e.target.value)}
-                  className="bg-card text-foreground text-xs rounded-lg pl-3 pr-8 py-2 border border-border outline-none cursor-pointer hover:border-muted-foreground/40 transition-colors min-w-0"
-                >
-                  {THREAD_USERS.map((u) => (
-                    <option key={u} value={u}>{u === "All users" ? "All users" : u.replace("_", " ")}</option>
-                  ))}
-                </select>
-                <select
-                  value={repo}
-                  onChange={(e) => setRepo(e.target.value)}
-                  className="bg-card text-foreground text-xs rounded-lg pl-3 pr-8 py-2 border border-border outline-none cursor-pointer hover:border-muted-foreground/40 transition-colors min-w-0 truncate"
-                >
-                  {THREAD_REPOS.map((r) => (
-                    <option key={r} value={r}>{r}</option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Thread list */}
-              {filtered.length === 0 ? (
-                <p className="text-sm text-muted-foreground text-center py-12">No threads match your filters.</p>
-              ) : (
-                filtered.map((thread) => (
-                  <ThreadRow
-                    key={thread.id}
-                    thread={thread}
-                    isSelected={false}
-                    onClick={() => selectThread(thread.id)}
-                  />
-                ))
-              )}
+          ) : (
+            <div className="hidden lg:flex h-full items-center justify-center text-sm text-muted-foreground">
+              Select a thread to view
             </div>
-          </div>
-        </div>
-      )}
+          )}
+        </Panel>
+      </PanelGroup>
     </div>
   );
 }
