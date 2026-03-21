@@ -116,10 +116,6 @@ function ThreadRow({
               {thread.messageCount} message{thread.messageCount !== 1 ? "s" : ""}
             </span>
             <ThreadTypeBadge type={thread.threadType} />
-            <span className="flex items-center gap-0.5">
-              <Star className="h-3 w-3" />
-              {thread.stars}
-            </span>
           </div>
 
           <div className="rounded-lg bg-secondary/50 border-l-2 border-border px-3 py-2">
