@@ -1,6 +1,6 @@
 import { useState, useMemo, useCallback } from "react";
 import { useLocation } from "react-router-dom";
-import { Star, GitBranch, MessageSquare, FileCode, X } from "lucide-react";
+import { Star, GitBranch, MessageSquare, FileCode, X, Share2 } from "lucide-react";
 import { THREADS, THREAD_REPOS, THREAD_USERS, type Thread } from "@/lib/mock-threads";
 import { SESSIONS, SESSION_DETAIL } from "@/lib/mock-data";
 import type { Session, Turn } from "@/lib/mock-data";
