@@ -157,7 +157,7 @@ export function AppHeader() {
               {/* Mobile hamburger */}
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="sm:hidden h-8 w-8 flex items-center justify-center rounded-md text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
+                className="sm:hidden h-8 w-8 flex items-center justify-center rounded-md text-[hsl(var(--header-muted))] hover:text-[hsl(var(--header-foreground))] hover:bg-white/10 transition-colors"
               >
                 {mobileMenuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
               </button>
