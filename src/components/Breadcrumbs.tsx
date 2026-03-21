@@ -20,8 +20,8 @@ function useBreadcrumbs(): Crumb[] {
   const path = location.pathname;
   const from = (location.state as any)?.from as string | undefined;
 
-  if (path === "/" || path === "/my-sessions") {
-    return [{ label: "My Sessions" }];
+  if (path === "/" || path === "/my-sessions" || path === "/threads") {
+    return [{ label: "Threads" }];
   }
 
   if (path === "/explore") {
