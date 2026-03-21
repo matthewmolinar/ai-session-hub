@@ -1,11 +1,57 @@
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { MessageSquare, FileCode, Pencil } from "lucide-react";
-import { SessionCard } from "@/components/SessionCard";
+import { MessageSquare, FileCode, Pencil, Star, GitBranch } from "lucide-react";
 import { EditProfileModal } from "@/components/EditProfileModal";
 import { useProfile } from "@/hooks/useProfile";
-import { SESSIONS } from "@/lib/mock-data";
+import { THREADS, type Thread } from "@/lib/mock-threads";
 import { Button } from "@/components/ui/button";
+
+function getTimeAgo(dateStr: string): string {
+  const diff = Date.now() - new Date(dateStr).getTime();
+  const mins = Math.floor(diff / 60000);
+  if (mins < 60) return `${mins}m ago`;
+  const hours = Math.floor(mins / 60);
+  if (hours < 24) return `${hours}h ago`;
+  const days = Math.floor(hours / 24);
+  return `${days}d ago`;
+}
+
+function ProfileThreadRow({ thread }: { thread: Thread }) {
+  return (
+    <a
+      href={`/threads?id=${thread.id}`}
+      className="block border-b border-border last:border-b-0 px-4 py-4 hover:bg-secondary/30 transition-colors"
+    >
+      <div className="flex items-start gap-3">
+        <div className="h-9 w-9 rounded-full bg-primary/10 flex items-center justify-center text-sm font-semibold text-primary shrink-0 mt-0.5">
+          {thread.author.username[0].toUpperCase()}
+        </div>
+        <div className="flex-1 min-w-0">
+          <h3 className="text-sm font-semibold text-foreground leading-snug mb-1">{thread.title}</h3>
+          <div className="flex items-center gap-2 flex-wrap text-xs text-muted-foreground mb-2">
+            <span className="font-medium text-foreground/80">{thread.author.username.replace("_", " ")}</span>
+            <span>{getTimeAgo(thread.createdAt)}</span>
+            <span className="flex items-center gap-0.5">
+              <MessageSquare className="h-3 w-3" />
+              {thread.messageCount}
+            </span>
+            <span className="inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-2xs font-medium border border-border bg-secondary text-secondary-foreground">
+              <GitBranch className="h-2.5 w-2.5" />
+              {thread.threadType}
+            </span>
+            <span className="flex items-center gap-0.5">
+              <Star className="h-3 w-3" />
+              {thread.stars}
+            </span>
+          </div>
+          <div className="rounded-lg bg-secondary/50 border-l-2 border-border px-3 py-2">
+            <p className="text-xs text-muted-foreground line-clamp-1">{thread.openingPrompt}</p>
+          </div>
+        </div>
+      </div>
+    </a>
+  );
+}
 
 export default function Profile() {
   const { username } = useParams();
@@ -13,17 +59,11 @@ export default function Profile() {
   const { profile, loading, isOwn, updateProfile } = useProfile(username);
   const [editOpen, setEditOpen] = useState(false);
 
-  // Mock sessions — still using mock data for now
-  const allSessions = SESSIONS.filter((s) => s.author.username === username);
-  const sessions = allSessions.length > 0 ? allSessions : SESSIONS.slice(0, 3);
+  const allThreads = THREADS.filter((t) => t.author.username === username);
+  const threads = allThreads.length > 0 ? allThreads : THREADS.slice(0, 3);
 
-  const totalTurns = sessions.reduce((a, s) => a + s.turns, 0);
-  const totalFiles = sessions.reduce((a, s) => a + s.filesChanged, 0);
-
-  const modelCounts: Record<string, number> = {};
-  sessions.forEach((s) => {
-    modelCounts[s.model] = (modelCounts[s.model] || 0) + 1;
-  });
+  const totalMessages = threads.reduce((a, t) => a + t.messageCount, 0);
+  const totalFiles = threads.reduce((a, t) => a + t.diffStats.added + t.diffStats.removed + t.diffStats.modified, 0);
 
   if (loading) {
     return (
@@ -64,7 +104,7 @@ export default function Profile() {
             <div className="flex items-center gap-4 mt-2 text-xs text-muted-foreground">
               <span className="flex items-center gap-1">
                 <MessageSquare className="h-3 w-3" />
-                {totalTurns} total turns
+                {totalMessages} total messages
               </span>
               <span className="flex items-center gap-1">
                 <FileCode className="h-3 w-3" />
@@ -73,24 +113,13 @@ export default function Profile() {
             </div>
           </div>
         </div>
-
-        {/* Preferred models */}
-        <div className="mt-4 flex items-center gap-2">
-          <span className="text-2xs text-muted-foreground uppercase tracking-wider font-medium">Preferred models:</span>
-          {Object.entries(modelCounts).map(([model, count]) => (
-            <span key={model} className="inline-flex items-center gap-1 rounded-md bg-secondary px-1.5 py-0.5 text-2xs font-mono text-muted-foreground">
-              {model}
-              <span className="text-foreground font-medium">×{count}</span>
-            </span>
-          ))}
-        </div>
       </div>
 
-      {/* Sessions */}
-      <h2 className="text-label mb-3">Sessions</h2>
-      <div className="flex flex-col gap-3">
-        {sessions.map((session) => (
-          <SessionCard key={session.id} session={session} />
+      {/* Threads */}
+      <h2 className="text-label mb-3">Threads</h2>
+      <div className="rounded-xl border border-border bg-card overflow-hidden">
+        {threads.map((thread) => (
+          <ProfileThreadRow key={thread.id} thread={thread} />
         ))}
       </div>
 
