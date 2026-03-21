@@ -283,10 +283,10 @@ export default function Threads() {
             </div>
           ) : (
             <div className="hidden lg:flex h-full flex-col items-center pt-[35%]">
-              <div className="text-6xl mb-4">💬</div>
-              <h3 className="text-base font-semibold text-foreground mb-1">Your threads</h3>
-              <p className="text-sm text-muted-foreground text-center max-w-[240px]">
-                Pick a thread from the left to read the conversation
+              <div className="text-4xl mb-4 font-mono text-primary/30">_</div>
+              <h3 className="text-sm font-mono font-semibold text-foreground mb-1">select a thread</h3>
+              <p className="text-xs text-muted-foreground text-center max-w-[240px] font-mono">
+                pick a thread from the left to read the conversation
               </p>
             </div>
           )}
