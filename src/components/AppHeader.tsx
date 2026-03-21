@@ -98,7 +98,7 @@ export function AppHeader() {
             to="/threads"
             className={`px-3 py-1.5 rounded-md transition-colors ${location.pathname === "/threads" ? "bg-secondary text-foreground font-medium" : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"}`}
           >
-            Threads
+            Posts
           </Link>
           {FEATURE_FLAGS.FEED_ENABLED && (
             <Link
@@ -191,7 +191,7 @@ export function AppHeader() {
             to="/threads"
             className={`block px-3 py-2 rounded-md text-sm transition-colors ${location.pathname === "/threads" ? "bg-secondary text-foreground font-medium" : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"}`}
           >
-            Threads
+            Posts
           </Link>
           {FEATURE_FLAGS.FEED_ENABLED && (
             <Link
